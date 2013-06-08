@@ -1,16 +1,35 @@
 var assert = require( 'assert' )
   , squint = require( 'squint' )
-  , strip = squint.stripComments;
 
-assert.equal( strip( '/ a' ), '/ a' );
-assert.equal( strip( 'a' ), 'a' );
+preProDirectives();
+comments();
 
-assert.equal( strip( '/ * a; * /' ), '/ * a; * /' );
-assert.equal( strip( '/* a; * /' ), '/* a; * /' );
-assert.equal( strip( '/ * a; */' ), '/ * a; */' );
+function preProDirectives() {
 
-assert.equal( squint.stripComments( '// bla \n' ), '' );
-assert.equal( squint.stripComments( '// bla \nbla // bla\n' ), 'bla ' );
+  var strip = squint.stripPreProDirectives;
 
-assert.equal( squint.stripComments( '/* helleo */' ), '' ); 
-assert.equal( squint.stripComments( '/* helleo */bla /*hello*/' ), 'bla ' ); 
+  assert.equal( strip( '#include' ), '' );
+  assert.equal( strip( '#include\n' ), '' );
+  assert.equal( strip( '#include "text.h"' ), '' );
+  assert.equal( strip( '#include "text.h"\n' ), '' );
+}
+
+function comments() {
+
+  var strip = squint.stripComments;
+
+  assert.equal( strip( '/ text' ), '/ text' );
+  assert.equal( strip( 'text' ), 'text' );
+  assert.equal( strip( '/ * text; * /' ), '/ * text; * /' );
+  assert.equal( strip( '/* text; * /' ), '/* text; * /' );
+  assert.equal( strip( '/ * text; */' ), '/ * text; */' );
+
+  assert.equal( squint.stripComments( '// text \n' ), '' );
+  assert.equal( squint.stripComments( '// text \n\n' ), '\n' );
+  assert.equal( squint.stripComments( '// text \ntext // text\n' ), 'text ' );
+  assert.equal( squint.stripComments( '// text ' ), '' );
+  assert.equal( squint.stripComments( '// text \ntext // text' ), 'text ' );
+  
+  assert.equal( squint.stripComments( '/* text */' ), '' ); 
+  assert.equal( squint.stripComments( '/* text */text /*text*/' ), 'text ' ); 
+}
