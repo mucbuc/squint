@@ -18,7 +18,8 @@ var app = {
           console.log( 'processing file ' + path ); 
           fs.readFile( path, function( err, data ) {
             if (err) throw err;
-            command( data );
+            data = command( data.toString() );
+            fs.writeFile( path, data );
           } );
         }
         , processDirectory = function( path ) {
