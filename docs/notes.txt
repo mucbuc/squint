@@ -1,0 +1,117 @@
+terminology: 
+
+	statement := <statement>;
+	container := ( <content> ), [ <content> ], { <content> }
+	block := { <statement list> }
+
+
+
+higher level classifications
+
+named: 
+	
+	enumerations:
+		enum <name> { <constant list> };					//instance
+	
+	objects:
+		<type> <name>;										//instance
+		<type> <name>( <object list> );						//instance
+		<type> <name> = <object>;							//instance
+		<type> <name>[ <constant> ];						//instance
+		<type> <name>[ <constant> ] = { <object list> };	//instance 
+		
+	functions:
+		<type> <name>();									//reference
+		<type> <name>( <type list> );						//reference
+	
+		<type> <name>() {}									//scope
+		<type> <name>( <type list> ) {}						//scope
+	
+	types:
+		typedef <type> <name>;								//instance
+		typedef <type> <name>[ <constant> ];				//instance
+		typedef <type> <name>[ <constant> ][ <..;			//instance
+   	
+		built in:
+			void											//instance
+			int												//instance
+			float											//instance
+			...
+		
+		user defined:
+			class <name>;									//reference 
+			class <name> {};								//scope
+			class <name> : <type list > {}; 				//scope
+			struct <name>;									//reference
+			struct <name> {};								// scope
+			struct <name> : <type list > {}; 				// scope
+
+	namespace: 
+	
+		namespace <name> {}									// scope
+		
+	externals:
+	
+		extern int blablaba;
+		
+		
+		
+		
+		
+		
+		
+		
+
+statement: bla; 
+
+scopes: (), (T), (T, U), (...)
+		<>, <T>, <T, U>, <...>
+		[], ...
+		{}, ...
+		
+
+
+
+
+
+		
+lists:	T, U, ....
+
+
+
+
+
+need to divide tokens further into: 
+	
+	declaration: 	
+		using (using <namespace>::<member>)			namespace bla {}
+		struct										struct bla;
+		class										class bla;
+		function									void bla(int); 
+		extern/static variables						extern int bla; 
+		
+	definition:										 	
+		namespace 									namespace bla {}
+		type										typedef bla bla2;
+		struct										struct bla {}; 
+		class										class bla {}; 	
+		functions									void bla(int) {}
+		variables									int bla; 
+		enumeration									enum { bla }; 
+	
+	directive:		
+		using (using namespace <name>)				using namespace bla; 
+		macro										#define son ofa	
+		include										#include <yomama>/"yomama"
+	
+	block: 
+		if
+		while
+		do while
+		for
+		switch
+		definition
+		
+	scope identifiers: 
+		namespace
+		function
