@@ -10,4 +10,7 @@ assert.equal( strip( '/* a; * /' ), '/* a; * /' );
 assert.equal( strip( '/ * a; */' ), '/ * a; */' );
 
 assert.equal( squint.stripComments( '// bla \n' ), '' );
+assert.equal( squint.stripComments( '// bla \nbla // bla\n' ), 'bla ' );
+
 assert.equal( squint.stripComments( '/* helleo */' ), '' ); 
+assert.equal( squint.stripComments( '/* helleo */bla /*hello*/' ), 'bla ' ); 
