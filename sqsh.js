@@ -76,7 +76,7 @@ var app = {
           process.exit( 0 ); 
           break;
         case '-s': case '--strip':
-          command = squint.strip_comments;
+          command = squint.stripComments;
           app.execute = app.executeCommand;
           break;
         default:
