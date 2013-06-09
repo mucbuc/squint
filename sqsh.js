@@ -1,8 +1,6 @@
 var squint = require( 'squint' )
   , fs = require( 'fs' )
-  , join = require( 'path' ).join
-  , extname = require( 'path' ).extname
-  , basename = require( 'path' ).basename
+  , path = require( 'path' )
   , command = 0
   , commandName = ''
   , pathArguments = []
@@ -14,14 +12,14 @@ var squint = require( 'squint' )
       console.log( '    strip -> strip comments, includes, defines, undefs, and string literals\n' );
     }
   , isValidFile = function( file ) {
-      var ext = extname( file );
+      var ext = path.extname( file );
       return   ext == '.h'
             || ext == '.hxx'
             || ext == '.cpp'
             || ext == '.cxx';
     }
   , isValidDirectory = function( dir ) {
-      var base = basename( dir );
+      var base = path.basename( dir );
       return base[0] != '.';
     };
   
@@ -31,23 +29,23 @@ var app = {
   
     fs.stat( arg, function( err, stat ) {
       
-      var processFile = function( path ) {
-          console.log( 'squint$ ' + commandName + ' file: ' + path ); 
-          fs.readFile( path, function( err, data ) {
+      var processFile = function( file ) {
+          console.log( 'squint$ ' + commandName + ' file: ' + file ); 
+          fs.readFile( file, function( err, data ) {
             if (err) throw err;
             data = command( data.toString() );
-            fs.writeFile( path, data );
+            fs.writeFile( file, data );
           } );
         }
-        , processDirectory = function( path ) {
-          fs.readdir( path, function( err, files ) {
+        , processDirectory = function( dir ) {
+          fs.readdir( dir, function( err, files ) {
             if (err) throw err;
             files.forEach( function( file ) {
-              file = join( path, file );
+              file = path.join( dir, file );
               fs.stat( file, function( err, stat ) {
                 if (err) throw err;
                 if (stat.isDirectory()) {
-                  if (!isValidDirectory(path)) return;
+                  if (!isValidDirectory(dir)) return;
                   processDirectory( file );
                 }
                 else if (isValidFile(file)) {
