@@ -4,7 +4,7 @@
 <h2>abstract</h2>
   <ul>
     <li>create declarations from definitions
-    <li>create/merge definitions for declarations 
+    <li>create/merge definitions from declarations 
     <li>format code using templates
     <li>provide templates for common styles
   </ul>
