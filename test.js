@@ -1,10 +1,19 @@
 var assert = require( 'assert' )
   , squint = require( 'squint' )
 
+subScopes();
 forwardDeclarations();
 defines();
 includes();
 comments();
+
+function subScopes() {
+  var getSubs = squint.getSubScopes; 
+  
+  assert.equal( getSubs(' a {b} c {d} e'), 'bd' );
+
+
+}
 
 function forwardDeclarations() {
   var getTypes = squint.getTypeForwardDeclares
