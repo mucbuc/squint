@@ -8,11 +8,16 @@ includes();
 comments();
 
 function subScopes() {
-  var getSubs = squint.getSubScopes
-    , subs = getSubs(' a {b} c {d} e'); 
+  var get = squint.getSubScopes
+    , strip = squint.stripSubScopes
+    , source = ' a {b} c {d} e'
+    , subs = get( source )
+    , rem = strip( source );
   
   assert.equal( subs[0], '{b}' );
   assert.equal( subs[1], '{d}' );
+
+  assert.equal( rem, ' a  c  e' );
 }
 
 function forwardDeclarations() {
