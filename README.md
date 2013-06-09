@@ -1,5 +1,5 @@
 <h1>squint</h1>
-<p>still very rough c++ source code tool</p>
+<p>still very rough C++ source code tool</p>
 
 <h2>abstract</h2>
   <ul>
@@ -7,6 +7,11 @@
     <li>create/merge definitions from declarations 
     <li>format code using templates
     <li>provide templates for common styles
+  </ul>
+
+<h2>dependencies</h2>
+  <ul>
+    <li>node.js
   </ul>
 
 <h2>goals</h2> 
