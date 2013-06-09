@@ -8,10 +8,19 @@ function preProDirectives() {
 
   var strip = squint.stripPreProDirectives;
 
+  // single lines
   assert.equal( strip( '#include' ), '' );
   assert.equal( strip( '#include\n' ), '' );
   assert.equal( strip( '#include "text.h"' ), '' );
   assert.equal( strip( '#include "text.h"\n' ), '' );
+
+  // multiple lines  
+  assert.equal( strip( '#define text \\ntext' ), '' );
+  assert.equal( strip( '#define text \\ntext\n' ), '' );
+  assert.equal( strip( '#define text \\ntext\\ntext' ), '' );
+  assert.equal( strip( '#define text \\ntext\\ntext\n' ), '' );
+  assert.equal( strip( '#define text \	\ntext\ \ntext' ), '' );
+  assert.equal( strip( '#define text \ 	\ntext\ \ntext		\n' ), '' );
 }
 
 function comments() {
