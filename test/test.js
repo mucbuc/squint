@@ -8,6 +8,12 @@ comments();
 function defines() {
   var strip = squint.stripDefines;
   
+  assert.equal( strip( '#define text \\ 	\n text' ), '' );
+  assert.equal( strip( '#define text \ntext' ), 'text' );
+
+  assert.equal( strip( '#define text	\ntext' ), 'text' );
+  assert.equal( strip( '#define text \\\ntext' ), '' );
+ 
   assert.equal( strip( '#define' ), '' );
   assert.equal( strip( '#define text text' ), '' );
   
@@ -16,14 +22,16 @@ function defines() {
 
   assert.equal( strip( '#define' ), '' );
   assert.equal( strip( '#define text \\n text' ), '' );
-  assert.equal( strip( '#define text \	\n text' ), '' );
-
+  
   assert.equal( strip( '#	define' ), '' );
   assert.equal( strip( '# define text \\n text' ), '' );
-  assert.equal( strip( '#	define text \	\n text' ), '' );
-
+  assert.equal( strip( '#	define text \\	\n text' ), '' );
+  
   assert.equal( strip( '#undef' ), '' );
   assert.equal( strip( '# undef		\n' ), '' );
+  
+  assert.equal( strip( '#ifdef text' ), '#ifdef text' );
+  assert.equal( strip( '# ifdef text' ), '# ifdef text' );
 }
 
 function includes() {
@@ -40,16 +48,6 @@ function includes() {
   assert.equal( strip( '# 	include "text.h"	' ), '' );
   assert.equal( strip( '#  include "text.h"	\n' ), '' );
 }
-
-/*
-  // multiple lines  
-  assert.equal( strip( '#define text \\ntext' ), '' );
-  assert.equal( strip( '#define text \\ntext\n' ), '' );
-  assert.equal( strip( '#define text \\ntext\\ntext' ), '' );
-  assert.equal( strip( '#define text \\ntext\\ntext\n' ), '' );
-  assert.equal( strip( '#define text \	\ntext\ \ntext' ), '' );
-  assert.equal( strip( '#define text \ 	\ntext\ \ntext		\n' ), '' );
-*/
 
 function comments() {
 

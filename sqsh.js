@@ -77,7 +77,12 @@ var app = {
           process.exit( 0 ); 
           break;
         case '-s': case '--strip':
-          command = squint.stripComments;
+          command = function( code ) {
+            code = squint.stripIncludes( code );
+            code = squint.stripDefines( code );
+            code = squint.stripComments( code );
+            return code;
+          };
           app.execute = app.executeCommand;
           break;
         default:
