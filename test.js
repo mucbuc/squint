@@ -1,11 +1,26 @@
 var assert = require( 'assert' )
   , squint = require( 'squint' )
 
-subScopes();
+strings();
+//subScopes();
 forwardDeclarations();
 defines();
 includes();
 comments();
+
+function functionDefinitions() {
+  assert.equal( squint.defineFunctions( 'text text(); text text();' ), 'text text(){} text text(){}' );
+  assert.equal( squint.defineFunctions( 'text text(); text text; text text();' ), 'text text(){} text text(){}' );
+  assert.equal( squint.defineFunctions( 'text text(); text text{}; text text();' ), 'text text(){} text text(){}' );
+  assert.equal( squint.defineFunctions( 'text text(); text text(); text text();' ), 'text text(){} text text(){}' );
+}
+
+function strings() {
+  var strip = squint.stripStrings;
+
+  assert.equal( strip( '"text"text' ), 'text' );
+  assert.equal( strip( '"text\\\"text"' ), '' );
+}
 
 function subScopes() {
   var get = squint.getSubScopes
@@ -16,12 +31,14 @@ function subScopes() {
   
   assert.equal( subs[0], '{b}' );
   assert.equal( subs[1], '{d}' );
-
   assert.equal( rem, ' a  c  e' );
+
+  subs = get('a { b { c } }');
+  assert.equal( subs[0], '{ b { c } }' );
 }
 
 function forwardDeclarations() {
-  var getTypes = squint.getTypeForwardDeclares
+  var getTypes = squint.getTypeDeclares
     , getFunctions = squint.getFunctionForwardDeclares;
   
   assert.equal( getTypes( 'int text;' ), '' );
