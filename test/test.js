@@ -1,9 +1,17 @@
 var assert = require( 'assert' )
   , squint = require( 'squint' )
 
+forwardDeclarations();
 defines();
 includes();
 comments();
+
+function forwardDeclarations() {
+  var get = squint.getForwardTypeDeclares;
+  
+  assert.equal( get( 'int text;' ), '' );
+  assert.equal( get( 'class text;' ), 'class text;' );
+}
 
 function defines() {
   var strip = squint.stripDefines;
