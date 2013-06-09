@@ -7,10 +7,20 @@ includes();
 comments();
 
 function forwardDeclarations() {
-  var get = squint.getForwardTypeDeclares;
+  var getTypes = squint.getTypeForwardDeclares
+    , getFunctions = squint.getFunctionForwardDeclares;
   
-  assert.equal( get( 'int text;' ), '' );
-  assert.equal( get( 'class text;' ), 'class text;' );
+  assert.equal( getTypes( 'int text;' ), '' );
+  assert.equal( getTypes( 'int text();' ), '' );
+  
+  assert.equal( getTypes( 'class text;' ), 'class text;' );
+  assert.equal( getTypes( 'class text {' ), '' );
+  
+  assert.equal( getTypes( 'class text;' ), 'class text;' );
+  
+  // type forwards need to be stripped for getFunctions 
+  assert.equal( getFunctions( 'int text();' ), 'int text();' );
+  assert.equal( getFunctions( 'int text() {;' ), '' );
 }
 
 function defines() {
