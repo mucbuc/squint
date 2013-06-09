@@ -3,7 +3,7 @@ var assert = require( 'assert' )
 
 strings();
 //subScopes();
-forwardDeclarations();
+declarations();
 defines();
 includes();
 comments();
@@ -37,9 +37,9 @@ function subScopes() {
   assert.equal( subs[0], '{ b { c } }' );
 }
 
-function forwardDeclarations() {
+function declarations() {
   var getTypes = squint.getTypeDeclares
-    , getFunctions = squint.getFunctionForwardDeclares;
+    , getFunctions = squint.getFunctionDeclares;
   
   assert.equal( getTypes( 'int text;' ), '' );
   assert.equal( getTypes( 'int text();' ), '' );
@@ -49,7 +49,7 @@ function forwardDeclarations() {
   
   assert.equal( getTypes( 'class text;' ), 'class text;' );
   
-  // type forwards need to be stripped for getFunctions 
+  // type declares need to be stripped for getFunctions 
   assert.equal( getFunctions( 'int text();' ), 'int text();' );
   assert.equal( getFunctions( 'int text() {;' ), '' );
 }
