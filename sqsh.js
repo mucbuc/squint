@@ -5,11 +5,14 @@ var squint = require( 'squint' )
   , commandName = ''
   , pathArguments = []
   , execute = function() {
-      console.log( '\n    squint is a still very rough C++ source code tool. www.github/mucbuc' );
+      console.log( '\n    squint is a still very rough C++ source code tool. 
+      console.log( '\n    sqsh is the command line interface.
       console.log( '  USAGE:' );
       console.log( '    node sqsh [command] file ... ' ); 
       console.log( '  COMMANDS:' );
       console.log( '    strip -> strip comments, includes, defines, undefs, and string literals\n' );
+      console.log( '  SOURCE:' );
+      console.log( '    https://github.com/mucbuc' );
     }
   , isValidFile = function( file ) {
       var ext = path.extname( file );

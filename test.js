@@ -1,5 +1,7 @@
 var assert = require( 'assert' )
-  , squint = require( 'squint' )
+  , squint = require( 'squint' );
+
+require( 'parser' ).testParser();
 
 strings();
 //subScopes();
