@@ -1,14 +1,20 @@
 var assert = require( 'assert' )
   , squint = require( 'squint' );
 
-require( 'parser' ).testParser();
-
+arrayInitializerBlocks();
 strings();
 //subScopes();
 declarations();
 defines();
 includes();
 comments();
+
+function arrayInitializerBlocks() {
+  var strip = squint.stripArrayInitializerBlocks;
+  
+  assert.equal( strip( 'int a[] = { 0, 3, 1 };' ), 'int a[];' );
+  assert.equal( strip( 'int a[] = { 0, 3, 1 }; text text {};' ), 'int a[]; text text {};' );
+}
 
 function functionDefinitions() {
   assert.equal( squint.defineFunctions( 'text text(); text text();' ), 'text text(){} text text(){}' );
