@@ -56,10 +56,15 @@ function TestParser() {
   var expectations = [];
   
   Parser.call( this, this );
-  
+
+  process.on( 'exit', function() {
+    assert.equal( expectations.length, 0 );
+  } );
+
   this.emit = function( event, code ) {
 
     var expectation = expectations[0];
+    assert.notEqual( expectations.length, 0 );
     expectations.splice( 0, 1 );
     
     assert.equal( event, expectation.event );
