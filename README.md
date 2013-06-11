@@ -25,20 +25,3 @@
   <ul>
     <li> removing meta data like comments, includes, defines and string literals
   </ul>
-  
-<h2>details</h2>
-  <ul>
-    <li><b> node_modules/squint.js </b>
-      <ul> 
-        <li> manipulate the source code as strings 
-        <li> shared between browser and server
-      </ul>
-    <li><b> sqsh.js </b>
-      <ul>
-        <li> command line tool for working with files and directories
-      </ul>
-    <li><b> test.js </b>
-      <ul> 
-        <li> sanity check 
-      </ul> 
-  </ul>
