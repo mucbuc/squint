@@ -3,7 +3,6 @@ var assert = require( 'assert' )
 
 arrayInitializerBlocks();
 strings();
-//subScopes();
 declarations();
 defines();
 includes();

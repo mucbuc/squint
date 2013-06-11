@@ -5,14 +5,14 @@ var squint = require( 'squint' )
   , commandName = ''
   , pathArguments = []
   , execute = function() {
-      console.log( '\n    squint is a still very rough C++ source code tool. 
-      console.log( '\n    sqsh is the command line interface.
+      console.log( '\n    squint is a still very rough C++ source code tool.' );
+      console.log( '    sqsh is the command line interface.' );
       console.log( '  USAGE:' );
       console.log( '    node sqsh [command] file ... ' ); 
       console.log( '  COMMANDS:' );
-      console.log( '    strip -> strip comments, includes, defines, undefs, and string literals\n' );
+      console.log( '    strip -> strip comments, includes, defines, undefs, and string literals' );
       console.log( '  SOURCE:' );
-      console.log( '    https://github.com/mucbuc' );
+      console.log( '    https://github.com/mucbuc\n' );
     }
   , isValidFile = function( file ) {
       var ext = path.extname( file );
@@ -26,14 +26,17 @@ var squint = require( 'squint' )
       return base[0] != '.';
     };
   
-var app = { 
+var app = {
+  print: function( str ) { 
+    console.log( 'squint$ ' + str );
+  },
   processPathArgument: function( arg ) {
-    console.log( 'squint$ execute on argument: ' + arg );
+    app.print( 'execute on argument: ' + arg );
   
     fs.stat( arg, function( err, stat ) {
       
       var processFile = function( file ) {
-          console.log( 'squint$ ' + commandName + ' file: ' + file ); 
+          app.print( commandName + ' file: ' + file ); 
           fs.readFile( file, function( err, data ) {
             if (err) throw err;
             data = command( data.toString() );
@@ -68,9 +71,14 @@ var app = {
       }
     } );
   },
-  cleanup: function() {
-    console.log( 'squint$ ' );
-  },
+  stripCode: function( code ) { 
+    code = squint.stripStrings( code );
+    code = squint.stripIncludes( code );
+    code = squint.stripDefines( code );
+    code = squint.stripComments( code );
+    return code;
+  }, 
+  cleanup: function() {},
   parseArgs: function( args ) {
   
     var counter = args.length
@@ -90,20 +98,14 @@ var app = {
           execute(); 
           process.exit( 0 ); 
           break;
-        case 'strip':
+        case 'strip': case 'declare':
           commandName = arg;
-          command = function( code ) {
-            code = squint.stripStrings( code );
-            code = squint.stripIncludes( code );
-            code = squint.stripDefines( code );
-            code = squint.stripComments( code );
-            return code;
-          };
+          command = app.stripCode;
           execute = function() {
             if (!pathArguments.length) {
               pathArguments.push( __dirname );
             }
-            console.log( 'squint$ ' + commandName );
+            app.print( commandName );
             pathArguments.forEach( app.processPathArgument );
           };
           break;
