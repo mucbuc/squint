@@ -15,7 +15,7 @@ function TestBuilder() {
     , builder = new Builder( emitter );
   
   emitter.on( 'open', function( code ) {
-    builder.document = builder.document.concat( 'code ' + '{' );
+    builder.document = builder.document.concat( 'abc' + '{' );
   } );
   
   emitter.on( 'close', function( code ) {
@@ -25,7 +25,7 @@ function TestBuilder() {
   parser.process( 'text { text; }' ); 
   
   process.on( 'exit', function() { 
-    console.log( builder.document );
+    assert.equal( builder.document, 'abc{}' )
   } );
 }
 
