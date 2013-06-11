@@ -1,31 +1,24 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( 'parser' ).Parser
-  , Builder = require( 'builder' ).Builder;
+  , Builder = require( 'builder' ).Builder
+  , Factory = require( 'factory' ).Factory;
   
 basics();
 
 function basics() {
-  var builder = new TestBuilder();
+  var builder = new TestContext();
 }
 
-function TestBuilder() {
+function TestContext() {
   var emitter = new events.EventEmitter()
     , parser = new Parser( emitter )
-    , builder = new Builder( emitter );
-  
-  emitter.on( 'open', function( code ) {
-    builder.document = builder.document.concat( 'abc' + '{' );
-  } );
-  
-  emitter.on( 'close', function( code ) {
-    builder.document = builder.document.concat( '}' );
-  } );
+    , builder = new Builder( emitter, new Factory() );
   
   parser.process( 'text { text; }' ); 
   
   process.on( 'exit', function() { 
-    assert.equal( builder.document, 'abc{}' )
+    assert.equal( builder.document, '{;}' )
   } );
 }
 
