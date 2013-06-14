@@ -36,47 +36,57 @@ var app = {
     var view = path.join( 'view', arg );
     
     app.print( 'execute on argument: ' + arg );
-    systemExecute( 'mkdir -p ' + view, function( err ) {
+    mkdir( view, function( err ) {
       if (err) throw err;
-      systemExecute( 'cp -rfp ' + arg + ' ' + view, function(err) {
+      cpdir( arg, view, function( err ) {
         if (err) throw err;
-        fs.stat( view, function( err, stat ) {
-          var processFile = function( file ) {
-                app.print( commandName + ' file: ' + file ); 
-                fs.readFile( file, function( err, data ) {
-                  if (err) throw err;
-                  command( data.toString(), file );
-                } );
-              }
-            , processDirectory = function( dir ) {
-                fs.readdir( dir, function( err, files ) {
-                if (err) throw err;
-                files.forEach( function( file ) {
-                  file = path.join( dir, file );
-                  fs.stat( file, function( err, stat ) {
-                    if (err) throw err;
-                    if (stat.isDirectory()) {
-                      if (!isValidDirectory(dir)) return;
-                      processDirectory( file );
-                    }
-                    else if (isValidFile(file)) {
-                      processFile( file );
-                    }
-                  } );
-                } );
-              } );
-            };
-      
-          if (err) throw err;
-          if (!stat.isDirectory()) {
-            processFile( view );
-          }
-          else {
-            processDirectory( view );
-          }
-        } );
+        fs.stat( view, processPath );
       } );
     } );
+        
+    function processPath( err, stat ) {
+      if (err) throw err;
+      if (!stat.isDirectory()) {
+        processFile( view );
+      }
+      else {
+        processDirectory( view );
+      }
+    }
+    
+    function processFile( file ) { 
+      app.print( commandName + ' file: ' + file ); 
+      fs.readFile( file, function( err, data ) {
+        if (err) throw err;
+        command( data.toString(), file );
+      } );
+    }
+    
+    function processDirectory( dir ) {
+      fs.readdir( dir, function( err, files ) {
+        if (err) throw err;
+        files.forEach( function( file ) {
+          file = path.join( dir, file );
+          fs.stat( file, function( err, stat ) {
+            if (err) throw err;
+            if (stat.isDirectory()) {
+              if (!isValidDirectory(dir)) return;
+              processDirectory( file );
+            }
+            else if (isValidFile(file)) {
+              processFile( file );
+            }
+          } );
+        } );
+      } );
+    }
+    
+    function mkdir( dir, done ) {
+      systemExecute( 'mkdir -p ' + dir, done );
+    }
+    function cpdir( src, dst, done ) {
+      systemExecute( 'cp -rfp ' + src + ' ' + dst, done );
+    }
   },
   stripCode: function( code, file ) { 
     code = squint.stripStrings( code );
