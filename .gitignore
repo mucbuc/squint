@@ -1,3 +1,6 @@
 .DS_STORE
 .svn/
 docs/
+node_modules/fs.extra
+view/
+sample/

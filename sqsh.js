@@ -1,5 +1,5 @@
 var squint = require( 'squint' )
-  , fs = require( 'fs' )
+  , fs = require( 'fs.extra' )
   , path = require( 'path' )
   , command = 0
   , commandName = ''
@@ -33,14 +33,17 @@ var app = {
   processPathArgument: function( arg ) {
     app.print( 'execute on argument: ' + arg );
   
+    fs.copyRecursive( arg, 'view/' + arg, function( err ) { 
+      if (err) throw err;
+    } );
+  
     fs.stat( arg, function( err, stat ) {
       
       var processFile = function( file ) {
           app.print( commandName + ' file: ' + file ); 
           fs.readFile( file, function( err, data ) {
             if (err) throw err;
-            data = command( data.toString() );
-            fs.writeFile( file, data );
+            command( data.toString(), file );
           } );
         }
         , processDirectory = function( dir ) {
@@ -71,7 +74,7 @@ var app = {
       }
     } );
   },
-  stripCode: function( code ) { 
+  stripCode: function( code, file ) { 
     code = squint.stripStrings( code );
     code = squint.stripIncludes( code );
     code = squint.stripDefines( code );
@@ -100,7 +103,9 @@ var app = {
           break;
         case 'strip': case 'declare':
           commandName = arg;
-          command = app.stripCode;
+          command = function( code, file ) {
+            fs.writeFile( file + 't', app.stripCode( code ) );
+          };
           execute = function() {
             if (!pathArguments.length) {
               pathArguments.push( __dirname );
