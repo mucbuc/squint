@@ -26,14 +26,15 @@ var squint = require( 'squint' )
   , isValidDirectory = function( dir ) {
       var base = path.basename( dir );
       return base[0] != '.';
-    };
-  
+    }
+  , config = require( './config.json' );
+
 var app = {
   print: function( str ) { 
     console.log( 'squint$ ' + str );
   },
   processPathArgument: function( arg ) {
-    var view = path.join( 'view', arg );
+    var view = path.join( config.out, arg );
     
     app.print( 'execute on argument: ' + arg );
     mkdir( view, function( err ) {
@@ -84,6 +85,7 @@ var app = {
     function mkdir( dir, done ) {
       systemExecute( 'mkdir -p ' + dir, done );
     }
+    
     function cpdir( src, dst, done ) {
       systemExecute( 'cp -rfp ' + src + ' ' + dst, done );
     }
