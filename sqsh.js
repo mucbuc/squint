@@ -87,6 +87,19 @@ var app = {
     function cpdir( src, dst, done ) {
       systemExecute( 'cp -rfp ' + src + ' ' + dst, done );
     }
+    
+    function systemExecute( cmd, done ) {
+      app.print( cmd ); 
+      var p = cp.exec( cmd, [], function( err, stdout, stderr ) {
+        if (err) done( err ); 
+      } ); 
+      p.stdout.on( 'data', function( data ) { 
+        process.stdout.write( data ); 
+      } );
+      if (typeof done != 'undefined')
+        p.on( 'exit', done ); 
+      return p;
+    }
   },
   stripCode: function( code, file ) { 
     code = squint.stripStrings( code );
@@ -139,19 +152,6 @@ var app = {
     } ); 
   },
 };
-
-function systemExecute( cmd, done ) {
-  app.print( cmd ); 
-  var p = cp.exec( cmd, [], function( err, stdout, stderr ) {
-    if (err) done( err ); 
-  } ); 
-  p.stdout.on( 'data', function( data ) { 
-    process.stdout.write( data ); 
-  } );
-  if (typeof done != 'undefined')
-    p.on( 'exit', done ); 
-  return p;
-}
 
 process.on( 'exit', app.cleanup );
 app.parseArgs( process.argv.slice(2) );
