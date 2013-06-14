@@ -17,11 +17,7 @@ var squint = require( 'squint' )
       console.log( '    https://github.com/mucbuc\n' );
     }
   , isValidFile = function( file ) {
-      var ext = path.extname( file );
-      return   ext == '.h'
-            || ext == '.hxx'
-            || ext == '.cpp'
-            || ext == '.cxx';
+      return config.valid.indexOf( path.extname( file ) ) != -1;
     }
   , isValidDirectory = function( dir ) {
       var base = path.basename( dir );

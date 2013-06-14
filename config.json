@@ -1,3 +1,4 @@
 {
-  "out": "view"
+  "out": "view",
+  "valid": [ ".h", ".hxx", ".cpp", ".cxx" ]
 }
