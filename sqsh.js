@@ -1,6 +1,7 @@
 var squint = require( 'squint' )
   , fs = require( 'fs.extra' )
   , path = require( 'path' )
+  , cp = require( 'child_process' )
   , command = 0
   , commandName = ''
   , pathArguments = []
@@ -11,6 +12,7 @@ var squint = require( 'squint' )
       console.log( '    node sqsh [command] file ... ' ); 
       console.log( '  COMMANDS:' );
       console.log( '    strip -> strip comments, includes, defines, undefs, and string literals' );
+      console.log( '  VERSION: 0.0.1' );
       console.log( '  SOURCE:' );
       console.log( '    https://github.com/mucbuc\n' );
     }
@@ -31,47 +33,49 @@ var app = {
     console.log( 'squint$ ' + str );
   },
   processPathArgument: function( arg ) {
+    var view = path.join( 'view', arg );
+    
     app.print( 'execute on argument: ' + arg );
-  
-    fs.copyRecursive( arg, 'view/' + arg, function( err ) { 
+    systemExecute( 'mkdir -p ' + view, function( err ) {
       if (err) throw err;
-    } );
-  
-    fs.stat( arg, function( err, stat ) {
-      
-      var processFile = function( file ) {
-          app.print( commandName + ' file: ' + file ); 
-          fs.readFile( file, function( err, data ) {
-            if (err) throw err;
-            command( data.toString(), file );
-          } );
-        }
-        , processDirectory = function( dir ) {
-          fs.readdir( dir, function( err, files ) {
-            if (err) throw err;
-            files.forEach( function( file ) {
-              file = path.join( dir, file );
-              fs.stat( file, function( err, stat ) {
+      systemExecute( 'cp -rfp ' + arg + ' ' + view, function(err) {
+        if (err) throw err;
+        fs.stat( view, function( err, stat ) {
+          var processFile = function( file ) {
+                app.print( commandName + ' file: ' + file ); 
+                fs.readFile( file, function( err, data ) {
+                  if (err) throw err;
+                  command( data.toString(), file );
+                } );
+              }
+            , processDirectory = function( dir ) {
+                fs.readdir( dir, function( err, files ) {
                 if (err) throw err;
-                if (stat.isDirectory()) {
-                  if (!isValidDirectory(dir)) return;
-                  processDirectory( file );
-                }
-                else if (isValidFile(file)) {
-                  processFile( file );
-                }
+                files.forEach( function( file ) {
+                  file = path.join( dir, file );
+                  fs.stat( file, function( err, stat ) {
+                    if (err) throw err;
+                    if (stat.isDirectory()) {
+                      if (!isValidDirectory(dir)) return;
+                      processDirectory( file );
+                    }
+                    else if (isValidFile(file)) {
+                      processFile( file );
+                    }
+                  } );
+                } );
               } );
-            } );
-          } );
-        };
+            };
       
-      if (err) throw err;
-      if (!stat.isDirectory()) {
-        processFile( arg );
-      }
-      else {
-        processDirectory( arg );
-      }
+          if (err) throw err;
+          if (!stat.isDirectory()) {
+            processFile( view );
+          }
+          else {
+            processDirectory( view );
+          }
+        } );
+      } );
     } );
   },
   stripCode: function( code, file ) { 
@@ -104,7 +108,10 @@ var app = {
         case 'strip': case 'declare':
           commandName = arg;
           command = function( code, file ) {
-            fs.writeFile( file + 't', app.stripCode( code ) );
+            fs.unlink( file, function( err ) {
+              if (err) throw err;
+              fs.writeFile( file, app.stripCode( code ) );
+            } );
           };
           execute = function() {
             if (!pathArguments.length) {
@@ -122,6 +129,19 @@ var app = {
     } ); 
   },
 };
+
+function systemExecute( cmd, done ) {
+  app.print( cmd ); 
+  var p = cp.exec( cmd, [], function( err, stdout, stderr ) {
+    if (err) done( err ); 
+  } ); 
+  p.stdout.on( 'data', function( data ) { 
+    process.stdout.write( data ); 
+  } );
+  if (typeof done != 'undefined')
+    p.on( 'exit', done ); 
+  return p;
+}
 
 process.on( 'exit', app.cleanup );
 app.parseArgs( process.argv.slice(2) );
