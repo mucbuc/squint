@@ -1,6 +1,6 @@
 var assert = require( 'assert' )
-  , Parser = require( 'squint/parser' ).Parser
-  , makeEmitTester = require( 'squint/test/tester' ).makeEmitTester;
+  , Parser = require( '../src/parser' ).Parser
+  , makeEmitTester = require( './tester' ).makeEmitTester;
 
 makeEmitTester( Parser.prototype );
 

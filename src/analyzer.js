@@ -1,4 +1,4 @@
-var Parser = require( 'squint/parser' ).Parser
+var Parser = require( './parser' ).Parser
   , events = require( 'events' );
 
 function Analyzer( parser ) {

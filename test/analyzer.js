@@ -1,8 +1,8 @@
 var assert = require( 'assert' )
-  , Analyzer = require( 'squint/analyzer' ).Analyzer
-  , Parser = require( 'squint/parser' ).Parser 
   , events = require( 'events' )
-  , makeEmitTester = require( 'squint/test/tester' ).makeEmitTester;
+  , Analyzer = require( '../src/analyzer' ).Analyzer
+  , Parser = require( '../src/parser' ).Parser 
+  , makeEmitTester = require( './tester' ).makeEmitTester;
 
 function runTest() {
 
@@ -14,6 +14,8 @@ function runTest() {
   functionLikeMacrosAsTemplateParameter();
   templateParameters();
 */
+
+  console.log( 'analyzer passed' );
 }
 
 function typeTemplateDeclaration() {
