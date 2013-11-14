@@ -16,19 +16,13 @@ var squint = require( 'squint' )
       console.log( '  SOURCE:' );
       console.log( '    https://github.com/mucbuc\n' );
     }
-  , isValidFile = function( file ) {
-      return config.valid.indexOf( path.extname( file ) ) != -1;
-    }
-  , isValidDirectory = function( dir ) {
-      var base = path.basename( dir );
-      return base[0] != '.';
-    }
   , config = require( './config.json' );
-
+  
 var app = {
   print: function( str ) { 
     console.log( 'squint$ ' + str );
   },
+  
   processPathArgument: function( arg ) {
     var view = path.join( config.out, arg );
     
@@ -85,7 +79,15 @@ var app = {
     function cpdir( src, dst, done ) {
       systemExecute( 'cp -rfp ' + src + ' ' + dst, done );
     }
+
+    function isValidFile( file ) {
+      return config.valid.indexOf( path.extname( file ) ) != -1;
+    }
     
+    function isValidDirectory( dir ) {
+      return path.basename( dir )[0] != '.';
+    }
+
     function systemExecute( cmd, done ) {
       app.print( cmd ); 
       var p = cp.exec( cmd, [], function( err, stdout, stderr ) {
