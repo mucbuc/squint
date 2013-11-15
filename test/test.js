@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var assert = require( 'assert' )
   , squint = require( '../src/squint' )
   , runParser = require( './parser' ).run
@@ -7,8 +9,10 @@ assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );
 
-//runParser();
-runAnalyser();
+runParser();
+
+
+//runAnalyser();
 
 /*
 arrayInitializerBlocks();

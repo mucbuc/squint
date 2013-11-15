@@ -7,16 +7,19 @@ makeEmitTester( Parser.prototype );
 module.exports = { 
   run : function() {
   
-    regularExpressions();
-  
-    //preProcess();
-  
-    basicTest();
-    functionParameters();
+    testDeliminator();
     testNested();
     testInterleaved();
     testScopes();
     testStatments();
+
+  //  regularExpressions();
+  //  preProcess();
+    // functionParameters();
+    // 
+    // 
+    // 
+  
   }, 
 };
 
@@ -30,36 +33,19 @@ function preProcess() {
 
 }
 
-function basicTest() {
-  var parser = new Parser();
-  
-  parser.expect( 'statement', 'a' ); 
-  parser.process( 'a;' );
-  
-  parser.expect( 'open', 'a' ); 
-  parser.process( 'a {' );
-}
-
-function testNested() {
+function testStatments() {
   var parser = new Parser();
 
-  parser.expect( 'open', 'a' );
-  parser.expect( 'open', 'b' );
-  parser.expect( 'statement', 'c' );
-  parser.expect( 'close' );
-  parser.expect( 'close' );
+  parser.expect( 'statement', '1' );
+  parser.expect( 'statement', '2' );
+  parser.expect( 'statement', '3' );
+  parser.expect( 'statement' );
+ 
+  parser.process( '1; 2; 3;;' );
 
-  parser.process( 'a { b { c; } }' );
-};
-
-function testInterleaved() { 
-  var parser = new Parser();
-  
-  parser.expect( 'open', 'a' );
-  parser.expect( 'statement','b' );
-  parser.expect( 'close' );
-   
-  parser.process( 'a{ b; }' );
+  process.on( 'exit', function() {
+    console.log( 'testStatments passed' );
+  } );
 }
 
 function testScopes() {
@@ -73,15 +59,70 @@ function testScopes() {
   parser.expect( 'close' );
  
   parser.process( 'a{} b{} c{}' );
+
+  process.on( 'exit', function() {
+    console.log( 'testScopes passed' );
+  } );
 }
 
-function testStatments() {
+function testInterleaved() { 
+  var parser = new Parser();
+  
+  parser.expect( 'open', 'a' );
+  parser.expect( 'statement','b' );
+  parser.expect( 'close' );
+   
+  parser.process( 'a{ b; }' );
+
+  process.on( 'exit', function() {
+    console.log( 'testInterleaved passed' );
+  } );
+}
+
+function testNested() {
   var parser = new Parser();
 
-  parser.expect( 'statement', '1' );
-  parser.expect( 'statement', '2' );
-  parser.expect( 'statement', '3' );
-  parser.expect( 'statement' );
- 
-  parser.process( '1; 2; 3;;' );
+  parser.expect( 'open', 'a' );
+  parser.expect( 'open', 'b' );
+  parser.expect( 'statement', 'c' );
+  parser.expect( 'close' );
+  parser.expect( 'close' );
+
+  parser.process( 'a { b { c; } }' );
+
+  process.on( 'exit', function() {
+    console.log( 'testNested passed' );
+  } );
+}
+
+function testDeliminator() {
+  var parser = new Parser();
+  
+  parser.expect( 'statement', 'a' ); 
+  parser.process( 'a;' );
+  
+  parser.expect( 'statement', 'a' ); 
+  parser.process( 'a ;' );
+
+  parser.expect( 'statement', 'a' ); 
+  parser.process( ' a;' );
+
+  parser.expect( 'statement', 'a' ); 
+  parser.process( ' a ;' );
+
+  parser.expect( 'open', 'a' ); 
+  parser.process( 'a {' );
+
+  parser.expect( 'open', 'a' ); 
+  parser.process( 'a{' );
+
+  parser.expect( 'open', 'a' ); 
+  parser.process( ' a {' );
+
+  parser.expect( 'open', 'a' ); 
+  parser.process( ' a{' );
+
+  process.on( 'exit', function() {
+    console.log( 'testDeliminator passed' );
+  } );
 }
