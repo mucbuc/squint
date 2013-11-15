@@ -14,9 +14,10 @@ function runTest() {
   typeDeclaration();
   typeTemplateDeclaration();
   templatesAsFunctionParameters();
-/* 
   functionSignatures();
- functionLikeMacrosAsTemplateParameter();
+
+/* 
+  functionLikeMacrosAsTemplateParameter();
   templateParameters();
 */
 

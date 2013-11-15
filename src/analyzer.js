@@ -19,10 +19,10 @@ function Analyzer( parser ) {
         
     function processTemplateParameters() {
       var parser = new Parser( { 
-          '<': 'open template', 
-          '>': 'close template',
-          '(': 'open function'
-        } )
+            '<': 'open template', 
+            '>': 'close template',
+            '(': 'open function'
+          } )
         , signature = ''
         , depth = 0;
         
@@ -53,19 +53,19 @@ function Analyzer( parser ) {
     
     function processFunctionSignature( sign ) {
       var parser = new Parser( { 
-          '(': 'open function', 
-          ')': 'close function'
-        } )
+            '(': 'open function', 
+            ')': 'close function'
+          } )
         , signature = sign == undefined ? '' : sign
         , depth = sign == undefined ? 0 : 1;
       
-      parser.on( 'open function', function( code ) {
+      parser.once( 'open function', function( code ) {
         isFunction = true;
         signature += code + '(';
         ++depth;
       } );
     
-      parser.on( 'close function', function( code ) { 
+      parser.once( 'close function', function( code ) { 
         signature += code + ')';
         if (!--depth) {
           instance.emit( 'function signature', signature );
