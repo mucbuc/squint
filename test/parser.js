@@ -6,32 +6,13 @@ makeEmitTester( Parser.prototype );
 
 module.exports = { 
   run : function() {
-  
     testDeliminator();
     testNested();
     testInterleaved();
     testScopes();
     testStatments();
-
-  //  regularExpressions();
-  //  preProcess();
-    // functionParameters();
-    // 
-    // 
-    // 
-  
   }, 
 };
-
-function regularExpressions() {
-
-
-}
-
-function preProcess() {
-  //var parser = new Parser( '#': '
-
-}
 
 function testStatments() {
   var parser = new Parser();

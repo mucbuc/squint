@@ -22,7 +22,7 @@ function Parser( map ) {
     var pos = code.search( deliminators );
     
     while (pos != -1) {
-      var source = code.substr( 0, pos ).trim();
+      var source = code.substr( 0, pos );
       instance.emit( instance[ code[ pos ] ], source );
       code = code.substr( pos + 1, code.length );
       pos = code.search( deliminators );
@@ -34,6 +34,9 @@ function Parser( map ) {
     var chars = '['
       , regExs = [];
     EventEmitter.call( this );
+    
+    instance.setMaxListeners( 0 );
+
     for (property in map) {
       if (property.length > 1) {
         regExs.push( { property: map[property] } );

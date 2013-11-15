@@ -19,7 +19,7 @@ function makeEmitTester( emitter ) {
     expectations.splice( 0, 1 );
    
     if (expectation.code != undefined) {
-      assert.deepEqual( code, expectation.code );
+      assert.deepEqual( code.trim(), expectation.code.trim() );
     }
     
     if (expectations.length) {

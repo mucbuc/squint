@@ -10,9 +10,7 @@ assert( typeof squint != 'undefined' );
 process.setMaxListeners( 0 );
 
 runParser();
-
-
-//runAnalyser();
+runAnalyser();
 
 /*
 arrayInitializerBlocks();
