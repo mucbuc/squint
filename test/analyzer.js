@@ -22,6 +22,9 @@ function runTest() {
   templatesAsFunctionParameters();
   templateParameters();
   functionLikeMacrosAsTemplateParameter();
+  functionLikeMacrosAsTemplateParameter2();
+  functionLikeMacrosAsTemplateParameter3();
+  functionLikeMacrosAsTemplateParameter4();
 
   testLog( 'analyzer passed' );
 }
@@ -46,20 +49,35 @@ function functionLikeMacrosAsTemplateParameter() {
   parser.expect( 'open', 'template class< MACRO( arg ) >' );
   analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{' );
+  testLog( 'functionLikeMacrosAsTemplateParameter passed' );
 
-  // parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
-  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
-  // parser.process( 'template class< MACRO( arg ) > class C{' );
+}
 
-  // parser.expect( 'open', 'template class< MACRO( arg ), U > class C' );
-  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
-  // parser.process( 'template class< MACRO( arg ), U > class C{' );
-  
-  // parser.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
-  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
-  // parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
+function functionLikeMacrosAsTemplateParameter2() {
 
-  //testLog( 'functionLikeMacrosAsTemplateParameter passed' );
+  var parser = makeEmitTester( new Parser() )
+    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
+  analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
+  parser.process( 'template class< MACRO( arg ) > class C{' );
+}
+
+function functionLikeMacrosAsTemplateParameter3() {
+
+  var parser = makeEmitTester( new Parser() )
+    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  parser.expect( 'open', 'template class< MACRO( arg ), U > class C' );
+  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
+  parser.process( 'template class< MACRO( arg ), U > class C{' );
+}
+
+function functionLikeMacrosAsTemplateParameter4() {
+
+  var parser = makeEmitTester( new Parser() )
+    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  parser.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
+  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
+  parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
 } 
 
 function functionSignatures() {

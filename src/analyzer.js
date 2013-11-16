@@ -13,6 +13,10 @@ function Analyzer( parser ) {
           '(': 'open function'
         } );
     
+    sub.once( 'end', function() {
+      sub.removeAllListeners();
+      delete sub;
+    } );
     sub.once( 'open function', processFunctionSignature );
     sub.once( 'open template', processTemplateParameters );
     sub.process( code );
@@ -41,6 +45,9 @@ function Analyzer( parser ) {
         process.nextTick( function() {
           instance.emit( 'type declaration', code );
         } );
+
+        sub.removeAllListeners();
+      delete sub;
       } );
 
       sub.process( code );
@@ -64,6 +71,11 @@ function Analyzer( parser ) {
         if (!--depth) {
           instance.emit( 'function signature', signature );
         }
+      } );
+
+      sub.once( 'end', function() {
+        sub.removeAllListeners();
+      delete sub;
       } );
 
       sub.process( code );
