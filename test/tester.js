@@ -4,6 +4,10 @@ function makeEmitTester( emitter ) {
   var expectations = [];
   
   process.on( 'exit', function() {
+    if (expectations.length) {
+      console.log( expectations );
+    }
+
     assert.equal( expectations.length, 0 );
   } );
 

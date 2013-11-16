@@ -8,6 +8,60 @@ function Analyzer( parser ) {
 
   parser.once( 'open', function( code ) {
 
+    var sub = new Parser( {
+        '<': 'open template',
+        '(': 'open function'
+      } )
+      , isType = true;
+
+    sub.once( 'end', function() {
+      if (isType) {
+        instance.emit( 'type declaration', code );
+      }
+      delete sub;
+    } );
+    
+    sub.once( 'open function', processFunctionSignature );
+    sub.process( code );
+
+    function processFunctionSignature( sign ) {
+      var sub = new Parser( { 
+            '(': 'open function', 
+            ')': 'close function'
+          } )
+        , signature = ''
+        , depth = 0;
+
+      sub.on( 'open function', function( code ) {
+        isFunction = true;
+        signature += code + '(';
+        ++depth;
+      } );
+    
+      sub.on( 'close function', function( code ) { 
+        signature += code + ')';
+        if (!--depth) {
+          instance.emit( 'function signature', signature );
+          delete sub;
+        }
+      } );
+      
+      isType = false;
+      return sub.process( code );
+    }
+
+  });
+}
+
+Analyzer.prototype = new events.EventEmitter(); 
+
+module.exports.Analyzer = Analyzer; 
+
+
+
+
+/*
+
     var isFunction = false;
 
     code = processTemplateParameters( code );
@@ -16,28 +70,36 @@ function Analyzer( parser ) {
       instance.emit( 'type declaration', code.trim() );
     }
         
-    function processTemplateParameters() {
+    function processTemplateParameters( code ) {
       var parser = new Parser( { 
             '<': 'open template', 
             '>': 'close template',
-            '(': 'open function'
+            '(': 'open function',
           } )
         , signature = ''
         , depth = 0;
-        
+      
+      parser.once( 'end', function() {
+        delete parser;
+      } );
+
       parser.once( 'open function', function( code ) {
         if (!signature.length) {
           processFunctionSignature();
         }
         else {
-          signature += code + '(';
+          
+          append( code );
+          
+          parser.on( 'open function', append );
+          
+          function append( code ) {
+            signature += code + '(';
+          }
         }
-
-        parser.removeAllListeners();
       } );
 
       parser.on( 'open template', function( code ) {
-
         signature += code + '<';
         ++depth;
       } );
@@ -61,6 +123,10 @@ function Analyzer( parser ) {
         , signature = sign == undefined ? '' : sign
         , depth = sign == undefined ? 0 : 1;
       
+      parser.once( 'end', function() {
+        delete parser;
+      } );
+
       parser.once( 'open function', function( code ) {
         isFunction = true;
         signature += code + '(';
@@ -73,16 +139,10 @@ function Analyzer( parser ) {
           instance.emit( 'function signature', signature );
           signature = '';
         }
-
-        parser.removeAllListeners();
       } );
       
       return parser.process( code );
     }
     
-  } );
-}
 
-Analyzer.prototype = new events.EventEmitter(); 
-
-module.exports.Analyzer = Analyzer; 
+*/ 
