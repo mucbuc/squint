@@ -33,7 +33,7 @@ function Parser( map ) {
   function init( map ) {
     var chars = '['
       , regExs = [];
-    EventEmitter.call( this );
+    EventEmitter.call( instance );
     
     instance.setMaxListeners( 0 );
 

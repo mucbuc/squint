@@ -4,10 +4,9 @@ var Parser = require( './parser' ).Parser
 function Analyzer( parser ) {
 
   var instance = this;
-
   events.EventEmitter.call( this );
 
-  parser.on( 'open', function( code ) {
+  parser.once( 'open', function( code ) {
 
     var isFunction = false;
 
@@ -33,9 +32,12 @@ function Analyzer( parser ) {
         else {
           signature += code + '(';
         }
+
+        parser.removeAllListeners();
       } );
 
       parser.on( 'open template', function( code ) {
+
         signature += code + '<';
         ++depth;
       } );
@@ -47,7 +49,7 @@ function Analyzer( parser ) {
           signature = '';
         }
       } );
-      
+
       return parser.process( code );
     }
     
@@ -71,6 +73,8 @@ function Analyzer( parser ) {
           instance.emit( 'function signature', signature );
           signature = '';
         }
+
+        parser.removeAllListeners();
       } );
       
       return parser.process( code );
