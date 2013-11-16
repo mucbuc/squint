@@ -27,7 +27,7 @@ function Parser( map ) {
       code = code.substr( pos + 1, code.length );
       pos = code.search( deliminators );
     }
-    instance.emit( 'end' );
+    instance.emit( 'end', code );
     return code;
   }; 
   

@@ -9,22 +9,44 @@ function Analyzer( parser ) {
   parser.once( 'open', function( code ) {
 
     var sub = new Parser( {
-        '<': 'open template',
-        '(': 'open function'
-      } )
-      , isType = true;
-
-    sub.once( 'end', function() {
-      if (isType) {
-        instance.emit( 'type declaration', code );
-      }
-      delete sub;
-    } );
+          '<': 'open template',
+          '(': 'open function'
+        } );
     
     sub.once( 'open function', processFunctionSignature );
+    sub.once( 'open template', processTemplateParameters );
     sub.process( code );
 
-    function processFunctionSignature( sign ) {
+    function processTemplateParameters() {
+      var sub = new Parser( { 
+          '<': 'open template', 
+          '>': 'close template'
+        } )
+      , signature = ''
+      , depth = 0;
+
+      sub.on( 'open template', function( code ) {
+        signature += code + '<';
+        depth++;
+      } );
+    
+      sub.on( 'close template', function( code ) { 
+        signature += code + '>';
+        if (!--depth) {
+          instance.emit( 'template parameters', signature );
+        }
+      } );
+
+      sub.once( 'end', function() {
+        process.nextTick( function() {
+          instance.emit( 'type declaration', code );
+        } );
+      } );
+
+      sub.process( code );
+    }
+
+    function processFunctionSignature() {
       var sub = new Parser( { 
             '(': 'open function', 
             ')': 'close function'
@@ -33,7 +55,6 @@ function Analyzer( parser ) {
         , depth = 0;
 
       sub.on( 'open function', function( code ) {
-        isFunction = true;
         signature += code + '(';
         ++depth;
       } );
@@ -42,12 +63,10 @@ function Analyzer( parser ) {
         signature += code + ')';
         if (!--depth) {
           instance.emit( 'function signature', signature );
-          delete sub;
         }
       } );
-      
-      isType = false;
-      return sub.process( code );
+
+      sub.process( code );
     }
 
   });
@@ -56,93 +75,3 @@ function Analyzer( parser ) {
 Analyzer.prototype = new events.EventEmitter(); 
 
 module.exports.Analyzer = Analyzer; 
-
-
-
-
-/*
-
-    var isFunction = false;
-
-    code = processTemplateParameters( code );
-    code = processFunctionSignature( code );
-    if (!isFunction) { 
-      instance.emit( 'type declaration', code.trim() );
-    }
-        
-    function processTemplateParameters( code ) {
-      var parser = new Parser( { 
-            '<': 'open template', 
-            '>': 'close template',
-            '(': 'open function',
-          } )
-        , signature = ''
-        , depth = 0;
-      
-      parser.once( 'end', function() {
-        delete parser;
-      } );
-
-      parser.once( 'open function', function( code ) {
-        if (!signature.length) {
-          processFunctionSignature();
-        }
-        else {
-          
-          append( code );
-          
-          parser.on( 'open function', append );
-          
-          function append( code ) {
-            signature += code + '(';
-          }
-        }
-      } );
-
-      parser.on( 'open template', function( code ) {
-        signature += code + '<';
-        ++depth;
-      } );
-    
-      parser.on( 'close template', function( code ) { 
-        signature += code + '>';
-        if (!--depth) {
-          instance.emit( 'template parameters', signature );
-          signature = '';
-        }
-      } );
-
-      return parser.process( code );
-    }
-    
-    function processFunctionSignature( sign ) {
-      var parser = new Parser( { 
-            '(': 'open function', 
-            ')': 'close function'
-          } )
-        , signature = sign == undefined ? '' : sign
-        , depth = sign == undefined ? 0 : 1;
-      
-      parser.once( 'end', function() {
-        delete parser;
-      } );
-
-      parser.once( 'open function', function( code ) {
-        isFunction = true;
-        signature += code + '(';
-        ++depth;
-      } );
-    
-      parser.once( 'close function', function( code ) { 
-        signature += code + ')';
-        if (!--depth) {
-          instance.emit( 'function signature', signature );
-          signature = '';
-        }
-      } );
-      
-      return parser.process( code );
-    }
-    
-
-*/ 

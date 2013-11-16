@@ -4,7 +4,6 @@ var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser 
   , makeEmitTester = require( './tester' ).makeEmitTester;
 
-
 module.exports = {
   run : runTest
 };
@@ -19,11 +18,10 @@ function runTest() {
 
   typeDeclaration();
   functionSignatures();
-    
-  // typeTemplateDeclaration();
-  //templatesAsFunctionParameters();
-  // templateParameters();
-  //functionLikeMacrosAsTemplateParameter();
+  typeTemplateDeclaration();
+  templatesAsFunctionParameters();
+  templateParameters();
+  functionLikeMacrosAsTemplateParameter();
 
   testLog( 'analyzer passed' );
 }
@@ -49,19 +47,17 @@ function functionLikeMacrosAsTemplateParameter() {
   analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{' );
 
-/*   
-  parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
-  parser.process( 'template class< MACRO( arg ) > class C{' );
+  // parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
+  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
+  // parser.process( 'template class< MACRO( arg ) > class C{' );
 
-  parser.expect( 'open', 'template class< MACRO( arg ), U > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
-  parser.process( 'template class< MACRO( arg ), U > class C{' );
+  // parser.expect( 'open', 'template class< MACRO( arg ), U > class C' );
+  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
+  // parser.process( 'template class< MACRO( arg ), U > class C{' );
   
-  parser.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
-  parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
-*/
+  // parser.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
+  // analyzer.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
+  // parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
 
   //testLog( 'functionLikeMacrosAsTemplateParameter passed' );
 } 

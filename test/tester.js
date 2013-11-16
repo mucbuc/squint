@@ -5,6 +5,7 @@ function makeEmitTester( emitter ) {
   
   process.on( 'exit', function() {
     if (expectations.length) {
+      console.log( 'expected events did not occur' );
       console.log( expectations );
     }
 
