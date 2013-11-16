@@ -8,6 +8,12 @@ var assert = require( 'assert' )
 module.exports = {
   run : runTest
 };
+
+function testLog( msg ) {
+  process.on( 'exit', function() {
+    console.log( msg );
+  } );
+}
   
 function runTest() {
 
@@ -15,15 +21,13 @@ function runTest() {
   typeTemplateDeclaration();
   templatesAsFunctionParameters();
   functionSignatures();
-  functionLikeMacrosAsTemplateParameter();
-/* 
-  
   templateParameters();
+
+/* 
+  functionLikeMacrosAsTemplateParameter();
 */
 
-  process.on( 'exit', function() {
-    console.log( 'analyzer passed' );
-  } );
+  testLog( 'analyzer passed' );
 }
 
 function templateParameters() {
@@ -35,20 +39,18 @@ function templateParameters() {
   analyzer.expect( 'template parameters', 'template class< arg >' );
   parser.process( 'template class< arg >{' );
 
-  process.on( 'exit', function() {
-    console.log( 'templateParameters passed' );
-  } );
+  testLog( 'templateParameters passed' );
 }
 
 function functionLikeMacrosAsTemplateParameter() {
 
   var parser = makeEmitTester( new Parser() )
     , analyzer = makeEmitTester( new Analyzer( parser ) );
-/*   
+/* 
   parser.expect( 'open', 'template class< MACRO( arg ) >' );
   analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{' );
-
+  
   parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
   analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) > class C{' );
@@ -62,9 +64,7 @@ function functionLikeMacrosAsTemplateParameter() {
   parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
 */
 
-  process.on( 'exit', function() {
-    console.log( 'functionLikeMacrosAsTemplateParameter passed' );
-  } );
+  testLog( 'functionLikeMacrosAsTemplateParameter passed' );
 } 
 
 function functionSignatures() {
@@ -76,9 +76,7 @@ function functionSignatures() {
   analyzer.expect( 'function signature', 'type foo()' );
   parser.process( 'type foo(){' );
 
-  process.on( 'exit', function() {
-    console.log( 'functionSignatures passed' );
-  } );
+  testLog( 'functionSignatures passed' );
 }
 
 function templatesAsFunctionParameters() {
@@ -89,9 +87,7 @@ function templatesAsFunctionParameters() {
   analyzer.expect( 'function signature', 'type foo( st< abc > )' );
   parser.process( 'type foo( st< abc > ){' );
 
-  process.on( 'exit', function() {
-    console.log( 'templatesAsFunctionParameters passed' );
-  } );
+  testLog( 'templatesAsFunctionParameters passed' );
 }
 
 function typeTemplateDeclaration() {
@@ -104,9 +100,7 @@ function typeTemplateDeclaration() {
   analyzer.expect( 'type declaration', 'type XYZ' );
   parser.process( 'template<class, class> type XYZ{' );
 
-  process.on( 'exit', function() {
-    console.log( 'typeTemplateDeclaration passed' );
-  } );
+  testLog( 'typeTemplateDeclaration passed' );
 }
 
 function typeDeclaration() {
@@ -117,8 +111,6 @@ function typeDeclaration() {
   analyzer.expect( 'type declaration', 'type XYZ' );
   parser.process( 'type XYZ{' );
 
-  process.on( 'exit', function() {
-    console.log( 'typeDeclaration passed' );
-  } );
+  testLog( 'typeDeclaration passed' );
 }
 
