@@ -2,15 +2,12 @@
 
 var assert = require( 'assert' )
   , squint = require( '../src/squint' )
-  , runParser = require( './parser' ).run
-  , runAnalyser = require( './analyzer' ).run;
+  , parser = require( './parser' )
+  , analyzer = require( './analyzer' );
 
 assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );
-
-runParser();
-runAnalyser();
 
 /*
 arrayInitializerBlocks();

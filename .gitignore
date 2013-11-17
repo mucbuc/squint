@@ -1,6 +1,6 @@
 .DS_STORE
 .svn/
 docs/
-node_modules/fs.extra
+node_modules/
 view/
 sample/

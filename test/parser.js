@@ -1,18 +1,20 @@
 var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
-  , Tester = require( './tester' )
+  , Tester = require( 'mucbuc-jsthree' ).Tester
   , testLog = Tester.testLog
   , makeEmitTester = Tester.makeEmitTester;
 
-module.exports = { 
-  run : function() {
-    testDeliminator();
-    testNested();
-    testInterleaved();
-    testScopes();
-    testStatments();
-  }, 
-};
+assert( typeof makeEmitTester != 'undefined' );
+
+checkParser();
+
+function checkParser() {
+  testDeliminator();
+  testNested();
+  testInterleaved();
+  testScopes();
+  testStatments();
+}
 
 function testStatments() {
   var parser = new Parser()

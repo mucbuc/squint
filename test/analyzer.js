@@ -2,16 +2,13 @@ var assert = require( 'assert' )
   , EventEmitter = require( 'events' ).EventEmitter
   , Analyzer = require( '../src/analyzer' ).Analyzer
   , Parser = require( '../src/parser' ).Parser 
-  , Tester = require( './tester' )
+  , Tester = require( 'mucbuc-jsthree' ).Tester
   , testLog = Tester.testLog
   , makeEmitTester = Tester.makeEmitTester;
 
-module.exports = {
-  run : runTest
-};
- 
-function runTest() {
+checkAnalyzer();
 
+function checkAnalyzer() {
   typeDeclaration();
   functionSignatures();
   typeTemplateDeclaration();
@@ -21,11 +18,7 @@ function runTest() {
   functionLikeMacrosAsTemplateParameter2();
   functionLikeMacrosAsTemplateParameter3();
   functionLikeMacrosAsTemplateParameter4();
-
-  testLog( 'analyzer passed' );
 }
-
-runTest();
 
 function templateParameters() {
 
