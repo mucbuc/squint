@@ -88,6 +88,4 @@ function Analyzer( parser ) {
   });
 }
 
-Analyzer.prototype = new events.EventEmitter(); 
-
 module.exports.Analyzer = Analyzer; 

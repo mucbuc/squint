@@ -1,19 +1,17 @@
 var assert = require( 'assert' )
-  , events = require( 'events' )
+  , EventEmitter = require( 'events' ).EventEmitter
   , Analyzer = require( '../src/analyzer' ).Analyzer
   , Parser = require( '../src/parser' ).Parser 
-  , makeEmitTester = require( './tester' ).makeEmitTester;
+  , Tester = require( './tester' ).Tester
+  , testLog = Tester.testLog
+  , makeEmitTester = Tester.makeEmitTester;
 
 module.exports = {
   run : runTest
 };
 
-function testLog( msg ) {
-  process.on( 'exit', function() {
-    console.log( msg );
-  } );
-}
-  
+runTest();
+ 
 function runTest() {
 
   typeDeclaration();

@@ -1,6 +1,8 @@
 var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
-  , makeEmitTester = require( './tester' ).makeEmitTester;
+  , Tester = require( './tester' )
+  , testLog = Tester.testLog
+  , makeEmitTester = Tester.makeEmitTester;
 
 module.exports = { 
   run : function() {
@@ -11,8 +13,6 @@ module.exports = {
     testStatments();
   }, 
 };
-
-module.exports.run();
 
 function testStatments() {
   var parser = new Parser()
@@ -25,9 +25,7 @@ function testStatments() {
  
   parser.process( '1; 2; 3;;', emitter );
 
-  process.on( 'exit', function() {
-    console.log( 'testStatments passed' );
-  } );
+  testLog( 'testStatments passed' );
 }
 
 function testScopes() {
@@ -43,9 +41,7 @@ function testScopes() {
  
   parser.process( 'a{} b{} c{}', emitter );
 
-  process.on( 'exit', function() {
-    console.log( 'testScopes passed' );
-  } );
+  testLog( 'testScopes passed' );
 }
 
 function testInterleaved() { 
@@ -58,9 +54,7 @@ function testInterleaved() {
    
   parser.process( 'a{ b; }', emitter );
 
-  process.on( 'exit', function() {
-    console.log( 'testInterleaved passed' );
-  } );
+  testLog( 'testInterleaved passed' );
 }
 
 function testNested() {
@@ -75,9 +69,7 @@ function testNested() {
 
   parser.process( 'a { b { c; } }', emitter );
 
-  process.on( 'exit', function() {
-    console.log( 'testNested passed' );
-  } );
+  testLog( 'testNested passed' );
 }
 
 function testDeliminator() {
@@ -108,7 +100,5 @@ function testDeliminator() {
   emitter.expect( 'open', 'a' ); 
   parser.process( ' a{', emitter );
 
-  process.on( 'exit', function() {
-    console.log( 'testDeliminator passed' );
-  } );
+  testLog( 'testDeliminator passed' );
 }
