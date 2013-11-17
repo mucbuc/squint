@@ -12,15 +12,15 @@ module.exports = {
  
 function runTest() {
 
-  // typeDeclaration();
-  // functionSignatures();
+  typeDeclaration();
+  functionSignatures();
   typeTemplateDeclaration();
-  // templatesAsFunctionParameters();
-  // templateParameters();
-  // functionLikeMacrosAsTemplateParameter();
-  // functionLikeMacrosAsTemplateParameter2();
-  // functionLikeMacrosAsTemplateParameter3();
-  // functionLikeMacrosAsTemplateParameter4();
+  templatesAsFunctionParameters();
+  templateParameters();
+  functionLikeMacrosAsTemplateParameter();
+  functionLikeMacrosAsTemplateParameter2();
+  functionLikeMacrosAsTemplateParameter3();
+  functionLikeMacrosAsTemplateParameter4();
 
   testLog( 'analyzer passed' );
 }
@@ -29,62 +29,80 @@ runTest();
 
 function templateParameters() {
 
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
 
-  parser.expect( 'open', 'template class< arg >' );
-  analyzer.expect( 'template parameters', 'template class< arg >' );
-  parser.process( 'template class< arg >{' );
+  emitter.expect( 'open', 'template class< arg >' );
+  emitter.expect( 'template parameters', 'template class< arg >' );
+  parser.process( 'template class< arg >{', emitter );
 
   testLog( 'templateParameters passed' );
 }
 
 function functionLikeMacrosAsTemplateParameter() {
 
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
 
-  parser.expect( 'open', 'template class< MACRO( arg ) >' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
-  parser.process( 'template class< MACRO( arg ) >{' );
+  emitter.expect( 'open', 'template class< MACRO( arg ) >' );
+  emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
+  parser.process( 'template class< MACRO( arg ) >{', emitter );
   testLog( 'functionLikeMacrosAsTemplateParameter passed' );
 
 }
 
 function functionLikeMacrosAsTemplateParameter2() {
 
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
-  parser.expect( 'open', 'template class< MACRO( arg ) > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ) >' );
-  parser.process( 'template class< MACRO( arg ) > class C{' );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
+  emitter.expect( 'open', 'template class< MACRO( arg ) > class C' );
+  emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
+  parser.process( 'template class< MACRO( arg ) > class C{', emitter );
 }
 
 function functionLikeMacrosAsTemplateParameter3() {
 
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
-  parser.expect( 'open', 'template class< MACRO( arg ), U > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
-  parser.process( 'template class< MACRO( arg ), U > class C{' );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
+  emitter.expect( 'open', 'template class< MACRO( arg ), U > class C' );
+  emitter.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
+  parser.process( 'template class< MACRO( arg ), U > class C{', emitter );
 }
 
 function functionLikeMacrosAsTemplateParameter4() {
 
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
-  parser.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
-  analyzer.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
-  parser.process( 'template class< MACRO( arg ), template <class U> class > class C{' );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
+  emitter.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
+  emitter.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
+  parser.process( 'template class< MACRO( arg ), template <class U> class > class C{', emitter );
 } 
 
 function templatesAsFunctionParameters() {
-  var parser = makeEmitTester( new Parser() )
-    , analyzer = makeEmitTester( new Analyzer( parser ) );
+  var parser = new Parser()
+    , emitter = makeEmitTester()
+    , analyze = require( '../src/analyzer' ).analyze;
+  
+  analyze( emitter );
 
-  parser.expect( 'open', 'type foo( st< abc > )' );
-  analyzer.expect( 'function signature', 'type foo( st< abc > )' );
-  parser.process( 'type foo( st< abc > ){' );
+  emitter.expect( 'open', 'type foo( st< abc > )' );
+  emitter.expect( 'function signature', 'type foo( st< abc > )' );
+  parser.process( 'type foo( st< abc > ){', emitter );
 
   testLog( 'templatesAsFunctionParameters passed' );
 }

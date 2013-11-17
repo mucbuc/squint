@@ -5,24 +5,17 @@ function analyze( e ) {
 
   e.once( 'open', function( code ) {
 
-    var sub = new Parser( { '<': 'open template', '(': 'open function' } )
-      , emitter = new EventEmitter()
-      , declareType = true;
-    
-    emitter.once( 'open function', processFunctionSignature );
-    emitter.once( 'open template', processTemplateParameters );
-    emitter.once( 'end', processTypeDeclaration );
-    
-    sub.process( code, emitter );
-
-    function processTypeDeclaration( end ) {
-      if (declareType) {
-        process.nextTick( function() {
-          e.emit( 'type declaration', end );
-        } );
-      }
-    //  emitter.removeAllListeners();
-     // delete emitter;
+    var pos = code.search( /[<(]/ );
+    if (pos == -1) {
+      process.nextTick( function() {
+        e.emit( 'type declaration', code );
+      } );
+    } 
+    else if (code[pos] == '<') {
+      processTemplateParameters();
+    }
+    else {
+      processFunctionSignature();
     }
 
     function processTemplateParameters() {
@@ -39,6 +32,7 @@ function analyze( e ) {
       emitter.on( 'close template', function( code ) { 
         signature += code + '>';
         if (!--depth) {
+          
           process.nextTick( function() {
             e.emit( 'template parameters', signature );
           } );

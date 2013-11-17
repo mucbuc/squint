@@ -10,6 +10,8 @@ var Tester = {
         emitter = new events.EventEmitter();
       }
       
+      process.setMaxListeners( 0 );
+
       process.on( 'exit', function() {
         if (expectations.length) {
           console.log( 'expected events did not occur' );
