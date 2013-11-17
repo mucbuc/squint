@@ -2,8 +2,6 @@ var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
   , makeEmitTester = require( './tester' ).makeEmitTester;
 
-makeEmitTester( Parser.prototype );
-
 module.exports = { 
   run : function() {
     testDeliminator();
@@ -14,15 +12,18 @@ module.exports = {
   }, 
 };
 
-function testStatments() {
-  var parser = new Parser();
+module.exports.run();
 
-  parser.expect( 'statement', '1' );
-  parser.expect( 'statement', '2' );
-  parser.expect( 'statement', '3' );
-  parser.expect( 'statement' );
+function testStatments() {
+  var parser = new Parser()
+    , emitter = makeEmitTester();
+
+  emitter.expect( 'statement', '1' );
+  emitter.expect( 'statement', '2' );
+  emitter.expect( 'statement', '3' );
+  emitter.expect( 'statement' );
  
-  parser.process( '1; 2; 3;;' );
+  parser.process( '1; 2; 3;;', emitter );
 
   process.on( 'exit', function() {
     console.log( 'testStatments passed' );
@@ -30,16 +31,17 @@ function testStatments() {
 }
 
 function testScopes() {
-  var parser = new Parser();
+  var parser = new Parser()
+    , emitter = makeEmitTester();
   
-  parser.expect( 'open', 'a' ); 
-  parser.expect( 'close' );
-  parser.expect( 'open', 'b' );
-  parser.expect( 'close' );
-  parser.expect( 'open', 'c' );
-  parser.expect( 'close' );
+  emitter.expect( 'open', 'a' ); 
+  emitter.expect( 'close' );
+  emitter.expect( 'open', 'b' );
+  emitter.expect( 'close' );
+  emitter.expect( 'open', 'c' );
+  emitter.expect( 'close' );
  
-  parser.process( 'a{} b{} c{}' );
+  parser.process( 'a{} b{} c{}', emitter );
 
   process.on( 'exit', function() {
     console.log( 'testScopes passed' );
@@ -47,13 +49,14 @@ function testScopes() {
 }
 
 function testInterleaved() { 
-  var parser = new Parser();
+  var parser = new Parser()
+    , emitter = makeEmitTester();
   
-  parser.expect( 'open', 'a' );
-  parser.expect( 'statement','b' );
-  parser.expect( 'close' );
+  emitter.expect( 'open', 'a' );
+  emitter.expect( 'statement','b' );
+  emitter.expect( 'close' );
    
-  parser.process( 'a{ b; }' );
+  parser.process( 'a{ b; }', emitter );
 
   process.on( 'exit', function() {
     console.log( 'testInterleaved passed' );
@@ -61,15 +64,16 @@ function testInterleaved() {
 }
 
 function testNested() {
-  var parser = new Parser();
+  var parser = new Parser()
+    , emitter = makeEmitTester();
 
-  parser.expect( 'open', 'a' );
-  parser.expect( 'open', 'b' );
-  parser.expect( 'statement', 'c' );
-  parser.expect( 'close' );
-  parser.expect( 'close' );
+  emitter.expect( 'open', 'a' );
+  emitter.expect( 'open', 'b' );
+  emitter.expect( 'statement', 'c' );
+  emitter.expect( 'close' );
+  emitter.expect( 'close' );
 
-  parser.process( 'a { b { c; } }' );
+  parser.process( 'a { b { c; } }', emitter );
 
   process.on( 'exit', function() {
     console.log( 'testNested passed' );
@@ -77,31 +81,32 @@ function testNested() {
 }
 
 function testDeliminator() {
-  var parser = new Parser();
+  var parser = new Parser()
+    , emitter = makeEmitTester();
   
-  parser.expect( 'statement', 'a' ); 
-  parser.process( 'a;' );
+  emitter.expect( 'statement', 'a' ); 
+  parser.process( 'a;', emitter );
   
-  parser.expect( 'statement', 'a' ); 
-  parser.process( 'a ;' );
+  emitter.expect( 'statement', 'a' ); 
+  parser.process( 'a ;', emitter );
 
-  parser.expect( 'statement', 'a' ); 
-  parser.process( ' a;' );
+  emitter.expect( 'statement', 'a' ); 
+  parser.process( ' a;', emitter );
 
-  parser.expect( 'statement', 'a' ); 
-  parser.process( ' a ;' );
+  emitter.expect( 'statement', 'a' ); 
+  parser.process( ' a ;', emitter );
 
-  parser.expect( 'open', 'a' ); 
-  parser.process( 'a {' );
+  emitter.expect( 'open', 'a' ); 
+  parser.process( 'a {', emitter );
 
-  parser.expect( 'open', 'a' ); 
-  parser.process( 'a{' );
+  emitter.expect( 'open', 'a' ); 
+  parser.process( 'a{', emitter );
 
-  parser.expect( 'open', 'a' ); 
-  parser.process( ' a {' );
+  emitter.expect( 'open', 'a' ); 
+  parser.process( ' a {', emitter );
 
-  parser.expect( 'open', 'a' ); 
-  parser.process( ' a{' );
+  emitter.expect( 'open', 'a' ); 
+  parser.process( ' a{', emitter );
 
   process.on( 'exit', function() {
     console.log( 'testDeliminator passed' );

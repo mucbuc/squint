@@ -1,7 +1,12 @@
-var assert = require( 'assert' );
-
+var assert = require( 'assert' )
+  , events = require( 'events' );
+  
 function makeEmitTester( emitter ) {
   var expectations = [];
+
+  if (typeof emitter === 'undefined') {
+    emitter = new events.EventEmitter();
+  }
   
   process.on( 'exit', function() {
     if (expectations.length) {

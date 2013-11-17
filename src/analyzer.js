@@ -1,84 +1,88 @@
 var Parser = require( './parser' ).Parser
-  , events = require( 'events' );
+  , EventEmitter = require( 'events' ).EventEmitter;
 
 function Analyzer( parser ) {
 
   var instance = this;
-  events.EventEmitter.call( this );
-
+  
   parser.once( 'open', function( code ) {
 
     var sub = new Parser( {
           '<': 'open template',
           '(': 'open function'
-        } );
+        } )
+      , emitter = new EventEmitter();
     
-    sub.once( 'end', function() {
-      sub.removeAllListeners();
-      delete sub;
+    emitter.once( 'end', function() {
+      emitter.removeAllListeners();
+      delete emitter;
     } );
-    sub.once( 'open function', processFunctionSignature );
-    sub.once( 'open template', processTemplateParameters );
-    sub.process( code );
+    emitter.once( 'open function', processFunctionSignature );
+    emitter.once( 'open template', processTemplateParameters );
+    
+    sub.process( code, emitter );
 
     function processTemplateParameters() {
       var sub = new Parser( { 
           '<': 'open template', 
           '>': 'close template'
         } )
+      , emitter = new EventEmitter()
       , signature = ''
       , depth = 0;
 
-      sub.on( 'open template', function( code ) {
+      emitter.on( 'open template', function( code ) {
         signature += code + '<';
         depth++;
       } );
     
-      sub.on( 'close template', function( code ) { 
+      emitter.on( 'close template', function( code ) { 
         signature += code + '>';
         if (!--depth) {
           instance.emit( 'template parameters', signature );
         }
       } );
 
-      sub.once( 'end', function() {
+      emitter.once( 'end', function() {
         process.nextTick( function() {
           instance.emit( 'type declaration', code );
         } );
 
-        sub.removeAllListeners();
-      delete sub;
+        emitter.removeAllListeners();
+        delete emitter;
       } );
 
-      sub.process( code );
+      sub.process( code, emitter );
     }
 
     function processFunctionSignature() {
+      
       var sub = new Parser( { 
             '(': 'open function', 
             ')': 'close function'
           } )
+        , emitter = new EventEmitter()
         , signature = ''
         , depth = 0;
 
-      sub.on( 'open function', function( code ) {
+      emitter.on( 'open function', function( code ) {
         signature += code + '(';
         ++depth;
       } );
     
-      sub.on( 'close function', function( code ) { 
+      emitter.on( 'close function', function( code ) { 
         signature += code + ')';
         if (!--depth) {
           instance.emit( 'function signature', signature );
         }
       } );
 
-      sub.once( 'end', function() {
-        sub.removeAllListeners();
-      delete sub;
+      emitter.once( 'end', function() {
+        emitter.removeAllListeners();
+        delete emitter;
       } );
 
-      sub.process( code );
+      sub.process( code, emitter );
     }
 
   });
