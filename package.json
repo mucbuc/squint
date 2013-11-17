@@ -1,10 +1,12 @@
 {
-  "name": "squint",
+  "name": "application-name",
   "version": "0.0.1",
-  "description": "C++ source code tool",
-  "main": "./squint.js",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
-  	  "mucbuc-jsthree": "*"
-  	},
-  "devDependencies": {}
+    "express": "3.2.0",
+    "jade": "*"
+  }
 }
