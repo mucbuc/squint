@@ -1,7 +1,6 @@
 var assert = require( 'assert' )
   , EventEmitter = require( 'events' ).EventEmitter
-  , Parser = require( '../src/parser' ).Parser 
-  , analyze = require( '../src/analyzer' ).analyze
+  , Analyzer = require( '../src/analyzer' ).Analyzer 
   , Tester = require( 'mucbuc-jsthree' ).Tester
   , testLog = Tester.testLog
   , makeEmitTester = Tester.makeEmitTester;
@@ -22,11 +21,9 @@ function checkAnalyzer() {
 
 function templateParameters() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester(); 
   
-  analyze( emitter );
-
   emitter.expect( 'open', 'template class< arg >' );
   emitter.expect( 'template parameters', 'template class< arg >' );
   parser.process( 'template class< arg >{', emitter );
@@ -36,11 +33,9 @@ function templateParameters() {
 
 function functionLikeMacrosAsTemplateParameter() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
-
   emitter.expect( 'open', 'template class< MACRO( arg ) >' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{', emitter );
@@ -50,10 +45,9 @@ function functionLikeMacrosAsTemplateParameter() {
 
 function functionLikeMacrosAsTemplateParameter2() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ) > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) > class C{', emitter );
@@ -61,10 +55,9 @@ function functionLikeMacrosAsTemplateParameter2() {
 
 function functionLikeMacrosAsTemplateParameter3() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), U > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
   parser.process( 'template class< MACRO( arg ), U > class C{', emitter );
@@ -72,21 +65,18 @@ function functionLikeMacrosAsTemplateParameter3() {
 
 function functionLikeMacrosAsTemplateParameter4() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
   parser.process( 'template class< MACRO( arg ), template <class U> class > class C{', emitter );
 } 
 
 function templatesAsFunctionParameters() {
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
-
   emitter.expect( 'open', 'type foo( st< abc > )' );
   emitter.expect( 'function signature', 'type foo( st< abc > )' );
   parser.process( 'type foo( st< abc > ){', emitter );
@@ -96,11 +86,9 @@ function templatesAsFunctionParameters() {
 
 function typeTemplateDeclaration() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
   
-  analyze( emitter );
-
   emitter.expect( 'open', 'template<class, class> type XYZ' );
   emitter.expect( 'template parameters', 'template<class, class>' );
   emitter.expect( 'type declaration', 'type XYZ' );
@@ -111,10 +99,8 @@ function typeTemplateDeclaration() {
 
 function functionSignatures() {
 
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
-
-  analyze( emitter );
 
   emitter.expect( 'open', 'type foo()' );
   emitter.expect( 'function signature', 'type foo()' );
@@ -125,10 +111,8 @@ function functionSignatures() {
 
 function typeDeclaration() {
   
-  var parser = new Parser()
+  var parser = new Analyzer()
     , emitter = makeEmitTester();
-
-  analyze( emitter );
 
   emitter.expect( 'open', 'type XYZ' );
   emitter.expect( 'type declaration', 'type XYZ' );
