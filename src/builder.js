@@ -1,26 +1,33 @@
 function Builder( emitter, factory ) {
   
-  var document = '';
-  
-  String.call( this );
+  var result = '';
   
   emitter.on( 'open', function( code ) {
-    document = document.concat( factory.createOpen( code ) );
+    result = result.concat( factory.createOpen( code ) );
   } );
 
   emitter.on( 'close', function( code ) {
-    document = document.concat( factory.createClose( code ) );
+    result = result.concat( factory.createClose( code ) );
   } );
 
   emitter.on( 'statement', function( code ) {
-    document = document.concat( factory.createStatement( code ) );
+    result = result.concat( factory.createStatement( code ) );
   } );
   
-  this.__defineGetter__( 'document', function() {
-    return document;
+  this.__defineGetter__( 'result', function() {
+    return result;
   } );
 }
 
-Builder.prototype = new String();
+function Forwarder( emitter, factory ) {
+
+  this.result = '';
+
+  emitter.on( 'type declaration', function( code ) {
+    this.result += factory.createType( code );
+  } );
+
+}
 
 module.exports.Builder = Builder;
+module.exports.Forwarder = Forwarder;

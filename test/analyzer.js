@@ -1,11 +1,11 @@
 var assert = require( 'assert' )
   , EventEmitter = require( 'events' ).EventEmitter
-  , Analyzer = require( '../src/analyzer' ).Analyzer
   , Parser = require( '../src/parser' ).Parser 
+  , analyze = require( '../src/analyzer' ).analyze
   , Tester = require( 'mucbuc-jsthree' ).Tester
   , testLog = Tester.testLog
   , makeEmitTester = Tester.makeEmitTester;
-
+ 
 checkAnalyzer();
 
 function checkAnalyzer() {
@@ -23,8 +23,7 @@ function checkAnalyzer() {
 function templateParameters() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester(); 
   
   analyze( emitter );
 
@@ -38,8 +37,7 @@ function templateParameters() {
 function functionLikeMacrosAsTemplateParameter() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
 
@@ -53,8 +51,7 @@ function functionLikeMacrosAsTemplateParameter() {
 function functionLikeMacrosAsTemplateParameter2() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ) > class C' );
@@ -65,8 +62,7 @@ function functionLikeMacrosAsTemplateParameter2() {
 function functionLikeMacrosAsTemplateParameter3() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), U > class C' );
@@ -77,8 +73,7 @@ function functionLikeMacrosAsTemplateParameter3() {
 function functionLikeMacrosAsTemplateParameter4() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
@@ -88,8 +83,7 @@ function functionLikeMacrosAsTemplateParameter4() {
 
 function templatesAsFunctionParameters() {
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
 
@@ -103,8 +97,7 @@ function templatesAsFunctionParameters() {
 function typeTemplateDeclaration() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
   
   analyze( emitter );
 
@@ -119,8 +112,7 @@ function typeTemplateDeclaration() {
 function functionSignatures() {
 
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
 
   analyze( emitter );
 
@@ -134,8 +126,7 @@ function functionSignatures() {
 function typeDeclaration() {
   
   var parser = new Parser()
-    , emitter = makeEmitTester()
-    , analyze = require( '../src/analyzer' ).analyze;
+    , emitter = makeEmitTester();
 
   analyze( emitter );
 

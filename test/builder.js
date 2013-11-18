@@ -1,9 +1,34 @@
 var assert = require( 'assert' )
-  , Parser = require( 'squint/parser' ).Parser
-  , Builder = require( 'squint/builder' ).Builder
-  , Factory = require( 'squint/factory' ).Factory;
+  , events = require( 'events' )
+  , Parser = require( '../src/parser' ).Parser
+  , analyze = require( '../src/analyzer' ).analyze
+  , Builder = require( '../src/builder' ).Builder
+  , Forwarder = require( '../src/builder' ).Forwarder
+  , Factory = require( '../src/factory' ).Factory;
+
+//basics();
+forwarder();
+
+function forwarder() {
+
+  var emitter = new events.EventEmitter()
+    , parser = new Parser()
+    , result = '';
+
+  analyze( emitter );
+
+  emitter.on( 'type declaration', function( code ) {
+    result = code + ';\n';
+  } );
+
+  process.on( 'exit', function() {
+    assert.equal( result, 'struct dummy;\n' );
   
-basics();
+    console.log( 'forwarder test passed' );
+  } );
+
+  parser.process( 'struct dummy{', emitter );
+}
 
 function basics() {
   var builder = new TestContext();

@@ -1,3 +1,10 @@
+/*
+  events emitted:
+    template parameters
+    function signature
+    type declaration
+*/ 
+
 var Parser = require( './parser' ).Parser
   , EventEmitter = require( 'events' ).EventEmitter;
 
@@ -74,7 +81,7 @@ function analyze( e ) {
       sub.process( code, emitter );
     }
 
-  });
+  } );
 }
 
 module.exports.analyze = analyze; 
