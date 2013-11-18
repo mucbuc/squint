@@ -9,31 +9,31 @@ assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );
 
-comments();
-defines();
-includes();
-arrayInitializerBlocks();
-strings();
+stripComments();
+stripDefines();
+stripIncludes();
+stripArrayInitializerBlocks();
+stripStrings();
 
-function strings() {
+function stripStrings() {
   var strip = squint.stripStrings;
 
   assert.equal( strip( '"text"text' ), 'text' );
   assert.equal( strip( '"text\\\"text"' ), '' );
 
-  testLog( 'strings passed' );
+  testLog( 'stripStrings passed' );
 }
 
-function arrayInitializerBlocks() {
+function stripArrayInitializerBlocks() {
   var strip = squint.stripArrayInitializerBlocks;
   
   assert.equal( strip( 'int a[] = { 0, 3, 1 };' ), 'int a[];' );
   assert.equal( strip( 'int a[] = { 0, 3, 1 }; text text {};' ), 'int a[]; text text {};' );
 
-  testLog( 'arrayInitializerBlocks passed' );
+  testLog( 'stripArrayInitializerBlocks passed' );
 }
 
-function includes() {
+function stripIncludes() {
 
   var strip = squint.stripIncludes;
 
@@ -47,10 +47,10 @@ function includes() {
   assert.equal( strip( '# 	include "text.h"	' ), '' );
   assert.equal( strip( '#  include "text.h"	\n' ), '' );
 
-  testLog( 'includes passed' );
+  testLog( 'stripIncludes passed' );
 }
 
-function defines() {
+function stripDefines() {
   var strip = squint.stripDefines;
   
   assert.equal( strip( '#define text \\   \n text' ), '' );
@@ -78,10 +78,10 @@ function defines() {
   assert.equal( strip( '#ifdef text' ), '#ifdef text' );
   assert.equal( strip( '# ifdef text' ), '# ifdef text' );
   
-  testLog( 'defines passed' );
+  testLog( 'stripDefines passed' );
 }
 
-function comments() {
+function stripComments() {
 
   var strip = squint.stripComments;
 
@@ -100,5 +100,5 @@ function comments() {
   assert.equal( strip( '/* text */' ), '' ); 
   assert.equal( strip( '/* text */text /*text*/' ), 'text ' ); 
 
-  testLog( 'comments passed' );
+  testLog( 'stripComments passed' );
 }
