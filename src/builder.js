@@ -32,10 +32,10 @@ function Forwarder( emitter, factory ) {
   } );
 }
 
-function Declarer( emitter, factory ) {
+function Declarer( emitter ) {
 
-  var result = ''
-    , members = ''; 
+  var name = ''
+    , members = [];
 
   emitter.once( 'open', function() {
     emitter.on( 'statement', appendMember ); 
@@ -46,17 +46,23 @@ function Declarer( emitter, factory ) {
   } );
 
   emitter.on( 'type declaration', function( code ) {
-    result += code + '{';
+    name = code;
   } );
   
-  this.__defineGetter__( 'result', function() {
-    return  result + members + '};';  ;
-  } );
+  this.buildProduct = function( factory, done ) {
+    
+    var result = name + factory.declareOpen();
+    members.forEach( function( member, index ) {
+      result += member + factory.memberDeclare();
+      if (index == members.length - 1) {
+        done( result + factory.declareClose() );
+      }
+    } );
+  };
 
   function appendMember(code) {
-    members += code.trim() + ';'; 
+    members.push( code.trim() );
   }
-
 }
 
 

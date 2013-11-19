@@ -7,7 +7,6 @@ var assert = require( 'assert' )
   , Declarer = require( '../src/builder' ).Declarer
   , Factory = require( '../src/factory' ).Factory;
 
-
 //basics();
 forwarder();
 forwarder2();
@@ -17,16 +16,26 @@ function declarer() {
   
   var emitter = new events.EventEmitter()
     , parser = new Analyzer()
-    , factory = {
-        createType: function(code) {
-            return code + '{};\n'; 
-          }
-        }
-    , builder = new Declarer( emitter, factory );
+    , builder = new Declarer( emitter );
 
   process.on( 'exit', function() {
-    assert.equal( builder.result, 'struct dummy{void init();};' );
-    console.log( 'declarer test passed' );
+    
+    var factory = {
+      declareOpen: function() {
+          return '{';
+        }, 
+      declareClose: function() {
+          return '};';    
+        }, 
+      memberDeclare: function() {
+          return ';';
+        }
+      };
+
+    builder.buildProduct( factory, function( result ) {
+      assert.equal( result, 'struct dummy{void init();};' );
+      console.log( 'declarer test passed' ); 
+    } );
   } );
 
   parser.process( 'struct dummy{ void init(); };', emitter );
