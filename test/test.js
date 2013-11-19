@@ -4,7 +4,8 @@ var assert = require( 'assert' )
   , squint = require( '../src/squint' )
   , parser = require( './parser' )
   , analyzer = require( './analyzer' )
-  , squint = require( './squint.js' );
+  , squint = require( './squint' )
+  , builder = require( './builder');
 
 assert( typeof squint != 'undefined' );
 

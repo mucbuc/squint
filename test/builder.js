@@ -13,14 +13,16 @@ function forwarder() {
 
   var emitter = new events.EventEmitter()
     , parser = new Analyzer()
-    , result = '';
-
-  emitter.on( 'type declaration', function( code ) {
-    result = code + ';\n';
-  } );
+    , result = ''
+    , factory = {
+        createType: function(code) {
+          return code + ';\n';
+        }
+      }
+    , builder = new Forwarder( emitter, factory );
 
   process.on( 'exit', function() {
-    assert.equal( result, 'struct dummy;\n' );
+    assert.equal( builder.result, 'struct dummy;\n' );
   
     console.log( 'forwarder test passed' );
   } );

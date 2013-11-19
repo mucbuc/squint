@@ -21,12 +21,15 @@ function Builder( emitter, factory ) {
 
 function Forwarder( emitter, factory ) {
 
-  this.result = '';
+  var result = '';
 
   emitter.on( 'type declaration', function( code ) {
-    this.result += factory.createType( code );
+    result += factory.createType( code );
   } );
-
+  
+  this.__defineGetter__( 'result', function() {
+    return result;
+  } );
 }
 
 module.exports.Builder = Builder;

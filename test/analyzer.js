@@ -41,8 +41,6 @@ function functionLikeMacrosAsTemplateParameter() {
   emitter.expect( 'open', 'template class< MACRO( arg ) >' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{', emitter );
-  
-  finalLog( 'functionLikeMacrosAsTemplateParameter passed' );
 }
 
 function functionLikeMacrosAsTemplateParameter2() {
@@ -73,6 +71,8 @@ function functionLikeMacrosAsTemplateParameter4() {
   emitter.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
   parser.process( 'template class< MACRO( arg ), template <class U> class > class C{', emitter );
+
+  finalLog( 'functionLikeMacrosAsTemplateParameter passed' );
 } 
 
 function templatesAsFunctionParameters() {
