@@ -2,8 +2,8 @@
 
 var assert = require( 'assert' )
   , squint = require( '../src/squint' )
-  , Tester = require( 'mucbuc-jsthree' ).Tester
-  , testLog = Tester.testLog;
+  , Test = require( 'mucbuc-jsthree' ).Test
+  , finalLog = Test.finalLog;
 
 assert( typeof squint != 'undefined' );
 
@@ -21,7 +21,7 @@ function stripStrings() {
   assert.equal( strip( '"text"text' ), 'text' );
   assert.equal( strip( '"text\\\"text"' ), '' );
 
-  testLog( 'stripStrings passed' );
+  finalLog( 'stripStrings passed' );
 }
 
 function stripArrayInitializerBlocks() {
@@ -30,7 +30,7 @@ function stripArrayInitializerBlocks() {
   assert.equal( strip( 'int a[] = { 0, 3, 1 };' ), 'int a[];' );
   assert.equal( strip( 'int a[] = { 0, 3, 1 }; text text {};' ), 'int a[]; text text {};' );
 
-  testLog( 'stripArrayInitializerBlocks passed' );
+  finalLog( 'stripArrayInitializerBlocks passed' );
 }
 
 function stripIncludes() {
@@ -47,7 +47,7 @@ function stripIncludes() {
   assert.equal( strip( '# 	include "text.h"	' ), '' );
   assert.equal( strip( '#  include "text.h"	\n' ), '' );
 
-  testLog( 'stripIncludes passed' );
+  finalLog( 'stripIncludes passed' );
 }
 
 function stripDefines() {
@@ -78,7 +78,7 @@ function stripDefines() {
   assert.equal( strip( '#ifdef text' ), '#ifdef text' );
   assert.equal( strip( '# ifdef text' ), '# ifdef text' );
   
-  testLog( 'stripDefines passed' );
+  finalLog( 'stripDefines passed' );
 }
 
 function stripComments() {
@@ -100,5 +100,5 @@ function stripComments() {
   assert.equal( strip( '/* text */' ), '' ); 
   assert.equal( strip( '/* text */text /*text*/' ), 'text ' ); 
 
-  testLog( 'stripComments passed' );
+  finalLog( 'stripComments passed' );
 }

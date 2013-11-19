@@ -1,11 +1,16 @@
 var assert = require( 'assert' )
   , EventEmitter = require( 'events' ).EventEmitter
-  , Analyzer = require( '../src/analyzer' ).Analyzer 
-  , Tester = require( 'mucbuc-jsthree' ).Tester
-  , testLog = Tester.testLog
-  , makeEmitTester = Tester.makeEmitTester;
- 
-checkAnalyzer();
+  , Parser = require( '../src/parser' ).Parser 
+  , analyze = require( '../src/analyzer' ).analyze
+  , Analyzer = require( '../src/analyzer' ).Analyzer
+  , analyze = require( '../src/analyzer' ).analyze
+  , Test = require( 'mucbuc-jsthree' ).Test
+  , finalLog = Test.finalLog
+  , testLog = finalLog
+  , TestEmitter = Test.Emitter
+  , makeTestEmitter = Test.makeEmitTester; 
+
+ checkAnalyzer();
 
 function checkAnalyzer() {
   typeDeclaration();
@@ -21,9 +26,11 @@ function checkAnalyzer() {
 
 function templateParameters() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester(); 
+  var parser = new Parser()
+    , emitter = makeTestEmitter(); 
   
+  analyze( emitter );
+
   emitter.expect( 'open', 'template class< arg >' );
   emitter.expect( 'template parameters', 'template class< arg >' );
   parser.process( 'template class< arg >{', emitter );
@@ -33,9 +40,11 @@ function templateParameters() {
 
 function functionLikeMacrosAsTemplateParameter() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
+
   emitter.expect( 'open', 'template class< MACRO( arg ) >' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) >{', emitter );
@@ -45,9 +54,10 @@ function functionLikeMacrosAsTemplateParameter() {
 
 function functionLikeMacrosAsTemplateParameter2() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ) > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ) >' );
   parser.process( 'template class< MACRO( arg ) > class C{', emitter );
@@ -55,9 +65,10 @@ function functionLikeMacrosAsTemplateParameter2() {
 
 function functionLikeMacrosAsTemplateParameter3() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), U > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ), U >' );
   parser.process( 'template class< MACRO( arg ), U > class C{', emitter );
@@ -65,18 +76,21 @@ function functionLikeMacrosAsTemplateParameter3() {
 
 function functionLikeMacrosAsTemplateParameter4() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
   emitter.expect( 'open', 'template class< MACRO( arg ), template <class U> class > class C' );
   emitter.expect( 'template parameters', 'template class< MACRO( arg ), template <class U> class >' );
   parser.process( 'template class< MACRO( arg ), template <class U> class > class C{', emitter );
 } 
 
 function templatesAsFunctionParameters() {
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
+
   emitter.expect( 'open', 'type foo( st< abc > )' );
   emitter.expect( 'function signature', 'type foo( st< abc > )' );
   parser.process( 'type foo( st< abc > ){', emitter );
@@ -86,9 +100,11 @@ function templatesAsFunctionParameters() {
 
 function typeTemplateDeclaration() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
   
+  analyze( emitter );
+
   emitter.expect( 'open', 'template<class, class> type XYZ' );
   emitter.expect( 'template parameters', 'template<class, class>' );
   emitter.expect( 'type declaration', 'type XYZ' );
@@ -99,8 +115,10 @@ function typeTemplateDeclaration() {
 
 function functionSignatures() {
 
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
+
+  analyze( emitter );
 
   emitter.expect( 'open', 'type foo()' );
   emitter.expect( 'function signature', 'type foo()' );
@@ -111,8 +129,10 @@ function functionSignatures() {
 
 function typeDeclaration() {
   
-  var parser = new Analyzer()
-    , emitter = makeEmitTester();
+  var parser = new Parser()
+    , emitter = makeTestEmitter();
+
+  analyze( emitter );
 
   emitter.expect( 'open', 'type XYZ' );
   emitter.expect( 'type declaration', 'type XYZ' );
@@ -121,3 +141,46 @@ function typeDeclaration() {
   testLog( 'typeDeclaration passed' );
 }
 
+/*
+
+function makeEmitTester( emitter ) {
+      var expectations = [];
+
+      if (typeof emitter === 'undefined') {
+        emitter = new EventEmitter();
+      }
+      
+      process.setMaxListeners( 0 );
+
+      process.on( 'exit', function() {
+        if (expectations.length) {
+          console.log( 'expected events did not occur' );
+          console.log( expectations );
+        }
+
+        assert.equal( expectations.length, 0 );
+      } );
+
+      emitter.expect = function( event, code ) {
+        if (!expectations.length) {
+          emitter.once( event, check );
+        }
+        expectations.push( { event: event, code: code } );
+      }; 
+
+      function check( code ) {
+        var expectation = expectations[0];
+        expectations.splice( 0, 1 );
+       
+        if (expectation.code != undefined) {
+          assert.deepEqual( code.trim(), expectation.code.trim() );
+        }
+        
+        if (expectations.length) {
+          emitter.once( expectations[0].event, check );
+        }
+      }
+      
+      return emitter;
+    }
+    */ 

@@ -1,10 +1,8 @@
 var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
-  , Tester = require( 'mucbuc-jsthree' ).Tester
-  , testLog = Tester.testLog
-  , makeEmitTester = Tester.makeEmitTester;
-
-assert( typeof makeEmitTester != 'undefined' );
+  , Test = require( 'mucbuc-jsthree' ).Test
+  , finalLog = Test.finalLog
+  , TestEmitter = Test.Emitter;
 
 checkParser();
 
@@ -18,7 +16,7 @@ function checkParser() {
 
 function testStatments() {
   var parser = new Parser()
-    , emitter = makeEmitTester();
+    , emitter = new TestEmitter();
 
   emitter.expect( 'statement', '1' );
   emitter.expect( 'statement', '2' );
@@ -27,12 +25,12 @@ function testStatments() {
  
   parser.process( '1; 2; 3;;', emitter );
 
-  testLog( 'testStatments passed' );
+  finalLog( 'testStatments passed' );
 }
 
 function testScopes() {
   var parser = new Parser()
-    , emitter = makeEmitTester();
+    , emitter = new TestEmitter();
   
   emitter.expect( 'open', 'a' ); 
   emitter.expect( 'close' );
@@ -43,12 +41,12 @@ function testScopes() {
  
   parser.process( 'a{} b{} c{}', emitter );
 
-  testLog( 'testScopes passed' );
+  finalLog( 'testScopes passed' );
 }
 
 function testInterleaved() { 
   var parser = new Parser()
-    , emitter = makeEmitTester();
+    , emitter = new TestEmitter();
   
   emitter.expect( 'open', 'a' );
   emitter.expect( 'statement','b' );
@@ -56,12 +54,12 @@ function testInterleaved() {
    
   parser.process( 'a{ b; }', emitter );
 
-  testLog( 'testInterleaved passed' );
+  finalLog( 'testInterleaved passed' );
 }
 
 function testNested() {
   var parser = new Parser()
-    , emitter = makeEmitTester();
+    , emitter = new TestEmitter();
 
   emitter.expect( 'open', 'a' );
   emitter.expect( 'open', 'b' );
@@ -71,12 +69,12 @@ function testNested() {
 
   parser.process( 'a { b { c; } }', emitter );
 
-  testLog( 'testNested passed' );
+  finalLog( 'testNested passed' );
 }
 
 function testDeliminator() {
   var parser = new Parser()
-    , emitter = makeEmitTester();
+    , emitter = new TestEmitter();
   
   emitter.expect( 'statement', 'a' ); 
   parser.process( 'a;', emitter );
@@ -102,5 +100,5 @@ function testDeliminator() {
   emitter.expect( 'open', 'a' ); 
   parser.process( ' a{', emitter );
 
-  testLog( 'testDeliminator passed' );
+  finalLog( 'testDeliminator passed' );
 }
