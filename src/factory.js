@@ -1,28 +1,18 @@
-function ForwardFactory() {
-  
-  this.createOpen = function( code ) {
-    return '{';
-  };
-  
-  this.createClose = function( code ) {
-    return '}';
-  };
-  
-  this.createStatement = function( code ) {
-    return ';';
-  };
-
-};
-
-
 function Factory() {
-  
-  
-}
-
-Factory.prototype.createOpen = function() {
 
 }
+
+Factory.prototype = {
+	declareOpen: function() {
+      return '{';
+    }, 
+  declareClose: function() {
+      return '};';    
+    }, 
+  memberDeclare: function() {
+      return ';';
+    }
+};
 
 
 module.exports.Factory = Factory;

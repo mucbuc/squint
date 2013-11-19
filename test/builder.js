@@ -20,19 +20,7 @@ function declarer() {
 
   process.on( 'exit', function() {
     
-    var factory = {
-      declareOpen: function() {
-          return '{';
-        }, 
-      declareClose: function() {
-          return '};';    
-        }, 
-      memberDeclare: function() {
-          return ';';
-        }
-      };
-
-    builder.buildProduct( factory, function( result ) {
+    builder.buildProduct( new Factory(), function( result ) {
       assert.equal( result, 'struct dummy{void init();};' );
       console.log( 'declarer test passed' ); 
     } );
