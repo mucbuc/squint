@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( '../src/parser' ).Parser
-  , analyze = require( '../src/analyzer' ).analyze
+  , Analyzer = require( '../src/analyzer' ).Analyzer
   , Builder = require( '../src/builder' ).Builder
   , Forwarder = require( '../src/builder' ).Forwarder
   , Factory = require( '../src/factory' ).Factory;
@@ -12,10 +12,8 @@ forwarder();
 function forwarder() {
 
   var emitter = new events.EventEmitter()
-    , parser = new Parser()
+    , parser = new Analyzer()
     , result = '';
-
-  analyze( emitter );
 
   emitter.on( 'type declaration', function( code ) {
     result = code + ';\n';
