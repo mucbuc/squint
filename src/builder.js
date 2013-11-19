@@ -32,5 +32,34 @@ function Forwarder( emitter, factory ) {
   } );
 }
 
+function Declarer( emitter, factory ) {
+
+  var result = ''
+    , members = ''; 
+
+  emitter.once( 'open', function() {
+    emitter.on( 'statement', appendMember ); 
+  } ); 
+
+  emitter.once( 'close', function() {
+    emitter.removeListener( 'statement', appendMember ); 
+  } );
+
+  emitter.on( 'type declaration', function( code ) {
+    result += code + '{';
+  } );
+  
+  this.__defineGetter__( 'result', function() {
+    return  result + members + '};';  ;
+  } );
+
+  function appendMember(code) {
+    members += code.trim() + ';'; 
+  }
+
+}
+
+
 module.exports.Builder = Builder;
 module.exports.Forwarder = Forwarder;
+module.exports.Declarer = Declarer;
