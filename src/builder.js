@@ -19,17 +19,24 @@ function Builder( emitter, factory ) {
   } );
 }
 
-function Forwarder( emitter, factory ) {
+function Forwarder( emitter ) {
 
-  var result = '';
+  var types = [];
 
   emitter.on( 'type declaration', function( code ) {
-    result += factory.createType( code );
+    types.push( code );
   } );
   
-  this.__defineGetter__( 'result', function() {
-    return result;
-  } );
+  this.buildProduct = function( factory, done ) {
+    var result = '';
+    types.forEach( function( type, index ) {
+      result += type + factory.memberDeclare();
+    
+      if (index == types.length - 1) {
+        done( result );
+      }
+    } ); 
+  };
 }
 
 function Declarer( emitter ) {

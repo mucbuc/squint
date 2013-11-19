@@ -7,79 +7,75 @@ var assert = require( 'assert' )
   , Declarer = require( '../src/builder' ).Declarer
   , Factory = require( '../src/factory' ).Factory;
 
-//basics();
-forwarder();
-forwarder2();
-declarer();
+checkBuilder();
 
-function declarer() {
-  
-  var emitter = new events.EventEmitter()
-    , parser = new Analyzer()
-    , builder = new Declarer( emitter );
+function checkBuilder() {
 
-  process.on( 'exit', function() {
+  test( forwarder );
+  test( forwarder2 );
+  test( declarer );
+
+  function declarer(emitter, parser) {
     
-    builder.buildProduct( new Factory(), function( result ) {
-      assert.equal( result, 'struct dummy{void init();};' );
-      console.log( 'declarer test passed' ); 
+    var builder = new Declarer( emitter );
+
+    process.on( 'exit', function() {
+      builder.buildProduct( new Factory(), function( result ) {
+        assert.equal( result, 'struct dummy{void init();};' );
+        console.log( 'declarer test passed' ); 
+      } );
     } );
-  } );
 
-  parser.process( 'struct dummy{ void init(); };', emitter );
-} 
+    parser.process( 'struct dummy{ void init(); };', emitter );
+  } 
 
-function forwarder2() {
+  function forwarder2(emitter, parser) {
 
-  var emitter = new events.EventEmitter()
-    , parser = new Analyzer()
-    , result = ''
-    , factory = {
-        createType: function(code) {
-          return code + ';\n';
-        }
-      }
-    , builder = new Forwarder( emitter, factory );
+    var builder = new Forwarder( emitter );
 
-  process.on( 'exit', function() {
-    assert.equal( builder.result, 'struct dummy;\n' );
-    console.log( 'forwarder2 test passed' );
-  } );
+    process.on( 'exit', function() {
+      builder.buildProduct( new Factory(), function(result) {
+        assert.equal( result, 'struct dummy;' );
+        console.log( 'forwarder2 test passed' );
+      } );
+    } );
 
-  parser.process( 'struct dummy{ void init();', emitter );
-}
+    parser.process( 'struct dummy{ void init();', emitter );
+  }
 
-function forwarder() {
+  function forwarder(emitter, parser) {
 
-  var emitter = new events.EventEmitter()
-    , parser = new Analyzer()
-    , result = ''
-    , factory = {
-        createType: function(code) {
-          return code + ';\n';
-        }
-      }
-    , builder = new Forwarder( emitter, factory );
+    var builder = new Forwarder( emitter );
 
-  process.on( 'exit', function() {
-    assert.equal( builder.result, 'struct dummy;\n' );
-    console.log( 'forwarder test passed' );
-  } );
+    process.on( 'exit', function() {
+      builder.buildProduct( new Factory(), function( result ) {
+        assert.equal( result, 'struct dummy;' );
+        console.log( 'forwarder test passed' );
+      } ); 
+    } );
 
-  parser.process( 'struct dummy{', emitter );
-}
+    parser.process( 'struct dummy{', emitter );
+  }
 
-function basics() {
-  var builder = new TestContext();
-}
+  function basics() {
+    var builder = new TestContext();
+  }
 
-function TestContext() {
-  var parser = new Parser()
-    , builder = new Builder( parser, new Factory() );
-  
-  parser.process( 'text { text; }' ); 
-  
-  process.on( 'exit', function() { 
-    assert.equal( builder.document, '{;}' )
-  } );
+  function TestContext() {
+    var parser = new Parser()
+      , builder = new Builder( parser, new Factory() );
+    
+    parser.process( 'text { text; }' ); 
+    
+    process.on( 'exit', function() { 
+      assert.equal( builder.document, '{;}' )
+    } );
+  }
+
+  function test( f ) {
+    var emitter = new events.EventEmitter()
+      , parser = new Analyzer()
+    
+    f( emitter, parser );
+  }
 }
