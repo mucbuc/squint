@@ -11,8 +11,8 @@ checkBuilder();
 
 function checkBuilder() {
 
-  test( forwarder );
-  test( forwarder2 );
+  test( forwarderEmpty );
+  test( forwarderNonStaticMemberFunction );
   test( declarer );
 
   function declarer(emitter, parser) {
@@ -29,47 +29,32 @@ function checkBuilder() {
     parser.process( 'struct dummy{ void init(); };', emitter );
   } 
 
-  function forwarder2(emitter, parser) {
+  function forwarderNonStaticMemberFunction(emitter, parser) {
 
     var builder = new Forwarder( emitter );
 
     process.on( 'exit', function() {
       builder.buildProduct( new Factory(), function(result) {
         assert.equal( result, 'struct dummy;' );
-        console.log( 'forwarder2 test passed' );
+        console.log( 'forwarderNonStaticMemberFunction test passed' );
       } );
     } );
 
-    parser.process( 'struct dummy{ void init();', emitter );
+    parser.process( 'struct dummy{ void init(); }', emitter );
   }
 
-  function forwarder(emitter, parser) {
+  function forwarderEmpty(emitter, parser) {
 
     var builder = new Forwarder( emitter );
 
     process.on( 'exit', function() {
       builder.buildProduct( new Factory(), function( result ) {
         assert.equal( result, 'struct dummy;' );
-        console.log( 'forwarder test passed' );
+        console.log( 'forwarderEmpty test passed' );
       } ); 
     } );
 
-    parser.process( 'struct dummy{', emitter );
-  }
-
-  function basics() {
-    var builder = new TestContext();
-  }
-
-  function TestContext() {
-    var parser = new Parser()
-      , builder = new Builder( parser, new Factory() );
-    
-    parser.process( 'text { text; }' ); 
-    
-    process.on( 'exit', function() { 
-      assert.equal( builder.document, '{;}' )
-    } );
+    parser.process( 'struct dummy{};', emitter );
   }
 
   function test( f ) {

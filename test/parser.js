@@ -7,98 +7,89 @@ var assert = require( 'assert' )
 checkParser();
 
 function checkParser() {
-  testDeliminator();
-  testNested();
-  testInterleaved();
-  testScopes();
-  testStatments();
-}
 
-function testStatments() {
-  var parser = new Parser()
-    , emitter = new TestEmitter();
+  test( deliminator );
+  test( nested );
+  test( interleaved );
+  test( scopes );
+  test( statments );
 
-  emitter.expect( 'statement', '1' );
-  emitter.expect( 'statement', '2' );
-  emitter.expect( 'statement', '3' );
-  emitter.expect( 'statement' );
- 
-  parser.process( '1; 2; 3;;', emitter );
-
-  finalLog( 'testStatments passed' );
-}
-
-function testScopes() {
-  var parser = new Parser()
-    , emitter = new TestEmitter();
-  
-  emitter.expect( 'open', 'a' ); 
-  emitter.expect( 'close' );
-  emitter.expect( 'open', 'b' );
-  emitter.expect( 'close' );
-  emitter.expect( 'open', 'c' );
-  emitter.expect( 'close' );
- 
-  parser.process( 'a{} b{} c{}', emitter );
-
-  finalLog( 'testScopes passed' );
-}
-
-function testInterleaved() { 
-  var parser = new Parser()
-    , emitter = new TestEmitter();
-  
-  emitter.expect( 'open', 'a' );
-  emitter.expect( 'statement','b' );
-  emitter.expect( 'close' );
+  function statments( emitter, parser ) {
+    
+    emitter.expect( 'statement', '1' );
+    emitter.expect( 'statement', '2' );
+    emitter.expect( 'statement', '3' );
+    emitter.expect( 'statement' );
    
-  parser.process( 'a{ b; }', emitter );
+    parser.process( '1; 2; 3;;', emitter );    
+  }
 
-  finalLog( 'testInterleaved passed' );
-}
+  function scopes( emitter, parser ) {
+        
+    emitter.expect( 'open', 'a' ); 
+    emitter.expect( 'close' );
+    emitter.expect( 'open', 'b' );
+    emitter.expect( 'close' );
+    emitter.expect( 'open', 'c' );
+    emitter.expect( 'close' );
+   
+    parser.process( 'a{} b{} c{}', emitter );    
+  }
 
-function testNested() {
-  var parser = new Parser()
-    , emitter = new TestEmitter();
+  function interleaved( emitter, parser ) { 
+        
+    emitter.expect( 'open', 'a' );
+    emitter.expect( 'statement','b' );
+    emitter.expect( 'close' );
+     
+    parser.process( 'a{ b; }', emitter );    
+  }
 
-  emitter.expect( 'open', 'a' );
-  emitter.expect( 'open', 'b' );
-  emitter.expect( 'statement', 'c' );
-  emitter.expect( 'close' );
-  emitter.expect( 'close' );
+  function nested( emitter, parser ) {
+    
+    emitter.expect( 'open', 'a' );
+    emitter.expect( 'open', 'b' );
+    emitter.expect( 'statement', 'c' );
+    emitter.expect( 'close' );
+    emitter.expect( 'close' );
 
-  parser.process( 'a { b { c; } }', emitter );
+    parser.process( 'a { b { c; } }', emitter );    
+  }
 
-  finalLog( 'testNested passed' );
-}
+  function deliminator( emitter, parser ) {
+        
+    emitter.expect( 'statement', 'a' ); 
+    parser.process( 'a;', emitter );
+    
+    emitter.expect( 'statement', 'a' ); 
+    parser.process( 'a ;', emitter );
 
-function testDeliminator() {
-  var parser = new Parser()
-    , emitter = new TestEmitter();
-  
-  emitter.expect( 'statement', 'a' ); 
-  parser.process( 'a;', emitter );
-  
-  emitter.expect( 'statement', 'a' ); 
-  parser.process( 'a ;', emitter );
+    emitter.expect( 'statement', 'a' ); 
+    parser.process( ' a;', emitter );
 
-  emitter.expect( 'statement', 'a' ); 
-  parser.process( ' a;', emitter );
+    emitter.expect( 'statement', 'a' ); 
+    parser.process( ' a ;', emitter );
 
-  emitter.expect( 'statement', 'a' ); 
-  parser.process( ' a ;', emitter );
+    emitter.expect( 'open', 'a' ); 
+    parser.process( 'a {', emitter );
 
-  emitter.expect( 'open', 'a' ); 
-  parser.process( 'a {', emitter );
+    emitter.expect( 'open', 'a' ); 
+    parser.process( 'a{', emitter );
 
-  emitter.expect( 'open', 'a' ); 
-  parser.process( 'a{', emitter );
+    emitter.expect( 'open', 'a' ); 
+    parser.process( ' a {', emitter );
 
-  emitter.expect( 'open', 'a' ); 
-  parser.process( ' a {', emitter );
+    emitter.expect( 'open', 'a' ); 
+    parser.process( ' a{', emitter );    
+  }
 
-  emitter.expect( 'open', 'a' ); 
-  parser.process( ' a{', emitter );
+  function test( f ) { 
+    var parser = new Parser()
+      , emitter = new TestEmitter();
 
-  finalLog( 'testDeliminator passed' );
+    f( emitter, parser );
+
+    finalLog( f.name + ' passed' );
+  }
+
 }
