@@ -1,8 +1,10 @@
 /*
   events emitted:
     template parameters
-    function signature
     type declaration
+    function result type
+    function name
+    function signature
 */ 
 
 var Parser = require( './parser' ).Parser

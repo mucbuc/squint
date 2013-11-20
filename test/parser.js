@@ -2,17 +2,26 @@ var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
   , Test = require( 'mucbuc-jsthree' ).Test
   , finalLog = Test.finalLog
-  , TestEmitter = Test.Emitter;
+  , TestEmitter = Test.Emitter
 
 checkParser();
 
 function checkParser() {
+
+  var parser = new Parser()
+    , emitter = new TestEmitter();
 
   test( deliminator );
   test( nested );
   test( interleaved );
   test( scopes );
   test( statments );
+  test( end );
+
+  function end( emitter, parser ) {
+    emitter.expect( 'end', 'a' );
+    parser.process( ';a', emitter );
+  }
 
   function statments( emitter, parser ) {
     
@@ -84,12 +93,7 @@ function checkParser() {
   }
 
   function test( f ) { 
-    var parser = new Parser()
-      , emitter = new TestEmitter();
-
     f( emitter, parser );
-
     finalLog( f.name + ' passed' );
   }
-
 }
