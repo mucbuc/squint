@@ -72,6 +72,17 @@ function Analyzer() {
           , depth = 0;
 
         emitter.on( 'open function', function( code ) {
+
+          // this should probably only happen once, not every '(' 
+          var split = code.split( ' ' )
+            , resultType = split.slice(0, split.length - 1).join( ' ' )
+            , name = split[ split.length - 1 ]; 
+
+          e.emit( 'function result type', resultType )
+          process.nextTick( function() {
+            e.emit( 'function name', name );
+          })
+          
           signature += code + '(';
           ++depth;
         } );

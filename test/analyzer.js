@@ -66,6 +66,8 @@ function checkAnalyzer() {
 
   function functionSignatures( emitter, parser ) {
     emitter.expect( 'open', 'type foo()' );
+    emitter.expect( 'function result type', 'type' );
+    emitter.expect( 'function name', 'foo' );
     emitter.expect( 'function signature', 'type foo()' );
     parser.process( 'type foo(){', emitter );
   }
