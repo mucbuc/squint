@@ -16,18 +16,25 @@ function Definer( emitter ) {
   } );
   
   this.buildProduct = function( factory, done ) {
-    var result = ''
-      , type_name = getDeclarationName(declaration);
     
-    members.forEach( function( member, index ) {
-      var return_type = getReturnType( member )
-        , function_name = getNameAndArgs( member );
+    if (!members.length) {
+      done( '' );
+    }
+    else 
+    {
+      var result = ''
+        , type_name = getDeclarationName(declaration);
+      
+      members.forEach( function( member, index ) {
+        var return_type = getReturnType( member )
+          , function_name = getNameAndArgs( member );
 
-      result += return_type + ' ' + type_name + '::' + function_name + '{}'; 
-      if (index == members.length - 1) {
-        done( result );
-      }
-    } );
+        result += return_type + ' ' + type_name + '::' + function_name + '{}'; 
+        if (index == members.length - 1) {
+          done( result );
+        }
+      } );
+    }
   };
 
   function appendMember(code) {

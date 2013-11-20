@@ -16,14 +16,24 @@ function Declarer( emitter ) {
   } );
   
   this.buildProduct = function( factory, done ) {
-    
+
     var result = name + factory.declareOpen();
-    members.forEach( function( member, index ) {
-      result += member + factory.memberDeclare();
-      if (index == members.length - 1) {
-        done( result + factory.declareClose() );
-      }
-    } );
+    
+    if (!members.length) {
+      close();
+    }
+    else {
+      members.forEach( function( member, index ) {
+        result += member + factory.memberDeclare();
+        if (index == members.length - 1) {
+          close();
+        }
+      } );
+    }
+
+    function close() {
+      done( result + factory.declareClose() );
+    }
   };
 
   function appendMember(code) {

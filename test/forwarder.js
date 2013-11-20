@@ -13,16 +13,14 @@ function checkForwarder() {
   test( forwarderTypeWithMemberFunction );
 
   function forwarderTypeWithMemberFunction(emitter, analyzer) {
-
     var builder = new Forwarder( emitter );
-    expect( builder, 'struct dummy;' ); 
+    expect( builder, 'struct dummy;', emitter ); 
     analyzer.process( 'struct dummy{ void init(); }', emitter );
   }
 
   function forwardEmptyType(emitter, analyzer) {
-
     var builder = new Forwarder( emitter );
-    expect( builder, 'struct dummy;' );
+    expect( builder, 'struct dummy;', emitter ); 
     analyzer.process( 'struct dummy{};', emitter );
   }
 }

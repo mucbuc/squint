@@ -13,11 +13,23 @@ var Builder = {
 
 	    finalLog( f.name + ' passed' );
 	  },
-	expect: function( builder, code ) {
-		process.on( 'exit', function() {
-      builder.buildProduct( new Factory(), function( result ) {
-        assert.equal( result, code );
-      } ); 
+	expect: function( builder, code, emitter ) { 
+
+		emitter.on( 'end', function() {
+    //process.on( 'exit', function() {
+      var checked = false;
+      
+      process.nextTick( function() {
+        builder.buildProduct( new Factory(), function( result ) {
+          assert.equal( result, code );
+          checked = true;
+        } ); 
+        
+        process.once( 'exit', function() {
+          assert.equal( checked, true );
+        } );
+      } );
+
     } );
 	}
 };

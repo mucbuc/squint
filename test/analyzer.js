@@ -2,8 +2,7 @@ var assert = require( 'assert' )
   , EventEmitter = require( 'events' ).EventEmitter
   , Parser = require( '../src/parser' ).Parser 
   , Analyzer = require( '../src/analyzer' ).Analyzer
-  , Test = require( 'mucbuc-jsthree' ).Test
-  , finalLog = Test.finalLog;
+  , Test = require( 'mucbuc-jsthree' ).Test;
 
 process.setMaxListeners( 0 );
 
@@ -84,9 +83,11 @@ function checkAnalyzer() {
 
     var emitter = new Test.Emitter();
 
-    f( emitter, parser );
+    emitter.once( 'end', function() {
+      console.log( f.name + ' passed' );
+    } );
 
-    finalLog( f.name + ' passed' );
+    f( emitter, parser );
   }
 }
 

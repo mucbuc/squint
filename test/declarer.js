@@ -15,14 +15,14 @@ function testDeclarer() {
   function declareMemberFunction(emitter, parser) {
     
     var builder = new Declarer( emitter );
-    expect( builder, 'struct dummy{void init();};' );
+    expect( builder, 'struct dummy{void init();};', emitter );
     parser.process( 'struct dummy{ void init(); };', emitter );
   } 
 
   function declareEmptyType(emitter, parser) {
 
     var builder = new Declarer( emitter );
-    expect( builder,'struct dummy{};' );
+    expect( builder,'struct dummy{};', emitter );
     parser.process( 'struct dummy{};', emitter );
   }
 
