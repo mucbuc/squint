@@ -15,6 +15,9 @@ function Definer( emitter ) {
     declaration = code;
   } );
   
+  emitter.on( 'function return type', function() {} );
+
+
   this.buildProduct = function( factory, done ) {
     
     if (!members.length) {

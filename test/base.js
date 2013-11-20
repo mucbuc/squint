@@ -14,9 +14,7 @@ var Builder = {
 	    finalLog( f.name + ' passed' );
 	  },
 	expect: function( builder, code, emitter ) { 
-
 		emitter.on( 'end', function() {
-    //process.on( 'exit', function() {
       var checked = false;
       
       process.nextTick( function() {
@@ -29,7 +27,6 @@ var Builder = {
           assert.equal( checked, true );
         } );
       } );
-
     } );
 	}
 };
