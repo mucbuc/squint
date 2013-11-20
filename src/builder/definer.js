@@ -16,6 +16,7 @@ function Definer( emitter ) {
   } );
   
   emitter.on( 'function return type', function() {} );
+  
 
 
   this.buildProduct = function( factory, done ) {

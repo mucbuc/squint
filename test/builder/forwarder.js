@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
-  , Builder = require( './base' ).Builder
-  , Forwarder = require( '../src/forwarder' ).Forwarder
-  , Factory = require( '../src/factory' ).Factory
+  , Builder = require( '../base' ).Builder
+  , Forwarder = require( '../../src/builder/forwarder' ).Forwarder
+  , Factory = require( '../../src/factory' ).Factory
   , test = Builder.test
   , expect = Builder.expect;
   

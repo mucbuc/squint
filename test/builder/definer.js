@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
-  , Builder = require( './base' ).Builder
-  , Definer = require( '../src/definer' ).Definer
-  , Factory = require( '../src/factory' ).Factory
+  , Builder = require( '../base' ).Builder
+  , Definer = require( '../../src/builder/definer' ).Definer
+  , Factory = require( '../../src/factory' ).Factory
   , test = Builder.test
   , expect = Builder.expect;
 
