@@ -5,6 +5,7 @@ var assert = require( 'assert' )
   , Builder = require( '../src/builder' ).Builder
   , Forwarder = require( '../src/builder' ).Forwarder
   , Declarer = require( '../src/builder' ).Declarer
+  , Definer = require( '../src/builder' ).Definer
   , Factory = require( '../src/factory' ).Factory;
 
 checkBuilder();
@@ -14,6 +15,21 @@ function checkBuilder() {
   test( forwarderEmpty );
   test( forwarderNonStaticMemberFunction );
   test( declarer );
+  test( definer );
+
+  function definer(emitter, parser) { 
+    
+    var builder = new Definer( emitter );
+
+    process.on( 'exit', function() {
+      builder.buildProduct( new Factory(), function( result ) {
+        assert.equal( result, 'void dummy::init(){}' );
+        console.log( 'definer test passed' ); 
+      } );
+    } );
+  
+    parser.process( 'struct dummy{ void init(); };', emitter );
+  }
 
   function declarer(emitter, parser) {
     
