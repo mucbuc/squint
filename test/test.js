@@ -5,7 +5,9 @@ var assert = require( 'assert' )
   , parser = require( './parser' )
   , analyzer = require( './analyzer' )
   , squint = require( './squint' )
-  , builder = require( './builder' );
+  , forwarder = require( './forwarder' )
+  , declarer = require( './declarer' )
+  , definer = require( './definer' );
 
 assert( typeof squint != 'undefined' );
 

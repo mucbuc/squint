@@ -11,6 +11,8 @@ checkAnalyzer();
 
 function checkAnalyzer() {
 
+  var parser = new Analyzer();
+
   test( typeDeclaration );
   test( functionSignatures );
   test( typeTemplateDeclaration );
@@ -80,8 +82,7 @@ function checkAnalyzer() {
 
   function test( f ) {
 
-    var parser = new Analyzer()
-      , emitter = new Test.Emitter();
+    var emitter = new Test.Emitter();
 
     f( emitter, parser );
 
