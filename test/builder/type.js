@@ -14,7 +14,7 @@ function checkType() {
 	test( doNotDefineType );
 	test( defineType );
 	test( declareType );
-	//test( declareTemplateType );
+	test( declareTemplateType );
 
 	function declareTemplateType(emitter, parser) {
 		var builder = new Type( emitter );

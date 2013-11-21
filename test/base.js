@@ -10,6 +10,8 @@ var Builder = {
       var emitter = new Test.Emitter()
         , parser = new Parser(); 
       
+      emitter.setMaxListeners( 0 );
+
       emitter.once( 'end', function() {
         console.log( f.name + ' passed' );
       } );

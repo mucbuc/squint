@@ -5,7 +5,6 @@ var assert = require( 'assert' )
   , test = Builder.test
   , expect = Builder.expect;
 
-
 checkDefiner(); 
 
 function checkDefiner() {

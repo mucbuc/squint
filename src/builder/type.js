@@ -9,11 +9,19 @@ function Type( emitter ) {
     , name = '';
 
   emitter.on( 'statement', function( code ) { 
+
+    var parser = new Parser()
+      , template = new Template( emitter ); 
+    parser.process( code, emitter );
+
     emitter.emit( 'type declaration', code ); 
   } ); 
 
   emitter.on( 'open', function(code) {
     if (!depth) {
+      var parser = new Parser()
+        , template = new Template( emitter ); 
+      parser.process( code, emitter );
       name = code;
     }
     ++depth;
