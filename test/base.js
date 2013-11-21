@@ -15,23 +15,7 @@ var Builder = {
       } );
 
 	    f( emitter, parser );
-	 },
-	expect: function( builder, code, emitter ) { 
-		emitter.on( 'end', function() {
-      var checked = false;
-      
-      process.nextTick( function() {
-        builder.buildProduct( new Factory(), function( result ) {
-          assert.equal( result, code );
-          checked = true;
-        } ); 
-        
-        process.once( 'exit', function() {
-          assert.equal( checked, true );
-        } );
-      } );
-    } );
-	}
+	  }
 };
 
 exports.Builder = Builder;

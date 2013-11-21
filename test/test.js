@@ -4,8 +4,8 @@ var assert = require( 'assert' )
   , squint = require( '../src/squint' )
   , parser = require( './parser' )
   , squint = require( './squint' )
-  , squint = require( './builder/function' )
   , squint = require( './builder/template' )
+  , squint = require( './builder/function' )
   , squint = require( './builder/type' );
 
 /*

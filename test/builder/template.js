@@ -7,8 +7,7 @@
 var assert = require( 'assert' )
   , Template = require( '../../src/builder/template' ).Template
   , Builder = require( '../base' ).Builder
-  , test = Builder.test
-  , expect = Builder.expect;
+  , test = Builder.test;
 
 process.setMaxListeners( 0 );
 
