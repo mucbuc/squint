@@ -2,27 +2,28 @@ function Forwarder( emitter ) {
 
   var types = [];
 
-  emitter.on( 'type declaration', function( code ) {
-    types.push( code );
-  } );
+  emitter.on( 'open', function(code) {
+    emitter.once( 'close', function() {
+      
+    } );
+
+  } ); 
+
+  emitter.on( 'end', append );
+
   
-  // TODO: factor out commonalty into builder prototype(maybe function)
-  this.buildProduct = function( factory, done ) {
-      
-    if (!types.length) {
-      done( '' );
-    }
-    else {
-      var result = '';
-      types.forEach( function( type, index ) {
-        result += type + factory.memberDeclare();
-      
-        if (index == types.length - 1) {
-          done( result );
-        }
-      } ); 
-    }
-  };
+    // process.nextTick( function() {
+    //   if (types.length) {
+    //     emitter.emit( 'forward declare', types.join( ';' )  );
+    //   }
+    // } );
+  
+  function append( code ) {
+
+    console.log( 'append', code );
+
+    types.push( code );
+  }
 }
 
 module.exports.Forwarder = Forwarder;

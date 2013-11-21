@@ -4,13 +4,15 @@ var assert = require( 'assert' )
   , squint = require( '../src/squint' )
   , parser = require( './parser' )
   , squint = require( './squint' )
-  , squint = require( './builder/template' )
-  , squint = require( './builder/function' )
-  , squint = require( './builder/type' );
+  , template = require( './builder/template' )
+  , func = require( './builder/function' )
+  , type = require( './builder/type' );
+
+  //, forwarder = require( './builder/forwarder' );
+  
 
 /*
   , analyzer = require( './analyzer' )
-  , forwarder = require( './builder/forwarder' )
   , declarer = require( './builder/declarer' )
   , definer = require( './builder/definer' );
 

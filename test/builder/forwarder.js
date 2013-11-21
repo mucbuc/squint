@@ -9,18 +9,28 @@ checkForwarder();
 
 function checkForwarder() {
 
+ // test( forwardType );
   test( forwardEmptyType );
-  test( forwarderTypeWithMemberFunction );
 
-  function forwarderTypeWithMemberFunction(emitter, analyzer) {
+  //test( forwarderTypeWithMemberFunction );
+
+  function forwarderTypeWithMemberFunction(emitter, parser) {
     var builder = new Forwarder( emitter );
-    expect( builder, 'struct dummy;', emitter ); 
-    analyzer.process( 'struct dummy{ void init(); }', emitter );
+    emitter.expect( 'forward declare', 'struct dummy;' ); 
+    parser.process( 'struct dummy{ void init(); }', emitter );
   }
 
-  function forwardEmptyType(emitter, analyzer) {
+  function forwardEmptyType(emitter, parser) {
+    
     var builder = new Forwarder( emitter );
-    expect( builder, 'struct dummy;', emitter ); 
-    analyzer.process( 'struct dummy{};', emitter );
+    emitter.expect( 'forward declare', 'struct dummy;' ); 
+    parser.process( 'struct dummy{};', emitter );
+  }
+
+  function forwardType(emitter, parser) {
+    
+    var builder = new Forwarder( emitter );
+    emitter.expect( 'forward declare', 'struct dummy' ); 
+    parser.process( 'struct dummy;', emitter );
   }
 }
