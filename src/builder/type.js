@@ -1,8 +1,7 @@
 
 var events = require( 'events' )
   , Parser = require( '../parser' ).Parser
-  , Template = require( '../../src/builder/template' ).Template
-	, Function = require( '../../src/builder/function' ).Function
+  , Template = require( '../../src/builder/template' ).Template;
 
 function Type( emitter ) {
 
@@ -16,8 +15,7 @@ function Type( emitter ) {
   	process.nextTick( function() {
   		
   		var parser = new Parser()
-  		  , template = new Template( emitter )
-  		  , _function = new Function( emitter ); 
+  		  , template = new Template( emitter ); 
 
   		parser.process( code, emitter );
 			emitter.emit( 'type declaration', code );

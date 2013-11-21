@@ -15,6 +15,14 @@ function checkFunction() {
 
 	test( voidParameter );
 	test( singleParameter );
+	test( declareTemplateFunction );
+
+	function declareTemplateFunction(emitter, parser) {
+		var builder = new Function( emitter ); 
+		emitter.expect( 'template parameters', 'class T' );
+		emitter.expect( 'function signature', 'template<class T> string greeting(T text)' );
+		parser.process( 'template<class T> string greeting(T text);', emitter );
+	}
 
 	function singleParameter(emitter, parser) {
 		var builder = new Function( emitter ); 

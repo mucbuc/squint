@@ -1,5 +1,6 @@
-var Parser = require( '../parser' ).Parser
-  , events = require( 'events' );
+var events = require( 'events' )
+  , Parser = require( '../parser' ).Parser
+  , Template = require( '../../src/builder/template' ).Template;
 
 function Function(emitter) {
 
@@ -16,6 +17,12 @@ function Function(emitter) {
       , name = '';
 
     sub.once( 'function open', function(code) {
+      
+      var parser = new Parser()
+        , template = new Template( emitter ); 
+
+      parser.process( code, emitter );
+      
       name = code;
       
       sub.once( 'function close', function(parameters) { 

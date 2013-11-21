@@ -10,24 +10,24 @@ checkType();
 
 function checkType() {
 
-	test( declareEmpty );
-	test( defineEmpty );
-	test( declareTemplate );
+	test( declareType );
+	test( defineEmptyType );
+	test( declareTemplateType );
 
-	function declareTemplate(emitter, parser) {
+	function declareTemplateType(emitter, parser) {
 		var builder = new Type( emitter );
 		emitter.expect( 'template parameters', 'class T' );
 		emitter.expect( 'type declaration', 'template<class T> text text' );
 		parser.process( 'template<class T> text text;', emitter );
 	}
 
-	function defineEmpty(emitter, parser) {
+	function defineEmptyType(emitter, parser) {
 		var builder = new Type( emitter );
 		emitter.expect( 'type definition', 'text text' );
 		parser.process( 'text text {', emitter );
 	}
 
-	function declareEmpty(emitter, parser) {
+	function declareType(emitter, parser) {
 		var builder = new Type( emitter ); 
 		emitter.expect( 'type declaration', 'text text' );
 		parser.process( 'text text;', emitter );		
