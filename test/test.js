@@ -5,12 +5,11 @@ var assert = require( 'assert' )
   , parser = require( './parser' )
   , squint = require( './squint' )
   , squint = require( './builder/function' )
-  , squint = require( './builder/template' );
+  , squint = require( './builder/template' )
+  , squint = require( './builder/type' );
 
 /*
-  
   , analyzer = require( './analyzer' )
-
   , forwarder = require( './builder/forwarder' )
   , declarer = require( './builder/declarer' )
   , definer = require( './builder/definer' );

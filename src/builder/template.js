@@ -26,7 +26,7 @@ function Template( emitter ) {
     } );
 
     parser.process( code, sub );
-  };
+  }
 }
 
 exports.Template = Template; 
