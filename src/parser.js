@@ -13,7 +13,7 @@ design:
 function Parser( map ) {
   
   var instance = this
-    , deliminators = init( map == undefined ? Parser.prototype.defaultMap() : map );
+    , deliminators = init( typeof map === 'undefined' ? Parser.prototype.defaultMap() : map );
 
   this.process = function( code, emitter ) {
 
@@ -45,7 +45,11 @@ function Parser( map ) {
 }; 
 
 Parser.prototype.defaultMap = function() {
-  return { ';': 'statement', '{': 'open', '}': 'close' }; 
+  return { 
+      ';': 'statement', 
+      '{': 'open', 
+      '}': 'close'
+  }; 
 }; 
 
 module.exports.Parser = Parser;

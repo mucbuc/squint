@@ -20,10 +20,8 @@ function testDeclarer() {
   } 
 
   function declareEmptyType(emitter, parser) {
-
     var builder = new Declarer( emitter );
     expect( builder,'struct dummy{};', emitter );
     parser.process( 'struct dummy{};', emitter );
   }
-
 }

@@ -2,17 +2,20 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Test = require( 'mucbuc-jsthree' ).Test
   , finalLog = Test.finalLog
-  , Analyzer = require( '../src/analyzer' ).Analyzer
+  , Parser = require( '../src/parser' ).Parser
   , Factory = require( '../src/factory' ).Factory;
 
 var Builder = {
   test: function( f ) {
-	    var emitter = new events.EventEmitter()
-	      , analyzer = new Analyzer()
-	    f( emitter, analyzer );
+      var emitter = new Test.Emitter()
+        , parser = new Parser(); 
+      
+      emitter.once( 'end', function() {
+        console.log( f.name + ' passed' );
+      } );
 
-	    finalLog( f.name + ' passed' );
-	  },
+	    f( emitter, parser );
+	 },
 	expect: function( builder, code, emitter ) { 
 		emitter.on( 'end', function() {
       var checked = false;

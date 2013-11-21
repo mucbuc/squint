@@ -3,6 +3,8 @@ var assert = require( 'assert' )
   , Test = require( 'mucbuc-jsthree' ).Test
   , TestEmitter = Test.Emitter
 
+process.setMaxListeners( 0 );
+
 checkParser();
 
 function checkParser() {
@@ -19,6 +21,14 @@ function checkParser() {
   test( empty );
   test( falseEnd );
   test( statementEnd );
+  test( eventMap );
+
+  function eventMap( emitter ) {
+    var parser = new Parser( { '<': 'template open', '>': 'template close' } );
+    emitter.expect( 'template open', 'text' ); 
+    emitter.expect( 'template close', 'A' );
+    parser.process( 'text<A>', emitter );
+  }
 
   function statementEnd( emitter ) {
     emitter.expect( 'statement', '' );

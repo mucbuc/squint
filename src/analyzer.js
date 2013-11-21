@@ -14,8 +14,9 @@ function Analyzer() {
 
   var baseProcess; 
 
-  Parser.call( this );
-
+  Parser.call( this, Analyzer.prototype.defaultMap() );
+  
+/*  
   baseProcess = this.process;
 
   this.process = function( code, e ) {
@@ -106,7 +107,7 @@ function Analyzer() {
 
     baseProcess( code, e );
   };
-
+*/ 
 }
 
 Analyzer.prototype = new Parser();

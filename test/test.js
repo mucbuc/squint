@@ -3,11 +3,19 @@
 var assert = require( 'assert' )
   , squint = require( '../src/squint' )
   , parser = require( './parser' )
-  , analyzer = require( './analyzer' )
   , squint = require( './squint' )
+  , squint = require( './builder/function' )
+  , squint = require( './builder/template' );
+
+/*
+  
+  , analyzer = require( './analyzer' )
+
   , forwarder = require( './builder/forwarder' )
   , declarer = require( './builder/declarer' )
   , definer = require( './builder/definer' );
+
+*/ 
 
 assert( typeof squint != 'undefined' );
 
