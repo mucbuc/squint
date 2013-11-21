@@ -1,9 +1,3 @@
-/* 
-
-
-
-*/
-
 var assert = require( 'assert' )
   , Template = require( '../../src/builder/template' ).Template
   , Builder = require( '../base' ).Builder
@@ -23,7 +17,13 @@ function checkTemplate() {
 		
 		var builder = new Template( emitter ); 
 		emitter.expect( 'template parameters', 'MACRO(), MACRO' );
-		parser.process( 'template< MACRO(), MACRO >;', emitter );		
+		parser.process( 'template< MACRO(), MACRO >;', emitter );
+
+		emitter.expect( 'template parameters', 'MACRO(), MACRO' );
+		parser.process( 'template< MACRO(), MACRO >', emitter );			
+	
+		emitter.expect( 'template parameters', 'MACRO(ARG), MACRO()' );
+		parser.process( 'template< MACRO(ARG), MACRO() >;', emitter );		
 	}
 
 	function multipleParameters(emitter, parser) {

@@ -10,12 +10,10 @@ var assert = require( 'assert' )
 
   //, forwarder = require( './builder/forwarder' );
   
-
 /*
   , analyzer = require( './analyzer' )
   , declarer = require( './builder/declarer' )
   , definer = require( './builder/definer' );
-
 */ 
 
 assert( typeof squint != 'undefined' );
