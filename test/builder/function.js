@@ -24,6 +24,7 @@ function checkFunction() {
 	}
 
 	function singleParameter(emitter, parser) {
+		
 		var builder = new Function( emitter ); 
 		emitter.expect( 'function signature', 'string greeting(text)' );
 		parser.process( 'string greeting(text) {', emitter );
