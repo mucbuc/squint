@@ -15,6 +15,14 @@ function checkType() {
 	test( defineType );
 	test( declareType );
 	test( declareTemplateType );
+	test( defineTemplateType );
+
+	function defineTemplateType(emitter, parser) {
+		var builder = new Type( emitter );
+		emitter.expect( 'template parameters', 'class T' );
+		emitter.expect( 'type definition', 'template<class T> text text' );
+		parser.process( 'template<class T> text text {};', emitter );
+	}
 
 	function declareTemplateType(emitter, parser) {
 		var builder = new Type( emitter );
