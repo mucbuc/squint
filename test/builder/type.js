@@ -2,6 +2,7 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Type = require( '../../src/builder/type' ).Type
   , Builder = require( '../base' ).Builder
+  , Test = require( 'mucbuc-jsthree' ).Test
   , test = Builder.test
   , expect = Builder.expect;
 
@@ -16,6 +17,19 @@ function checkType() {
 	test( declareType );
 	test( declareTemplateType );
 	test( defineTemplateType );
+	test( defineNotDeclare );
+
+	function defineNotDeclare(emitter, parser) {
+		var emitter = new Test.Emitter
+		  , builder = new Type( emitter );
+		
+		emitter.on( 'type declaration', function() {
+		 	assert( false );
+		} );
+		
+		emitter.expect( 'type definition', 'struct dummy' );
+		parser.process( 'struct dummy{};', emitter );
+	}
 
 	function defineTemplateType(emitter, parser) {
 		var builder = new Type( emitter );
