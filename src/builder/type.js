@@ -6,15 +6,23 @@ var assert = require( 'assert' )
 function Type( emitter ) {
 
   var depth = 0
-    , name = '';
+    , name = ''
+    , isDefinition = false;
 
   emitter.on( 'statement', function( code ) { 
 
     var parser = new Parser()
-      , template = new Template( emitter ); 
+      , template = new Template( emitter );
     parser.process( code, emitter );
 
-    emitter.emit( 'type declaration', code ); 
+    if (!depth) {
+      if (isDefinition) {
+        emitter.emit( 'type definition', name );
+      }
+      else {
+         emitter.emit( 'type declaration', code );
+      }
+    }
   } ); 
 
   emitter.on( 'open', function(code) {
@@ -25,21 +33,12 @@ function Type( emitter ) {
       name = code;
     }
     ++depth;
+    isDefinition = true;
   } );
 
   emitter.on( 'close', function( code ) {
     assert.notEqual( depth, 0 );
-
-    if(!--depth) {
-      emitter.once( 'statement', define );
-    } 
-    else {
-      emitter.removeListener( 'statement', define );
-    }
-  
-    function define() {
-      emitter.emit( 'type definition', name );
-    }
+    --depth;
   } );
   
 }
