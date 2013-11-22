@@ -14,13 +14,17 @@ function checkDefiner() {
 
   function defineMemberFunction(emitter, parser) { 
     var builder = new Definer( emitter );
-    expect( builder, 'void dummy::init(){}', emitter );
+    emitter.expect( 'type definition', 'struct dummy' );
+    emitter.expect( 'type implementation', 'void init();' );
     parser.process( 'struct dummy{ void init(); };', emitter );
   }
 
   function defineEmpty(emitter, parser) {
     var builder = new Definer( emitter );
-    expect( builder, '', emitter );
+    emitter.once( 'type implementation', function() {
+      assert( false );
+    } ); 
+    emitter.expect( 'type definition', 'struct dummy' );
     parser.process( 'struct dummy{};', emitter );
   }
 }

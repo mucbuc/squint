@@ -8,9 +8,8 @@ var assert = require( 'assert' )
   , func = require( './builder/function' )
   , type = require( './builder/type' )
   , forwarder = require( './builder/forwarder' )
-  , declarer = require( './builder/declarer' );
-
-  //, definer = require( './builder/definer' );
+  , declarer = require( './builder/declarer' )
+  , definer = require( './builder/definer' );
 
 
 assert( typeof squint != 'undefined' );

@@ -12,12 +12,29 @@ checkType();
 
 function checkType() {
 
-	test( doNotDefineType );
-	test( defineType );
-	test( declareType );
-	test( declareTemplateType );
-	test( defineTemplateType );
-	test( defineNotDeclare );
+	// test( doNotDefineType );
+	// test( defineType );
+	// test( declareType );
+	// test( declareTemplateType );
+	// test( defineTemplateType );
+	// test( defineNotDeclare );
+
+	test( implementation );
+
+	function implementation(emitter, parser) {
+		var builder = new Type( emitter );
+		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'type implementation', 'abc' );
+		parser.process( 'text text {abc};', emitter );
+
+		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'type implementation', 'void abc()' );
+		parser.process( 'text text { void abc() };', emitter );
+
+		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'type implementation', 'void abc();' );
+		parser.process( 'text text { void abc(); };', emitter );
+	}
 
 	function defineNotDeclare(emitter, parser) {
 		var emitter = new Test.Emitter

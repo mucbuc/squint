@@ -7,7 +7,8 @@ function Type( emitter ) {
 
   var depth = 0
     , name = ''
-    , isDefinition = false;
+    , isDefinition = false
+    , definition = '';
 
   emitter.on( 'statement', function( code ) { 
     
@@ -15,6 +16,9 @@ function Type( emitter ) {
     if (!depth) {
       if (isDefinition) {
         emitter.emit( 'type definition', name );
+        if (definition.length) {
+          emitter.emit( 'type implementation', definition );
+        }
       }
       else {
          emitter.emit( 'type declaration', code );
@@ -28,12 +32,16 @@ function Type( emitter ) {
       name = code;
     }
     ++depth;
-    isDefinition = true;
   } );
 
   emitter.on( 'close', function( code ) {
     assert.notEqual( depth, 0 );
-    --depth;
+    console.log( 'close', code );
+    definition = code;
+
+    if (!--depth) {
+      isDefinition = true;
+    }
   } );
   
 }

@@ -1,14 +1,22 @@
+var Type = new require( './type' ).Type;
+
 function Definer( emitter ) {
 
-  var declaration = ''
-    , members = [];
+  var builder = new Type( emitter )
+    , name = '';
 
-  emitter.on( 'type declaration', function( code ) {
-    declaration = code;
+  emitter.on( 'type definition', function( code ) {
+    name = code;
+    emitter.once( 'close', function( code ) {
+      console.log( name + ':=' + code );
+    } );
   } );
-  
-  emitter.on( 'function return type', function() {} );
+}
 
+module.exports.Definer = Definer;
+
+/* 
+  var members = [];
   this.buildProduct = function( factory, done ) {
     
     if (!members.length) {
@@ -49,6 +57,47 @@ function Definer( emitter ) {
 
     return split.slice( 1 );
   }
-}
+*/ 
 
-module.exports.Definer = Definer;
+
+/*
+var name = ''
+    , members = [];
+
+  emitter.once( 'open', function() {
+    emitter.on( 'statement', appendMember ); 
+  } ); 
+
+  emitter.once( 'close', function() {
+    emitter.removeListener( 'statement', appendMember ); 
+  } );
+
+  emitter.on( 'type declaration', function( code ) {
+    name = code;
+  } );
+  
+  this.buildProduct = function( factory, done ) {
+
+    var result = name + factory.declareOpen();
+    
+    if (!members.length) {
+      close();
+    }
+    else {
+      members.forEach( function( member, index ) {
+        result += member + factory.memberDeclare();
+        if (index == members.length - 1) {
+          close();
+        }
+      } );
+    }
+
+    function close() {
+      done( result + factory.declareClose() );
+    }
+  };
+
+  function appendMember(code) {
+    members.push( code.trim() );
+  }*/
+
