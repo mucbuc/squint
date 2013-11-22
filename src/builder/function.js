@@ -4,23 +4,30 @@ var events = require( 'events' )
 
 function Function(emitter) {
 
-  emitter.on( 'open', parse );
-  emitter.on( 'statement', parse );
+  emitter.on( 'open', parseDefinition );
+  emitter.on( 'statement', parseDeclaration );
 
-  function parse(code) {
+  function parseDefinition(code) {
+    parse( code, 'function definition' );
+  }
+
+  function parseDeclaration(code) {
+    parse( code, 'function declaration' );
+  }
+
+  function parse(code, doneEvent) {
     var parser = new Parser( {
           '(': 'function open', 
           ')': 'function close'
         } )
       , sub = new events.EventEmitter()
-      , resultType = ''
       , name = '';
 
     sub.once( 'function open', function(code) {
       parseTemplateParameters( code, emitter );
       name = code;
       sub.once( 'function close', function(parameters) { 
-        emitter.emit( 'function declaration', resultType + ' ' + name + '(' + parameters + ')' );
+        emitter.emit( doneEvent, name + '(' + parameters + ')' );
       } );
     });
   
