@@ -22,6 +22,8 @@ function Type( emitter ) {
         parseTemplateParameters( code, emitter );
         emitter.emit( 'type declaration', code );
       }
+
+      reset();
     }
     else {
       definition += code + ';';
@@ -44,6 +46,11 @@ function Type( emitter ) {
       isDefinition = true;
     }
   } );
+
+  function reset() {
+    isDefinition = false;
+    definition = '';
+  }
   
 }
 
