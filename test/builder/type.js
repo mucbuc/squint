@@ -18,8 +18,17 @@ function checkType() {
 	// test( declareTemplateType );
 	// test( defineTemplateType );
 	// test( defineNotDeclare );
-
-	test( implementation );
+	//test( implementation );
+	test( declarationAfterDefinition );
+	
+	function declarationAfterDefinition(emitter, parser) {
+		var builder = new Type( emitter );
+		emitter.expect( 'type definition', 'text text' );
+		parser.process( 'text text {};', emitter );
+	
+		emitter.expect( 'type declaration', 'text text' );
+		parser.process( 'text text;', emitter );
+	}
 
 	function implementation(emitter, parser) {
 		var builder = new Type( emitter );
@@ -31,9 +40,9 @@ function checkType() {
 		emitter.expect( 'type implementation', 'void abc()' );
 		parser.process( 'text text { void abc() };', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
-		emitter.expect( 'type implementation', 'void abc();' );
-		parser.process( 'text text { void abc(); };', emitter );
+		// emitter.expect( 'type definition', 'text text' );
+		// emitter.expect( 'type implementation', 'void abc();' );
+		// parser.process( 'text text { void abc(); };', emitter );
 	}
 
 	function defineNotDeclare(emitter, parser) {
