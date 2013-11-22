@@ -3,21 +3,11 @@ function Definer( emitter ) {
   var declaration = ''
     , members = [];
 
-  emitter.once( 'open', function() {
-    emitter.on( 'statement', appendMember ); 
-  } ); 
-
-  emitter.once( 'close', function() {
-    emitter.removeListener( 'statement', appendMember ); 
-  } );
-
   emitter.on( 'type declaration', function( code ) {
     declaration = code;
   } );
   
   emitter.on( 'function return type', function() {} );
-  
-
 
   this.buildProduct = function( factory, done ) {
     

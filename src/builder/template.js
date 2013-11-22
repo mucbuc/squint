@@ -30,4 +30,11 @@ function Template( emitter ) {
   }
 }
 
-exports.Template = Template; 
+function parseTemplateParameters(code, emitter) {
+  var parser = new Parser()
+    , template = new Template( emitter );
+  parser.process( code, emitter );
+}
+
+exports.Template = Template;
+exports.parseTemplateParameters = parseTemplateParameters;

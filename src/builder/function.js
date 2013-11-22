@@ -1,6 +1,6 @@
 var events = require( 'events' )
   , Parser = require( '../parser' ).Parser
-  , Template = require( '../../src/builder/template' ).Template;
+  , parseTemplateParameters = require( '../../src/builder/template' ).parseTemplateParameters;
 
 function Function(emitter) {
 
@@ -17,18 +17,12 @@ function Function(emitter) {
       , name = '';
 
     sub.once( 'function open', function(code) {
-      
-      var parser = new Parser()
-        , template = new Template( emitter ); 
-
-      parser.process( code, emitter );
-      
+      parseTemplateParameters( code, emitter );
       name = code;
-      
       sub.once( 'function close', function(parameters) { 
-        emitter.emit( 'function signature', resultType + ' ' + name + '(' + parameters + ')' );
+        emitter.emit( 'function declaration', resultType + ' ' + name + '(' + parameters + ')' );
       } );
-    } );
+    });
   
     parser.process( code, sub );
   }

@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( '../parser' ).Parser
-  , Template = require( '../../src/builder/template' ).Template;
+  , parseTemplateParameters = require( '../../src/builder/template' ).parseTemplateParameters;
 
 function Type( emitter ) {
 
@@ -10,11 +10,8 @@ function Type( emitter ) {
     , isDefinition = false;
 
   emitter.on( 'statement', function( code ) { 
-
-    var parser = new Parser()
-      , template = new Template( emitter );
-    parser.process( code, emitter );
-
+    
+    parseTemplateParameters( code, emitter );
     if (!depth) {
       if (isDefinition) {
         emitter.emit( 'type definition', name );
@@ -27,9 +24,7 @@ function Type( emitter ) {
 
   emitter.on( 'open', function(code) {
     if (!depth) {
-      var parser = new Parser()
-        , template = new Template( emitter ); 
-      parser.process( code, emitter );
+      parseTemplateParameters( code, emitter );
       name = code;
     }
     ++depth;
@@ -44,20 +39,4 @@ function Type( emitter ) {
 }
 
 exports.Type = Type;
-
-/* 
-
-  emitter.on( 'statement', function( code ) {
-  	process.nextTick( function() {
-  		
-  		var parser = new Parser()
-  		  , template = new Template( emitter ); 
-
-  		parser.process( code, emitter );
-			emitter.emit( 'type declaration', code );
-  	} );
-  } );
-*/
-
-
 
