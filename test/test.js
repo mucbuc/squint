@@ -7,13 +7,10 @@ var assert = require( 'assert' )
   , template = require( './builder/template' )
   , func = require( './builder/function' )
   , type = require( './builder/type' )
-  , forwarder = require( './builder/forwarder' );
-  
-/*
-  , analyzer = require( './analyzer' )
+  , forwarder = require( './builder/forwarder' )
   , declarer = require( './builder/declarer' )
-  , definer = require( './builder/definer' );
-*/ 
+  ;//, definer = require( './builder/definer' );
+
 
 assert( typeof squint != 'undefined' );
 

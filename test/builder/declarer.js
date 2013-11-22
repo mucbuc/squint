@@ -4,24 +4,17 @@ var assert = require( 'assert' )
   , Factory = require( '../../src/factory' ).Factory
   , test = Builder.test
   , expect = Builder.expect;
+
+test( declareType );
+
+function declareType(emitter, parser) {
+  var builder = new Declarer( emitter );
+  emitter.expect( 'type decalartions', 'struct dummy' );
+  parser.process( 'struct dummy{};', emitter );
   
-testDeclarer();
+  emitter.expect( 'type decalartions', 'struct dummy' );
+  parser.process( 'struct dummy;', emitter );
 
-function testDeclarer() {
-
-  test( declareEmptyType );
-  test( declareMemberFunction );
-
-  function declareMemberFunction(emitter, parser) {
-    
-    var builder = new Declarer( emitter );
-    expect( builder, 'struct dummy{void init();};', emitter );
-    parser.process( 'struct dummy{ void init(); };', emitter );
-  } 
-
-  function declareEmptyType(emitter, parser) {
-    var builder = new Declarer( emitter );
-    expect( builder,'struct dummy{};', emitter );
-    parser.process( 'struct dummy{};', emitter );
-  }
+  emitter.expect( 'type decalartions', 'struct dummy' );
+  parser.process( 'struct dummy{ void init(); };', emitter );
 }
