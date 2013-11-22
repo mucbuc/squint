@@ -9,9 +9,9 @@ checkForwarder();
 
 function checkForwarder() {
 
-  //test( forwardType );
+  test( forwardType );
   test( forwardEmptyType );
-  //test( forwarderTypeWithMemberFunction );
+  test( forwarderTypeWithMemberFunction );
 
   function forwarderTypeWithMemberFunction(emitter, parser) {
     var builder = new Forwarder( emitter );

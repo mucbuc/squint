@@ -6,12 +6,12 @@ function Forwarder( emitter ) {
     , builder = new Type( emitter );
 
   emitter.on( 'type definition', function( type ) { 
-    console.log( 'type def', type );
+    //console.log( 'type def', type );
     types.push( type );
   } );
 
   emitter.on( 'type declaration', function( type ) { 
-    console.log( 'type decl', type );
+    //console.log( 'type decl', type );
     types.push( type );
   });
 

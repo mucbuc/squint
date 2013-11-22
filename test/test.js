@@ -6,9 +6,8 @@ var assert = require( 'assert' )
   , squint = require( './squint' )
   , template = require( './builder/template' )
   , func = require( './builder/function' )
-  , type = require( './builder/type' );
-
-  //, forwarder = require( './builder/forwarder' );
+  , type = require( './builder/type' )
+  , forwarder = require( './builder/forwarder' );
   
 /*
   , analyzer = require( './analyzer' )
