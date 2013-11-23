@@ -7,9 +7,6 @@ function Definer( emitter ) {
 
   emitter.on( 'type definition', function( code ) {
     name = code;
-    emitter.once( 'close', function( code ) {
-      console.log( name + ':=' + code );
-    } );
   } );
 }
 

@@ -11,7 +11,6 @@ var assert = require( 'assert' )
   , declarer = require( './builder/declarer' )
   , definer = require( './builder/definer' );
 
-
 assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );

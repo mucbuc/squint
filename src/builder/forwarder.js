@@ -1,4 +1,5 @@
-var Type = require( './type' ).Type; 
+var Type = require( './type' ).Type
+  , events = require( 'events' ); 
 
 function Forwarder( emitter ) {
 
@@ -20,4 +21,17 @@ function Forwarder( emitter ) {
   } );
 }
 
-module.exports.Forwarder = Forwarder;
+/*
+function makeForwardDeclaration( code, done ) {
+  var emitter = new events.EventsEmitter()
+    , builder = new Forwarder( emitter );
+
+  emitter.on( 'forward declare', function( code ) {
+    done( code );
+  } );
+  parser.process( 'struct dummy{ void init(); };', emitter );
+}
+
+exports.makeForwardDeclaration = makeForwardDeclaration;*/
+
+exports.Forwarder = Forwarder;

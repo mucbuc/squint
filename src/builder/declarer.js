@@ -11,7 +11,8 @@ function Declarer( emitter ) {
 
   emitter.on( 'end', function() {
     if (types.length) {
-      emitter.emit( 'type decalartions', types[0] );
+      emitter.emit( 'type decalartions', types );
+      types = [];
     }
   });
 
