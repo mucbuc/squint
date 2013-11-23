@@ -11,6 +11,14 @@ function checkDefiner() {
 
   test( defineEmpty ); 
   test( defineMemberFunction );
+  test( defineMemberFunctions );
+
+  function defineMemberFunctions(emitter, parser) { 
+    var builder = new Definer( emitter );
+    emitter.expect( 'type definition', 'struct dummy' );
+    emitter.expect( 'type implementation', 'void init(); void init2();' );
+    parser.process( 'struct dummy{ void init(); void init2();};', emitter );
+  }
 
   function defineMemberFunction(emitter, parser) { 
     var builder = new Definer( emitter );
