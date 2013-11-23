@@ -5,8 +5,8 @@ var assert = require( 'assert' )
   , test = Builder.test
   , expect = Builder.expect;
 
-test( emptyOnDeclare );
 test( declareType );
+test( emptyOnDeclare );
 
 function emptyOnDeclare(emitter, parser) {
   var builder = new Declarer( emitter );
