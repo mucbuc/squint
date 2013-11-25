@@ -49,6 +49,6 @@ exports.forward = function( code, done ) {
     done( types );
   } );
 
-  parser.process( 'code', emitter );
+  parser.process( code, emitter );
 }
 	
