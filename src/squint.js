@@ -1,4 +1,5 @@
 var assert = require( 'assert' )
+  , events = require( 'events' )
   , commentSingle = new RegExp( '\/\/.*\n?', 'g' )
   , commentMultiple = new RegExp( '\/\\*.*?\\*\/', 'mg' )
   , include = new RegExp( '#.*include.*\n?', 'g' )
@@ -39,5 +40,15 @@ exports.stripComments = function( code ) {
   return code;
 };
 
+exports.forward = function( code, done ) { 
+    var emitter = new events.EventEmitter()
+      , parser = new Parser()
+      , builder = new Forwarder( emitter );
+  
+  emitter.on( 'forward declare', function( types ) {
+    done( types );
+  } );
 
+  parser.process( 'code', emitter );
+}
 	

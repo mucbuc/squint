@@ -1,7 +1,11 @@
 {
   "name": "squint",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.3",
+  "main": "./src/squint",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mucbuc/squint"
+  },
   "dependencies": {
     "mucbuc-jsthree": "*"
   }
