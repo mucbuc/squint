@@ -11,6 +11,15 @@ test( namespaces );
 test( anonymousNamespaces );
 test( nonNamespaces );
 test( nestedNamespaces );
+test( nestedAggregate ); 
+
+function nestedAggregate( emitter, parser ) { 
+	var builder = new Namespacer( emitter );
+	emitter.expect( 'namespace declare', ['outside'] );
+	emitter.expect( 'namespace declare', ['outside', 'inside1'] );
+	emitter.expect( 'namespace declare', ['outside', 'inside2'] );
+	parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
+}
 
 function nestedNamespaces(emitter, parser) {
 	var builder = new Namespacer( emitter ); 

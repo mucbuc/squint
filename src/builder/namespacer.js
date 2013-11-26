@@ -6,11 +6,13 @@ function Namespacer( emitter ) {
 	emitter.on( 'open', function(code) {
 		code = code.trim();
 		if (code.indexOf('namespace') == 0) {
+			var name = code.substr( 'namespace'.length )
+			  , copy; 
+			nonNamespaceScopeDepths.push( 0 );
+			names.push( name );
+			copy = names.slice();
 			process.nextTick( function() {
-				var name = code.substr( 'namespace'.length );
-				nonNamespaceScopeDepths.push( 0 );
-				names.push( name );
-				emitter.emit( 'namespace declare', names );
+				emitter.emit( 'namespace declare', copy );
 			} );
 		}
 		else if (!nonNamespaceScopeDepths.length) {
@@ -25,9 +27,16 @@ function Namespacer( emitter ) {
 		if (!nonNamespaceScopeDepths.length) {
 			names.pop();
 		}
-		else if (!--nonNamespaceScopeDepths[nonNamespaceScopeDepths.length - 1]) {
-			names.pop();
-			nonNamespaceScopeDepths.pop();
+		else {
+			var count = nonNamespaceScopeDepths[nonNamespaceScopeDepths.length - 1];
+
+			if (!count) {
+				names.pop();
+				nonNamespaceScopeDepths.pop();
+			}
+			else {
+				--count;
+			}
 		}
 	} );
 }
