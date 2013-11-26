@@ -80,7 +80,7 @@ exports.define = function( code, done ) {
   
   console.log( 'define', code );
 
-  emitter.on( 'type definition', function( defs ) {
+  emitter.on( 'type implementation', function( defs ) {
     done( defs.toString() );
   } );
 
