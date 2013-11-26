@@ -9,7 +9,8 @@ var assert = require( 'assert' )
   , type = require( './builder/type' )
   , forwarder = require( './builder/forwarder' )
   , declarer = require( './builder/declarer' )
-  , definer = require( './builder/definer' );
+  , definer = require( './builder/definer' )
+  , namespacer = require( './builder/namespacer' );
 
 assert( typeof squint != 'undefined' );
 

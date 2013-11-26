@@ -22,6 +22,6 @@ function checkNonNamespaces(emitter, parser) {
 
 function checkNamespaces(emitter, parser) {
 		var builder = new Namespacer( emitter ); 
-		emitter.expect( 'namespace declare', 'namespace bla' );
+		emitter.expect( 'namespace declare', 'bla' );
 		parser.process( 'namespace bla {}', emitter );
 }
