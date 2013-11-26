@@ -9,9 +9,13 @@ var assert = require( 'assert' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
   , Parser = require( './Parser' )
-  , Forwarder = require( './builder/forwarder').Forwarder;
+  , Forwarder = require( './builder/forwarder').Forwarder
+  , Declarer = require( './builder/forwarder').Declarer
+  , Definer = require( './builder/forwarder').Definer;
   
 assert( typeof Forwarder !== 'undefined' );
+assert( typeof Declarer !== 'undefined' );
+assert( typeof Definer !== 'undefined' );
 
 exports.stripArrayInitializerBlocks = function( code ) {
   code = code.replace( arrayInitBlock, ';' );
@@ -53,7 +57,7 @@ exports.forward = function( code, done ) {
   } );
 
   parser.process( code, emitter );
-}
+};
 
 exports.declare = function( code, done ) { 
     var emitter = new events.EventEmitter()
@@ -67,7 +71,7 @@ exports.declare = function( code, done ) {
   } );
 
   parser.process( code, emitter );
-}
+};
 
 exports.define = function( code, done ) { 
     var emitter = new events.EventEmitter()
@@ -81,5 +85,5 @@ exports.define = function( code, done ) {
   } );
 
   parser.process( code, emitter );
-}
+};
   
