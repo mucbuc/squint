@@ -8,10 +8,10 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , Parser = require( './Parser' )
+  , Parser = require( './parser' ).Parser
   , Forwarder = require( './builder/forwarder').Forwarder
   , Declarer = require( './builder/declarer').Declarer
-  , Definer = require( './builder/Definer').Definer;
+  , Definer = require( './builder/definer').Definer;
   
 assert( typeof Forwarder !== 'undefined' );
 assert( typeof Declarer !== 'undefined' );
