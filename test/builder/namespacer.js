@@ -7,10 +7,19 @@ var assert = require( 'assert' )
 
 assert( typeof Namespacer !== 'undefined' );
 
-test( checkNamespaces );
-test( checkNonNamespaces );
+test( namespaces );
+test( nonNamespaces );
+test( nestedNamespaces );
 
-function checkNonNamespaces(emitter, parser) {
+function nestedNamespaces(emitter, parser) {
+	var builder = new Namespacer( emitter ); 
+	emitter.expect( 'namespace declare', 'hello' );
+	emitter.expect( 'namespace declare', 'world' );
+	emitter.expect( 'namespace declare', '' );
+	parser.process( 'namespace hello{ namespace world{ namespace { } } }', emitter );
+}
+
+function nonNamespaces(emitter, parser) {
 	var builder = new Namespacer( emitter ); 
 	
 	emitter.on( 'namespace declare', function() { 
@@ -20,8 +29,10 @@ function checkNonNamespaces(emitter, parser) {
 	parser.process( 'struct bla{};', emitter );
 }
 
-function checkNamespaces(emitter, parser) {
+function namespaces(emitter, parser) {
 		var builder = new Namespacer( emitter ); 
 		emitter.expect( 'namespace declare', 'bla' );
+		emitter.expect( 'namespace declare', '' );
 		parser.process( 'namespace bla {}', emitter );
+		parser.process( 'namespace {}', emitter );
 }
