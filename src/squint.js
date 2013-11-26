@@ -8,7 +8,7 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , Parser = require( 'Parser' )
+  , Parser = require( './Parser' )
   , Forwarder = require( './builder/forwarder').Forwarder;
   
 assert( typeof Forwarder !== 'undefined' );
