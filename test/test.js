@@ -2,19 +2,33 @@
 
 var assert = require( 'assert' )
   , squint = require( '../src/squint' )
-  , parser = require( './parser' )
-  , squint = require( './squint' )
-  , template = require( './builder/template' )
-  , func = require( './builder/function' )
-  , type = require( './builder/type' )
-  , forwarder = require( './builder/forwarder' )
-  , declarer = require( './builder/declarer' )
-  , definer = require( './builder/definer' )
-  , namespacer = require( './builder/namespacer' );
-
+  , Builder = require( './base' ).Builder
+  , test = Builder.test
+  , Namespacer = require( '../src/builder/namespacer' ).Namespacer;
+  
 assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );
+
+// require( './parser' );
+// require( './squint' );
+// require( './builder/template' )
+// require( './builder/function' );
+// require( './builder/type' );
+// require( './builder/forwarder' );
+// require( './builder/declarer' );
+// require( './builder/definer' );
+// require( './builder/namespacer' );
+
+
+test( forwardDeclarations );
+
+function forwardDeclarations() {
+  squint.forward( 'struct hello {};', function( result ) {
+    console.log( result );
+    //assert( result == ['struct hello'] );
+  } ); 
+}
 
 // not sure about these
 function functionDefinitions() {

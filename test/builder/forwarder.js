@@ -13,6 +13,17 @@ function checkForwarder() {
   test( forwardEmptyType );
   test( forwarderTypeWithMemberFunction );
   test( forwardMultipleTypes );
+  test( forwardOnlyOnce );
+
+  function forwardOnlyOnce(emitter, parser) {
+    var builder = new Forwarder( emitter );
+    
+    emitter.once( 'forward declare', function() {
+      emitter.expectNot( 'forward declare' );
+    } ); 
+
+    parser.process( 'struct dummy{};', emitter ); 
+  }
 
   function forwardMultipleTypes(emitter, parser) {
     var builder = new Forwarder( emitter );

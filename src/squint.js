@@ -49,9 +49,6 @@ exports.forward = function( code, done ) {
     var emitter = new events.EventEmitter()
       , parser = new Parser()
       , builder = new Forwarder( emitter );
-  
-  console.log( 'forward', code );
-
   emitter.on( 'forward declare', function( types ) {
     done( types.toString() );
   } );
@@ -63,9 +60,6 @@ exports.declare = function( code, done ) {
     var emitter = new events.EventEmitter()
       , parser = new Parser()
       , builder = new Declarer( emitter );
-  
-  console.log( 'declare', code );
-
   emitter.on( 'type decalartions', function( types ) {
     done( types.toString() );
   } );
@@ -77,9 +71,6 @@ exports.define = function( code, done ) {
     var emitter = new events.EventEmitter()
       , parser = new Parser()
       , builder = new Definer( emitter );
-  
-  console.log( 'define', code );
-
   emitter.on( 'type implementation', function( defs ) {
     done( defs.toString() );
   } );

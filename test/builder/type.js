@@ -1,10 +1,9 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Type = require( '../../src/builder/type' ).Type
-  , Builder = require( '../base' ).Builder
   , Test = require( 'mucbuc-jsthree' ).Test
-  , test = Builder.test
-  , expect = Builder.expect;
+  , Builder = require( '../base' ).Builder
+  , test = Builder.test;
 
 process.setMaxListeners( 0 );
 
