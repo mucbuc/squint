@@ -3,7 +3,7 @@
 var assert = require( 'assert' )
   , Builder = require( '../base' ).Builder
   , test = Builder.test
-	, Namespacer = require( '../../src/builder/namespacer' ).Namespacer;
+  , Namespacer = require( '../../src/builder/namespacer' ).Namespacer;
 
 assert( typeof Namespacer !== 'undefined' );
 
@@ -15,24 +15,34 @@ test( nestedAggregate );
 
 function nestedAggregate( emitter, parser ) { 
 	var builder = new Namespacer( emitter );
-	emitter.expect( 'namespace declare', ['outside'] );
-	emitter.expect( 'namespace declare', ['outside', 'inside1'] );
-	emitter.expect( 'namespace declare', ['outside', 'inside2'] );
+	emitter.expect( 'namespace open', 'outside' );
+	emitter.expect( 'namespace open', 'inside1' );
+	emitter.expect( 'namespace close' );
+	emitter.expect( 'namespace open', 'inside2' );
+	emitter.expect( 'namespace close' );
+	emitter.expect( 'namespace close' );
 	parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
 }
 
 function nestedNamespaces(emitter, parser) {
 	var builder = new Namespacer( emitter ); 
-	emitter.expect( 'namespace declare', ['hello'] );
-	emitter.expect( 'namespace declare', ['hello', 'world'] );
-	emitter.expect( 'namespace declare', ['hello', 'world', ''] );
+	emitter.expect( 'namespace open', 'hello' );
+	emitter.expect( 'namespace open', 'world' );
+	emitter.expect( 'namespace open', '' );
+	emitter.expect( 'namespace close' );
+	emitter.expect( 'namespace close' );
+	emitter.expect( 'namespace close' );
 	parser.process( 'namespace hello{ namespace world{ namespace { } } }', emitter );
 }
 
 function nonNamespaces(emitter, parser) {
 	var builder = new Namespacer( emitter ); 
+
+	emitter.on( 'namespace open', function() { 
+		assert( false );
+	} );
 	
-	emitter.on( 'namespace declare', function() { 
+	emitter.on( 'namespace close', function() { 
 		assert( false );
 	} );
 
@@ -40,13 +50,15 @@ function nonNamespaces(emitter, parser) {
 }
 
 function anonymousNamespaces(emitter, parser) {
-		var builder = new Namespacer( emitter ); 
-		emitter.expect( 'namespace declare', [''] );
-		parser.process( 'namespace {}', emitter );
+	var builder = new Namespacer( emitter ); 
+	emitter.expect( 'namespace open', '' );
+	emitter.expect( 'namespace close' );
+	parser.process( 'namespace {}', emitter );
 }
 
 function namespaces(emitter, parser) {
-		var builder = new Namespacer( emitter ); 
-		emitter.expect( 'namespace declare', ['bla'] );
-		parser.process( 'namespace bla {}', emitter );
+	var builder = new Namespacer( emitter ); 
+	emitter.expect( 'namespace open', 'bla' );
+	emitter.expect( 'namespace close' );
+	parser.process( 'namespace bla {}', emitter );
 }

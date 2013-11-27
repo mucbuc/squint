@@ -1,19 +1,15 @@
 function Namespacer( emitter ) {
 	
 	var names = []
+	  , typers = []
 	  , nonNamespaceScopeDepths = [];
 
 	emitter.on( 'open', function(code) {
 		code = code.trim();
 		if (code.indexOf('namespace') == 0) {
-			var name = code.substr( 'namespace'.length )
-			  , copy; 
+			var name = code.substr( 'namespace'.length );
+			emitter.emit( 'namespace open', name );
 			nonNamespaceScopeDepths.push( 0 );
-			names.push( name );
-			copy = names.slice();
-			process.nextTick( function() {
-				emitter.emit( 'namespace declare', copy );
-			} );
 		}
 		else if (!nonNamespaceScopeDepths.length) {
 			nonNamespaceScopeDepths.push(1)
@@ -25,14 +21,14 @@ function Namespacer( emitter ) {
 
 	emitter.on( 'close', function() { 
 		if (!nonNamespaceScopeDepths.length) {
-			names.pop();
+			emitter.emit( 'namespace close' );
 		}
 		else {
 			var count = nonNamespaceScopeDepths[nonNamespaceScopeDepths.length - 1];
 
 			if (!count) {
-				names.pop();
 				nonNamespaceScopeDepths.pop();
+				emitter.emit( 'namespace close' );
 			}
 			else {
 				--count;
