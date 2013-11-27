@@ -13,9 +13,7 @@ function emptyOnDeclare(emitter, parser) {
   emitter.expect( 'type decalartions', [ 'struct dummy' ] );
   parser.process( 'struct dummy{};', emitter );
   
-  emitter.on( 'type decalartions', function() {
-    assert( false );
-  } );
+  emitter.expectNot( 'type decalartions' );
   parser.process( '', emitter );
 }
 

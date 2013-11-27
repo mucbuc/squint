@@ -27,14 +27,12 @@ function checkForwarder() {
   }
 
   function forwardEmptyType(emitter, parser) {
-    
     var builder = new Forwarder( emitter );
     emitter.expect( 'forward declare', ['struct dummy'] ); 
     parser.process( 'struct dummy{};', emitter );
   }
 
   function forwardType(emitter, parser) {
-    
     var builder = new Forwarder( emitter );
     emitter.expect( 'forward declare', ['struct dummy'] ); 
     parser.process( 'struct dummy;', emitter );

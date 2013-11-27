@@ -29,9 +29,7 @@ function checkDefiner() {
 
   function defineEmpty(emitter, parser) {
     var builder = new Definer( emitter );
-    emitter.once( 'type implementation', function() {
-      assert( false );
-    } ); 
+    emitter.expectNot( 'type implementation' );
     emitter.expect( 'type definition', 'struct dummy' );
     parser.process( 'struct dummy{};', emitter );
   }

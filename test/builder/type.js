@@ -74,11 +74,7 @@ function checkType() {
 	function defineNotDeclare(emitter, parser) {
 		var emitter = new Test.Emitter
 		  , builder = new Type( emitter );
-		
-		emitter.on( 'type declaration', function() {
-		 	assert( false );
-		} );
-		
+		emitter.expectNot( 'type declaration' );
 		emitter.expect( 'type definition', 'struct dummy' );
 		parser.process( 'struct dummy{};', emitter );
 	}

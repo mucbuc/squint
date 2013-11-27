@@ -37,15 +37,8 @@ function nestedNamespaces(emitter, parser) {
 
 function nonNamespaces(emitter, parser) {
 	var builder = new Namespacer( emitter ); 
-
-	emitter.on( 'namespace open', function() { 
-		assert( false );
-	} );
-	
-	emitter.on( 'namespace close', function() { 
-		assert( false );
-	} );
-
+	emitter.expectNot( 'namespace open' );
+	emitter.expectNot( 'namespace close' );
 	parser.process( 'struct bla{};', emitter );
 }
 
