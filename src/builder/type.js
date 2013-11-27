@@ -1,6 +1,5 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , Parser = require( '../parser' ).Parser
   , parseTemplateParameters = require( '../../src/builder/template' ).parseTemplateParameters;
 
 function Type( emitter ) {

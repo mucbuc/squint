@@ -14,7 +14,7 @@ function Forwarder( emitter ) {
     types.push( type );
   });
 
-  emitter.on( 'end', function() { 
+  emitter.once( 'end', function() { 
     process.nextTick( function() {
       emitter.emit( 'forward declare', types );
     } );

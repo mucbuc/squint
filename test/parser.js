@@ -31,8 +31,15 @@ function checkParser() {
   }
 
   function statementEnd( emitter ) {
+    
+    var counter = 0;
     emitter.expect( 'statement', '' );
     emitter.expect( 'end', '' );
+    
+    emitter.once( 'end', function() { 
+      assert( !counter ); 
+      ++counter;
+    } );
     parser.process( ';', emitter );
   }
 

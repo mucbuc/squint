@@ -16,10 +16,12 @@ function checkForwarder() {
   test( forwardOnlyOnce );
 
   function forwardOnlyOnce(emitter, parser) {
-    var builder = new Forwarder( emitter );
-    
+    var builder = new Forwarder( emitter )
+      , counter = 0;
+
     emitter.once( 'forward declare', function() {
-      emitter.expectNot( 'forward declare' );
+      assert( counter == 0 );
+      ++counter;
     } ); 
 
     parser.process( 'struct dummy{};', emitter ); 
