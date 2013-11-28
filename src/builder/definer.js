@@ -5,7 +5,7 @@ function Definer( emitter ) {
   var builder = new Type( emitter )
     , name = '';
 
-  emitter.on( 'type definition', function( code ) {
+  emitter.on( 'define type', function( code ) {
     name = code;
   } );
 }
@@ -69,7 +69,7 @@ var name = ''
     emitter.removeListener( 'statement', appendMember ); 
   } );
 
-  emitter.on( 'type declaration', function( code ) {
+  emitter.on( 'declare type', function( code ) {
     name = code;
   } );
   

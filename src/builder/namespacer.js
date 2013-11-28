@@ -8,7 +8,7 @@ function Namespacer( emitter ) {
 		code = code.trim();
 		if (code.indexOf('namespace') == 0) {
 			var name = code.substr( 'namespace'.length );
-			emitter.emit( 'namespace open', name );
+			emitter.emit( 'open namespace', name );
 			nonNamespaceScopeDepths.push( 0 );
 		}
 		else if (!nonNamespaceScopeDepths.length) {
@@ -21,14 +21,14 @@ function Namespacer( emitter ) {
 
 	emitter.on( 'close', function() { 
 		if (!nonNamespaceScopeDepths.length) {
-			emitter.emit( 'namespace close' );
+			emitter.emit( 'close namespace' );
 		}
 		else {
 			var count = nonNamespaceScopeDepths[nonNamespaceScopeDepths.length - 1];
 
 			if (!count) {
 				nonNamespaceScopeDepths.pop();
-				emitter.emit( 'namespace close' );
+				emitter.emit( 'close namespace' );
 			}
 			else {
 				--count;

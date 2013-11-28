@@ -19,27 +19,27 @@ function checkFunction() {
 	function declareTemplateFunction(emitter, parser) {
 		var builder = new Function( emitter ); 
 		emitter.expect( 'template parameters', 'class T' );
-		emitter.expect( 'function declaration', 'template<class T> string greeting(T text)' );
+		emitter.expect( 'declare function', 'template<class T> string greeting(T text)' );
 		parser.process( 'template<class T> string greeting(T text);', emitter );
 	}
 
 	function singleParameter(emitter, parser) {
 		
 		var builder = new Function( emitter ); 
-		emitter.expect( 'function definition', 'string greeting(text)' );
+		emitter.expect( 'define function', 'string greeting(text)' );
 		parser.process( 'string greeting(text) {', emitter );
 	
-		emitter.expect( 'function declaration', 'string greeting(text)' );
+		emitter.expect( 'declare function', 'string greeting(text)' );
 		parser.process( 'string greeting(text);', emitter );
 	}
 
 	function voidParameter(emitter, parser) {
 		
 		var builder = new Function( emitter ); 
-		emitter.expect( 'function definition', 'string greeting()' );
+		emitter.expect( 'define function', 'string greeting()' );
 		parser.process( 'string greeting() {', emitter );		
 
-		emitter.expect( 'function declaration', 'string greeting()' );
+		emitter.expect( 'declare function', 'string greeting()' );
 		parser.process( 'string greeting();', emitter );		
 	}
 }

@@ -24,9 +24,9 @@ function checkParser() {
   test( eventMap );
 
   function eventMap( emitter ) {
-    var parser = new Parser( { '<': 'template open', '>': 'template close' } );
-    emitter.expect( 'template open', 'text' ); 
-    emitter.expect( 'template close', 'A' );
+    var parser = new Parser( { '<': 'open template', '>': 'close template' } );
+    emitter.expect( 'open template', 'text' ); 
+    emitter.expect( 'close template', 'A' );
     parser.process( 'text<A>', emitter );
   }
 

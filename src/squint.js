@@ -61,7 +61,7 @@ exports.declare = function( code, done ) {
     var emitter = new events.EventEmitter()
       , parser = new Parser()
       , builder = new Declarer( emitter );
-  emitter.on( 'type decalartions', function( types ) {
+  emitter.on( 'declare types', function( types ) {
     done( types.toString().trim() );
   } );
 

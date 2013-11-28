@@ -12,14 +12,14 @@ function Type( emitter ) {
   emitter.on( 'statement', function( code ) { 
     if (!depth) {
       if (isDefinition) {
-        emitter.emit( 'type definition', name );
+        emitter.emit( 'define type', name );
         if (definition.length) {
           emitter.emit( 'type implementation', definition );
         }
       }
       else {
         parseTemplateParameters( code, emitter );
-        emitter.emit( 'type declaration', code );
+        emitter.emit( 'declare type', code );
       }
 
       reset();

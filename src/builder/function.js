@@ -8,25 +8,25 @@ function Function(emitter) {
   emitter.on( 'statement', parseDeclaration );
 
   function parseDefinition(code) {
-    parse( code, 'function definition' );
+    parse( code, 'define function' );
   }
 
   function parseDeclaration(code) {
-    parse( code, 'function declaration' );
+    parse( code, 'declare function' );
   }
 
   function parse(code, doneEvent) {
     var parser = new Parser( {
-          '(': 'function open', 
-          ')': 'function close'
+          '(': 'open function', 
+          ')': 'close function'
         } )
       , sub = new events.EventEmitter()
       , name = '';
 
-    sub.once( 'function open', function(code) {
+    sub.once( 'open function', function(code) {
       parseTemplateParameters( code, emitter );
       name = code;
-      sub.once( 'function close', function(parameters) { 
+      sub.once( 'close function', function(parameters) { 
         emitter.emit( doneEvent, name + '(' + parameters + ')' );
       } );
     });

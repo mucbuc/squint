@@ -6,12 +6,12 @@ function Declarer( emitter ) {
   var builder = new Type( emitter )
     , types = [];
 
-  emitter.on( 'type declaration', appendType );
-  emitter.on( 'type definition', appendType );
+  emitter.on( 'declare type', appendType );
+  emitter.on( 'define type', appendType );
 
   emitter.on( 'end', function() {
     if (types.length) {
-      emitter.emit( 'type decalartions', types );
+      emitter.emit( 'declare types', types );
       types = [];
     }
   });

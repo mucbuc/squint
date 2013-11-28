@@ -25,47 +25,47 @@ function checkType() {
 
 	function declareMultipleTypes( emitter, parser ) {
 		var builder = new Type( emitter );
-		emitter.expect( 'type declaration', 'text text' );
-		emitter.expect( 'type declaration', 'text text' );
+		emitter.expect( 'declare type', 'text text' );
+		emitter.expect( 'declare type', 'text text' );
 		parser.process( 'text text; text text;', emitter );
 	}
 
 	function defineMultipleTypes( emitter, parser ) {
 		var builder = new Type( emitter );
-		emitter.expect( 'type definition', 'text text' );
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text{}; text text{};', emitter );
 	}
 
 	function definitionAfterDeclaration(emitter, parser) {
 		var builder = new Type( emitter );
-		emitter.expect( 'type declaration', 'text text' );
+		emitter.expect( 'declare type', 'text text' );
 		parser.process( 'text text;', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {};', emitter );
 	}
 
 	function declarationAfterDefinition(emitter, parser) {
 		var builder = new Type( emitter );
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {};', emitter );
 	
-		emitter.expect( 'type declaration', 'text text' );
+		emitter.expect( 'declare type', 'text text' );
 		parser.process( 'text text;', emitter );
 	}
 
 	function implementation(emitter, parser) {
 		var builder = new Type( emitter );
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		emitter.expect( 'type implementation', 'abc' );
 		parser.process( 'text text {abc};', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		emitter.expect( 'type implementation', 'void abc()' );
 		parser.process( 'text text { void abc() };', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		emitter.expect( 'type implementation', 'void abc();' );
 		parser.process( 'text text { void abc(); };', emitter );
 	}
@@ -73,43 +73,43 @@ function checkType() {
 	function defineNotDeclare(emitter, parser) {
 		var emitter = new Test.Emitter
 		  , builder = new Type( emitter );
-		emitter.expectNot( 'type declaration' );
-		emitter.expect( 'type definition', 'struct dummy' );
+		emitter.expectNot( 'declare type' );
+		emitter.expect( 'define type', 'struct dummy' );
 		parser.process( 'struct dummy{};', emitter );
 	}
 
 	function defineTemplateType(emitter, parser) {
 		var builder = new Type( emitter );
 		emitter.expect( 'template parameters', 'class T' );
-		emitter.expect( 'type definition', 'template<class T> text text' );
+		emitter.expect( 'define type', 'template<class T> text text' );
 		parser.process( 'template<class T> text text {};', emitter );
 	}
 
 	function declareTemplateType(emitter, parser) {
 		var builder = new Type( emitter );
 		emitter.expect( 'template parameters', 'class T' );
-		emitter.expect( 'type declaration', 'template<class T> text text' );
+		emitter.expect( 'declare type', 'template<class T> text text' );
 		parser.process( 'template<class T> text text;', emitter );
 	}
 
 	function declareType(emitter, parser) {
 		var builder = new Type( emitter ); 
-		emitter.expect( 'type declaration', 'text text' );
+		emitter.expect( 'declare type', 'text text' );
 		parser.process( 'text text;', emitter );		
 	}
 
 	function defineType(emitter, parser) {
 		var builder = new Type( emitter ); 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {};', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {;};', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {{}};', emitter );
 
-		emitter.expect( 'type definition', 'text text' );
+		emitter.expect( 'define type', 'text text' );
 		parser.process( 'text text {{};};', emitter );
 	}
 
@@ -119,7 +119,7 @@ function checkType() {
 		  , failed = false
 		  , name = doNotDefineType.name;
 		
-		sub.on( 'type definition', function() { 
+		sub.on( 'define type', function() { 
 			failed = true;
 			console.log( name + ' failed' );
 			assert( false );

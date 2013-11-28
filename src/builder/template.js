@@ -15,13 +15,13 @@ function Template( emitter ) {
   function parse( code ) {
     
     var parser = new Parser( { 
-          '<': 'template open', 
-          '>': 'template close' 
+          '<': 'open template', 
+          '>': 'close template' 
         } )
       , sub = new events.EventEmitter();
 
-    sub.once( 'template open', function( code ) {
-      sub.once( 'template close', function( code ) {
+    sub.once( 'open template', function( code ) {
+      sub.once( 'close template', function( code ) {
         emitter.emit( 'template parameters', code ); 
       } );
     } );

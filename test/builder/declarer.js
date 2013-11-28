@@ -10,21 +10,21 @@ test( emptyOnDeclare );
 
 function emptyOnDeclare(emitter, parser) {
   var builder = new Declarer( emitter );
-  emitter.expect( 'type decalartions', [ 'struct dummy' ] );
+  emitter.expect( 'declare types', [ 'struct dummy' ] );
   parser.process( 'struct dummy{};', emitter );
   
-  emitter.expectNot( 'type decalartions' );
+  emitter.expectNot( 'declare types' );
   parser.process( '', emitter );
 }
 
 function declareType(emitter, parser) {
   var builder = new Declarer( emitter );
-  emitter.expect( 'type decalartions', [ 'struct dummy' ] );
+  emitter.expect( 'declare types', [ 'struct dummy' ] );
   parser.process( 'struct dummy{};', emitter );
   
-  emitter.expect( 'type decalartions', [ 'struct dummy' ] );
+  emitter.expect( 'declare types', [ 'struct dummy' ] );
   parser.process( 'struct dummy;', emitter );
 
-  emitter.expect( 'type decalartions', [ 'struct dummy' ] );
+  emitter.expect( 'declare types', [ 'struct dummy' ] );
   parser.process( 'struct dummy{ void init(); };', emitter );
 }

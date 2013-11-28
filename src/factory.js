@@ -3,10 +3,10 @@ function Factory() {
 }
 
 Factory.prototype = {
-	declareOpen: function() {
-      return '{';
+	forwardType: function(code) {
+      return code + ';';
     }, 
-  declareClose: function() {
+  	declareClose: function() {
       return '};';    
     }, 
   memberDeclare: function() {

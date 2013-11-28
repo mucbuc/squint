@@ -6,11 +6,11 @@ function Forwarder( emitter ) {
   var types = []
     , builder = new Type( emitter );
 
-  emitter.on( 'type definition', function( type ) { 
+  emitter.on( 'define type', function( type ) { 
     types.push( type );
   } );
 
-  emitter.on( 'type declaration', function( type ) { 
+  emitter.on( 'declare type', function( type ) { 
     types.push( type );
   });
 
