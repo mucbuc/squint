@@ -22,6 +22,13 @@ function checkType() {
 	test( definitionAfterDeclaration );
 	test( defineMultipleTypes );
 	test( declareMultipleTypes );
+	test( doNotDeclareType ); 
+
+	function doNotDeclareType( emitter, parser ) { 
+		var builder = new Type( emitter );
+		emitter.expectNot( 'declare type' );
+		parser.process( 'text text();', emitter );
+	}
 
 	function declareMultipleTypes( emitter, parser ) {
 		var builder = new Type( emitter );
