@@ -1,6 +1,6 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , Parser = require( './parser' ).Parser
+  , Parser = require( './parser' ).Parser;
 
 function Scoper( openToken, closeToken ) {
 	
