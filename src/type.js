@@ -27,6 +27,16 @@ function Type() {
 				} );
 				emitter.emit( 'open type', code.replace( /(struct|class)/, '' ) );
 			}
+			else if (isFunction(code)) {
+				emitter.once( 'close scope', function( code ) { 
+					emitter.emit( 'close function', code );
+				} );
+				emitter.emit( 'open function', code );
+			}
+		
+			function isFunction( code ) {
+				return code[code.length - 1] == ')'
+			}
 
 			function isType( code ) {
 				return code.search( /(struct|class)/ ) != -1; 

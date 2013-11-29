@@ -7,6 +7,23 @@ assert( typeof Type !== 'undefined' );
 
 testNamespace();
 testType();
+testFunction();
+
+function testFunction() {
+
+	test( basicFunction );
+
+	function basicFunction( emitter, parser ) {
+		emitter.expectNot( 'open namespace' );
+		emitter.expectNot( 'open type' ); 
+		emitter.expectNot( 'close namespace' );
+		emitter.expectNot( 'close type' );
+		emitter.expect( 'open function', 'foo()' );
+		emitter.expect( 'close function', 'hello' );
+
+		parser.process( 'foo(){ hello }', emitter );
+	}
+}
 
 function testType() {
 	test( basicType );
