@@ -22,7 +22,7 @@ function checkType() {
 	test( definitionAfterDeclaration );
 	test( defineMultipleTypes );
 	test( declareMultipleTypes );
-	test( doNotDeclareType ); 
+	//test( doNotDeclareType ); 
 
 	function doNotDeclareType( emitter, parser ) { 
 		var builder = new Type( emitter );
@@ -121,27 +121,17 @@ function checkType() {
 	}
 
 	function doNotDefineType(emitter, parser) {
-		var sub = new events.EventEmitter()
-		  , builder = new Type( sub )
-		  , failed = false
-		  , name = doNotDefineType.name;
+		var builder = new Type( emitter );
 		
-		sub.on( 'define type', function() { 
-			failed = true;
-			console.log( name + ' failed' );
-			assert( false );
-		} ); 
+		emitter.expectNot( 'define type' );
+		emitter.expectNot( 'declare type' );
+		emitter.expect( 'define type', 'text text' );
 
-		process.on( 'exit', function() {
-			if (!failed) {
-				console.log( name + ' passed' );
-			}
-		} );
-
-		parser.process( 'text text{', sub );
-		parser.process( 'text text{;', sub );
-		parser.process( 'text text{;}', sub );
-		parser.process( 'text text{{};}', sub );
-		parser.process( 'text text{{}}', sub );
+		// parser.process( 'text text{', emitter );
+		// parser.process( 'text text{;', emitter );
+		// parser.process( 'text text{;}', emitter );
+		// parser.process( 'text text{{};}', emitter );
+		// parser.process( 'text text{{}}', emitter );
+		parser.process( 'text text{};', emitter );
 	}
 }

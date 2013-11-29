@@ -32,7 +32,7 @@ function Type( emitter ) {
   emitter.on( 'open', function(code) {
     if (!depth) {
       parseTemplateParameters( code, emitter );
-      name = code;
+      name = code;   
     }
     ++depth;
   } );

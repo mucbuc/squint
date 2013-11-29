@@ -1,8 +1,6 @@
 function Namespacer( emitter ) {
 	
-	var names = []
-	  , typers = []
-	  , nonNamespaceScopeDepths = [];
+	var nonNamespaceScopeDepths = [];
 
 	emitter.on( 'open', function(code) {
 		code = code.trim();
@@ -12,7 +10,7 @@ function Namespacer( emitter ) {
 			nonNamespaceScopeDepths.push( 0 );
 		}
 		else if (!nonNamespaceScopeDepths.length) {
-			nonNamespaceScopeDepths.push(1)
+			nonNamespaceScopeDepths.push( 1 )
 		}
 		else {
 			++nonNamespaceScopeDepths[ nonNamespaceScopeDepths.length - 1 ];
@@ -24,8 +22,8 @@ function Namespacer( emitter ) {
 			emitter.emit( 'close namespace' );
 		}
 		else {
-			var count = nonNamespaceScopeDepths[nonNamespaceScopeDepths.length - 1];
 
+			var count = nonNamespaceScopeDepths[ nonNamespaceScopeDepths.length - 1 ];
 			if (!count) {
 				nonNamespaceScopeDepths.pop();
 				emitter.emit( 'close namespace' );
