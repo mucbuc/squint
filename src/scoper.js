@@ -2,13 +2,13 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( './parser' ).Parser
 
-function Scoper() {
+function Scoper( openToken, closeToken ) {
 	
 	var depth = 0
 	  , content = ''
-	  , ParserProcess;
+	  , ParserProcess; 
 
-	Parser.call( this, { '{': 'open', '}': 'close' } );
+	Parser.call( this, initMap( openToken, closeToken ) );
 
 	ParserProcess = this.process;
 
@@ -41,8 +41,36 @@ function Scoper() {
 		} );
 
 		ParserProcess( code, sub );
-	}
+	};
 
+	function initMap() {
+
+		var result = {};
+
+		if (typeof openToken === 'undefined') 
+			openToken = '{'; 
+
+		if (typeof closeToken === 'undefined') 
+			closeToken = mapClosed();
+
+		result[openToken] = 'open'; 
+		result[closeToken] = 'close'; 
+		return result;
+
+		function mapClosed() {
+			switch(openToken) {
+				case '(': 
+					return ')';
+				case '[':
+					return ']';
+				case '<':
+					return '>';
+				case '{':
+				default:
+					return '}';
+			}
+		} 
+	}
 	
 }
 

@@ -32,7 +32,7 @@ function Parser( map ) {
       , regExs = [];
     
     for (property in map) {
-      if (property.length > 1) {
+      if (property.length > 1) {  // does this make sense? couldn't find a test case. TODO should probably remove
         regExs.push( { property: map[property] } );
       }
       else {

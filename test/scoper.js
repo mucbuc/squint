@@ -11,7 +11,7 @@ function testScoper() {
 	test( basicScope );
 	test( nestedScopes );
 	test( aggregateScopes ); 
-
+	
 	function aggregateScopes( emitter, parser ) { 
 
 		emitter.expectNot( 'open' );
