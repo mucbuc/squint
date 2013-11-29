@@ -20,22 +20,24 @@ function Scoper() {
 			if (!depth)
 				emitter.emit( 'open scope', code );
 			else
-				content += code; 
+				content += code.trim() + '{'; 
 			++depth;
 		} ); 
 
 		sub.on( 'close', function(code) { 
 			assert( depth );
 
-			content += code;
 			if (!--depth) {
-				emitter.emit( 'close scope', content );
+				emitter.emit( 'close scope', content + code.trim() );
 				content = '';
+			}
+			else {
+				content += '}' + code.trim();
 			}
 		} );
 
 		sub.on( 'end', function(code) {
-			emitter.emit( 'end', code );
+			emitter.emit( 'end', code.trim() );
 		} );
 
 		ParserProcess( code, sub );

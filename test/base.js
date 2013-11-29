@@ -6,9 +6,9 @@ var assert = require( 'assert' )
   , Factory = require( '../src/factory' ).Factory;
 
 var Builder = {
-  test: function( f ) {
+  test: function( f, Parser_Type ) {
       var emitter = new Test.Emitter()
-        , parser = new Parser(); 
+        , parser = new ((typeof Parser_Type === 'undefined') ? Parser : Parser_Type);
       
       emitter.setMaxListeners( 0 );
 
