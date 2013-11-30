@@ -18,7 +18,7 @@ function Scoper( openToken, closeToken ) {
 
 		sub.on( 'open', function(code) {
 			if (!depth)
-				emitter.emit( 'open scope', code );
+				emitter.emit( 'open scope', code.trim() );
 			else
 				content += code.trim() + '{'; 
 			++depth;

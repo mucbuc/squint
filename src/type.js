@@ -32,7 +32,7 @@ function Type() {
 				initScopeType( 'function' );
 
 			function initScopeType( name ) {
-				emitter.once( 'close scope', function( code ) {
+				emitter.on( 'close scope', function( code ) {
 					emitter.emit( 'close ' + name, code );
 				} );
 				emitter.emit( 'open ' + name, code );

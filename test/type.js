@@ -42,6 +42,16 @@ function testNamespace() {
 
 	test( basicNamespace );
 	test( nonNamespace );
+	test( aggregateNamespace );
+
+	function aggregateNamespace(emitter, parser) {
+		emitter.expect( 'open namespace', 'namespace hello' );
+		emitter.expect( 'close namespace', 'hello' );
+		emitter.expect( 'open namespace', 'namespace world' );
+		emitter.expect( 'close namespace', 'world' );
+
+		parser.process( 'namespace hello { hello } namespace world { world }', emitter );
+	}
 
 	function nonNamespace(emitter, parser) {
 		
