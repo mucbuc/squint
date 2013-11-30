@@ -43,6 +43,13 @@ function testNamespace() {
 	test( basicNamespace );
 	test( nonNamespace );
 	test( aggregateNamespace );
+	test( defineNamespace );
+
+	function defineNamespace(emitter, parser) {
+		emitter.expect( 'define namespace', { name: 'namespace hello', code: 'this is it' } );
+
+		parser.process( 'namespace hello { this is it }', emitter );
+	}
 
 	function aggregateNamespace(emitter, parser) {
 		emitter.expect( 'open namespace', 'namespace hello' );

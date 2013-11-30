@@ -31,11 +31,21 @@ function Type() {
 			else if (isFunction(code)) 
 				initScopeType( 'function' );
 
-			function initScopeType( name ) {
+			function initScopeType( type ) {
+				defineScopeType( type );
+
 				emitter.once( 'close scope', function( code ) {
-					emitter.emit( 'close ' + name, code.trim() );
+					emitter.emit( 'close ' + type, code.trim() );
 				} );
-				emitter.emit( 'open ' + name, code.trim() );
+				emitter.emit( 'open ' + type, code.trim() );
+						
+				function defineScopeType( type ) {
+					emitter.on( 'open ' + type, function( name ) { 
+						emitter.once( 'close ' + type, function( code ) { 
+							emitter.emit( 'define ' + type, { name: name, code: code } );
+						} );
+					} );
+				}
 			}
 
 			function isFunction( code ) {
