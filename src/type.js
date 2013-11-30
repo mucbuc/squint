@@ -26,20 +26,20 @@ function Type() {
 			
 			if (isNamespace(code)) 
 				initScopeType( 'namespace' ); 
-			else if (isType(code)) { 
+			else if (isType(code)) 
 				initScopeType( 'type' );
-			else if (isFunction(code)) {
+			else if (isFunction(code)) 
 				initScopeType( 'function' );
 
-			function initScopeType( name, code ) {
+			function initScopeType( name ) {
 				emitter.once( 'close scope', function( code ) {
-					emitter.emit( 'close ' + name );
+					emitter.emit( 'close ' + name, code );
 				} );
 				emitter.emit( 'open ' + name, code );
 			}
 
 			function isFunction( code ) {
-				return code[code.length - 1] == ')'
+				return code[code.length - 1] == ')';
 			}
 
 			function isType( code ) {
