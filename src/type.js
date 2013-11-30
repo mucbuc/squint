@@ -1,5 +1,13 @@
+/* 
+	think of this type as of scope "type". 
+
+		namespace
+		type
+		function
+*/ 
+
+
 var assert = require( 'assert' )
-  , events = require( 'events' )
   , Scoper = require( './scoper' ).Scoper;
 
 assert( typeof Scoper === 'function' );
@@ -15,25 +23,21 @@ function Type() {
 	this.process = function(code, emitter) {
 
 		emitter.on( 'open scope', function( code ) {
-			if (isNamespace(code)) {
-				emitter.once( 'close scope', function( code ) {
-					emitter.emit( 'close namespace', code );
-				} );
-				emitter.emit( 'open namespace', code );
-			}
+			
+			if (isNamespace(code)) 
+				initScopeType( 'namespace' ); 
 			else if (isType(code)) { 
-				emitter.once( 'close scope', function( code ) { 
-					emitter.emit( 'close type', code );
-				} );
-				emitter.emit( 'open type', code );
-			}
+				initScopeType( 'type' );
 			else if (isFunction(code)) {
-				emitter.once( 'close scope', function( code ) { 
-					emitter.emit( 'close function', code );
+				initScopeType( 'function' );
+
+			function initScopeType( name, code ) {
+				emitter.once( 'close scope', function( code ) {
+					emitter.emit( 'close ' + name );
 				} );
-				emitter.emit( 'open function', code );
+				emitter.emit( 'open ' + name, code );
 			}
-		
+
 			function isFunction( code ) {
 				return code[code.length - 1] == ')'
 			}

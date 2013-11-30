@@ -2,8 +2,7 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Test = require( 'mucbuc-jsthree' ).Test
   , finalLog = Test.finalLog
-  , Parser = require( '../src/parser' ).Parser
-  , Factory = require( '../src/factory' ).Factory;
+  , Parser = require( '../src/parser' ).Parser;
 
 var Builder = {
   test: function( f, Parser_Type ) {
