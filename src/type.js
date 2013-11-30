@@ -25,27 +25,17 @@ function Type() {
 		emitter.on( 'open scope', function( code ) {
 			
 			if (isNamespace(code)) 
-				initScopeType( 'namespace' ); 
+				initDefine( 'namespace' ); 
 			else if (isType(code)) 
-				initScopeType( 'type' );
+				initDefine( 'type' );
 			else if (isFunction(code)) 
-				initScopeType( 'function' );
+				initDefine( 'function' );
 
-			function initScopeType( type ) {
-				defineScopeType( type );
-
+			function initDefine( type ) {
+				var name = code.trim();
 				emitter.once( 'close scope', function( code ) {
-					emitter.emit( 'close ' + type, code.trim() );
+					emitter.emit( 'define ' + type, { name: name, code: code.trim() } );
 				} );
-				emitter.emit( 'open ' + type, code.trim() );
-						
-				function defineScopeType( type ) {
-					emitter.on( 'open ' + type, function( name ) { 
-						emitter.once( 'close ' + type, function( code ) { 
-							emitter.emit( 'define ' + type, { name: name, code: code } );
-						} );
-					} );
-				}
 			}
 
 			function isFunction( code ) {
