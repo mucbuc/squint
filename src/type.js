@@ -19,13 +19,13 @@ function Type() {
 				emitter.once( 'close scope', function( code ) {
 					emitter.emit( 'close namespace', code );
 				} );
-				emitter.emit( 'open namespace', code.substr( 'namespace'.length ) );
+				emitter.emit( 'open namespace', code );
 			}
 			else if (isType(code)) { 
 				emitter.once( 'close scope', function( code ) { 
 					emitter.emit( 'close type', code );
 				} );
-				emitter.emit( 'open type', code.replace( /(struct|class)/, '' ) );
+				emitter.emit( 'open type', code );
 			}
 			else if (isFunction(code)) {
 				emitter.once( 'close scope', function( code ) { 

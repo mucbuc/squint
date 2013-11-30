@@ -32,7 +32,7 @@ function testType() {
 
 		emitter.expectNot( 'open namespace' );
 		emitter.expectNot( 'close namespace' );
-		emitter.expect( 'open type', 'namespace' );
+		emitter.expect( 'open type', 'struct namespace' );
 
 		parser.process( 'struct namespace { }', emitter );
 	}
@@ -52,11 +52,11 @@ function testNamespace() {
 	}
 
 	function basicNamespace(emitter, parser) {
-		emitter.expect( 'open namespace', 'bka' ); 
+		emitter.expect( 'open namespace', 'namespace bka' ); 
 		emitter.expect( 'close namespace', 'hello' ); 
 		parser.process( 'namespace bka{ hello }', emitter );
 
-		emitter.expect( 'open namespace', 'bka' ); 
+		emitter.expect( 'open namespace', 'namespace bka' ); 
 		emitter.expect( 'close namespace', 'namespace hello{}' ); 
 		parser.process( 'namespace bka{ namespace hello {} }', emitter );
 	}	
