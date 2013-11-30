@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
   , Parser = require( '../src/parser' ).Parser
   , Test = require( 'mucbuc-jsthree' ).Test
-  , TestEmitter = Test.Emitter
+  , TestEmitter = Test.Emitter;
 
 process.setMaxListeners( 0 );
 

@@ -32,10 +32,10 @@ function Type() {
 				initScopeType( 'function' );
 
 			function initScopeType( name ) {
-				emitter.on( 'close scope', function( code ) {
-					emitter.emit( 'close ' + name, code );
+				emitter.once( 'close scope', function( code ) {
+					emitter.emit( 'close ' + name, code.trim() );
 				} );
-				emitter.emit( 'open ' + name, code );
+				emitter.emit( 'open ' + name, code.trim() );
 			}
 
 			function isFunction( code ) {

@@ -46,11 +46,11 @@ function testNamespace() {
 
 	function aggregateNamespace(emitter, parser) {
 		emitter.expect( 'open namespace', 'namespace hello' );
-		emitter.expect( 'close namespace', 'hello' );
+		emitter.expect( 'close namespace', 'hell' );
 		emitter.expect( 'open namespace', 'namespace world' );
-		emitter.expect( 'close namespace', 'world' );
+		emitter.expect( 'close namespace', 'word' );
 
-		parser.process( 'namespace hello { hello } namespace world { world }', emitter );
+		parser.process( 'namespace hello { hell } namespace world { word }', emitter );
 	}
 
 	function nonNamespace(emitter, parser) {
