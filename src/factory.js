@@ -8,9 +8,12 @@ notes:
 
 var Utills = { 
 	indent: function( code ) {
-		code = '\t' + code;
-		return code.replace( /\n/, '\n\t' ); 
-	} 
+			code = '\t' + code;
+			return code.replace( /\n/, '\n\t' ); 
+		}, 
+	openScope: function( name ) {
+			return name + '\n{\n';
+		}, 
 };
 
 function Factory() {
@@ -18,9 +21,20 @@ function Factory() {
 
 Factory.prototype = {
 
-	openNamespace: function( name ) {
-		return name + '\n{\n';
+	openFunction: Utills.openScope,
+
+	closeFunction: function() {
+		return '\n}\n'; 
 	},
+
+	defineFunction: function( name, code ) {
+		var result = this.openFunction( name );
+		result += Utills.indent( code );
+		result += this.closeFunction();
+		return result;
+	},
+
+	openNamespace: Utills.openScope,
 
 	closeNamespace: function( name ) { 
 		return '\n} // ' + name + '\n'; 

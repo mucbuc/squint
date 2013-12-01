@@ -28,7 +28,6 @@ function testDeclarer() {
 	 	emitter.expectNot( 'define type' );
 		emitter.expect( 'declare type', 'struct bla' );
 		parser.process( 'struct bla;', emitter );
-
 	}
 } 
 
