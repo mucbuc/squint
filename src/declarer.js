@@ -25,13 +25,12 @@ function Declarer() {
 			if (isType(code)) {
 				emitter.emit( 'declare type', code );
 			}
-			else if (!isStatement(code)) { 
+			else if (isFunctionDeclaration(code)) { 
 				emitter.emit( 'declare function', code );
 			}	
 
-			function isStatement() {
-				var temp = code.replace( /\w+\s*\(.*\)/, '' ); 
-				return temp == code;
+			function isFunctionDeclaration(code) {
+				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
 			}
 
 			function isType() {

@@ -16,6 +16,7 @@ function testDeclarer() {
 	function declareNot(emitter, parser) {
 		emitter.expectNot( 'declare function' );
 		parser.process( 'bla bla;', emitter );
+		parser.process( 'bla += bla();', emitter );
 	}
 
 	function declareFunction( emitter, parser ) {
