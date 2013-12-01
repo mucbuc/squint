@@ -8,23 +8,31 @@ var assert = require( 'assert' )
 
 assert( typeof Builder !== 'undefined' ); 
 
-testBuilder(); 
+testBuilderDefines(); 
+testBuilderDeclarations();
 
-function testBuilder() {
+function testBuilderDeclarations() {
+
+	test( testTypeDeclaration );
+
+	function testTypeDeclaration( emitter, parser ) {
+	
+		var builder = new Builder( emitter, {} );
+		parser.process( 'struct empty;', emitter );
+	   	assert.deepEqual( builder.product.types[ 'struct empty' ], 'undefined' ); 
+   	}
+
+	function test(f) { 
+		Base.test( f, Declarer );
+	}
+}
+
+function testBuilderDefines() {
 
 	test( testNamespaces ); 
 	test( testTypes );
 	test( testFunctions ); 
 	test( testNestedNamespace );
-	test( testTypeDeclaration );
-
-	function testTypeDeclaration( emitter ) {
-	
-		var builder = new Builder( emitter, {} )
-		  , parser = new Declarer( emitter ); 
-    	parser.process( 'struct empty;', emitter );
-	   	assert.deepEqual( builder.product.types[ 'struct empty' ], 'undefined' ); 
-   	}
 
     function testNestedNamespace( emitter, parser ) {
 
