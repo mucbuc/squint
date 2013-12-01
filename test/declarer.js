@@ -33,5 +33,4 @@ function testDeclarer() {
 } 
 
 function test(f) {
-	Base.test( f, Declarer );
-}
+	Base.test( f, Declarer ); }

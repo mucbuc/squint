@@ -14,6 +14,7 @@ function runTest() {
   require( './scoper' );
   require( './definer' ); 
   require( './declarer' );
+  require( './builder' );
   require( './factory' );
   
   function forwardDeclarations(emitter) {

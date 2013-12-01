@@ -1,6 +1,6 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , Type = require( '../src/type' ).Type
+  , Definer = require( '../src/definer' ).Definer
   , Builder = require( '../src/builder' ).Builder
   , Base = require( './base' ).Base
   , Test = require( 'mucbuc-jsthree' ).Test;
@@ -14,6 +14,13 @@ function testBuilder() {
 	test( testNamespaces ); 
 	test( testTypes );
 	test( testFunctions ); 
+
+    function testNested( emitter, parser ) {
+
+    	var builder = new Builder( emitter, {} );
+    	parser.process( 'namespace bla { struct bla; }' );
+    	assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], 'struct bla;' ); 
+	}
 
 	function testFunctions( emitter, parser ) {
 
@@ -39,6 +46,6 @@ function testBuilder() {
 	}
 	
 	function test(f) { 
-		Base.test( f, Type );
+		Base.test( f, Definer );
 	}
 }
