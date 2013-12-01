@@ -12,20 +12,33 @@ testBuilder();
 function testBuilder() {
 
 	test( testNamespaces ); 
+	test( testTypes );
+	test( testFunctions ); 
+
+	function testFunctions( emitter, parser ) {
+
+		var builder = new Builder( emitter, {});
+		parser.process( 'void foo() { hello }', emitter );
+		assert.deepEqual( builder.product.functions[ 'void foo()' ], 'hello' ); 
+	}
+
+	function testTypes(emitter, parser) {
+		
+		var builder = new Builder( emitter, {});
+		parser.process( 'struct bla{ blablabla }', emitter );
+		assert.deepEqual( builder.product.types[ 'struct bla' ], 'blablabla' ); 
+	}
 
 	function testNamespaces(emitter, parser) { 
 
-		var factory = {}
-		  , builder = new Builder(emitter, factory); 
-
+		var builder = new Builder(emitter, {}); 
 		parser.process( 'namespace bla{ } namespace bladf { saf3r23sfsd} namespace _ { dsfs }', emitter );
-
 		assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], '' ); 
 		assert.deepEqual( builder.product.namespaces[ 'namespace bladf' ], 'saf3r23sfsd' ); 
 		assert.deepEqual( builder.product.namespaces[ 'namespace _' ], 'dsfs' ); 
 	}
-}
-
-function test(f) { 
-	Base.test( f, Type );
+	
+	function test(f) { 
+		Base.test( f, Type );
+	}
 }
