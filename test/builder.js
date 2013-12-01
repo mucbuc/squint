@@ -2,6 +2,7 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Type = require( '../src/type' ).Type
   , Builder = require( '../src/builder' ).Builder
+  , Base = require( './base' ).Base
   , Test = require( 'mucbuc-jsthree' ).Test;
 
 assert( typeof Builder !== 'undefined' ); 
@@ -10,16 +11,21 @@ testBuilder();
 
 function testBuilder() {
 
-	var emitter = new Test.Emitter()
-	  , builder = new Builder(emitter)
-	  , parser = new Type()
-	  , doc; 
+	test( testNamespaces ); 
 
-	parser.process( 'namespace bla{ } namespace bladf { saf3r23sfsd} namespace _ { dsfs }', emitter );
+	function testNamespaces(emitter, parser) { 
 
-	doc = builder.document;
+		var factory = {}
+		  , builder = new Builder(emitter, factory); 
 
+		parser.process( 'namespace bla{ } namespace bladf { saf3r23sfsd} namespace _ { dsfs }', emitter );
 
+		assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], '' ); 
+		assert.deepEqual( builder.product.namespaces[ 'namespace bladf' ], 'saf3r23sfsd' ); 
+		assert.deepEqual( builder.product.namespaces[ 'namespace _' ], 'dsfs' ); 
+	}
+}
 
-	console.log( 'doc', doc ); 
+function test(f) { 
+	Base.test( f, Type );
 }

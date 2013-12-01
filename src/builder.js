@@ -1,24 +1,29 @@
-var assert = require( 'assert' );
+var assert = require( 'assert' ); 
 
-function Builder(emitter) {
+function Builder(emitter, factory) {
 
+	var product = {
+		namespaces: {}, 
+		types: {}, 
+		functions: {}
+	}; 
 
-	emitter.on( 'open namespace', function( name ) { 
-		emitter.once( 'close namespace', function( code ) { 
-			emitter.emit( 'define namespace', { 'name': name, 'code': code } );
-		} );
-	} );
-
-	emitter.on( 'open type', function( name ) { 
-		emitter.once( 'close type', function( code ) {
-			emitter.emit( 'define type', { 'name': name, 'code': code } );
-		} );
+	emitter.on( 'define namespace', function( scope ) {
+		if (!product.namespaces.hasOwnProperty(scope.code))
+			  product.namespaces[scope.name] = '';
+		product.namespaces[scope.name] += scope.code; 
 	} ); 
 
-	emitter.on( 'open function', function( name ) {
-		emitter.once( 'close function', function( code ) {
-			emitter.emit( 'define function', { 'name': name, 'code': code } ); 
-		} );
+	emitter.on( 'define type', function( scope ) {
+		console.log( 'define namespace', scope.name, scope.code );
+	} );
+
+	emitter.on( 'define function', function( scope ) {
+		console.log( 'define function', scope.name, scope.code );
+	} );
+
+	this.__defineGetter__( 'product', function() { 
+		return product; 
 	} );
 }
 

@@ -1,6 +1,6 @@
 
 var assert = require( 'assert' )
-  , Builder = require( './base' ).Builder
+  , Base = require( './base' ).Base
   , Type = require( '../src/type' ).Type;
 
 assert( typeof Type !== 'undefined' );
@@ -58,5 +58,5 @@ function testNamespace() {
 }
 
 function test(f) {
-	Builder.test( f, Type );
+	Base.test( f, Type );
 }

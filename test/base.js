@@ -4,7 +4,7 @@ var assert = require( 'assert' )
   , finalLog = Test.finalLog
   , Parser = require( '../src/parser' ).Parser;
 
-var Builder = {
+var Base = {
   test: function( f, Parser_Type ) {
       var emitter = new Test.Emitter()
         , parser = new ((typeof Parser_Type === 'undefined') ? Parser : Parser_Type);
@@ -19,4 +19,4 @@ var Builder = {
 	  }
 };
 
-exports.Builder = Builder;
+exports.Base = Base;

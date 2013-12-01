@@ -1,6 +1,6 @@
 var assert = require( 'assert' )
   , Scoper = require( '../src/scoper').Scoper
-  , Builder = require( './base' ).Builder;
+  , Base = require( './base' ).Base;
 
 assert( typeof Scoper !== 'undefined' );
 
@@ -51,6 +51,6 @@ function testScoper() {
 	}
 
 	function test(f) { 
-		Builder.test( f, Scoper );
+		Base.test( f, Scoper );
 	}
 }

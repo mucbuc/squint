@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
-  , Builder = require( './base' ).Builder
-  , test = Builder.test;
+  , Base = require( './base' ).Base
+  , test = Base.test;
 
 runTest();
 
