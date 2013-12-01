@@ -21,6 +21,19 @@ function Factory() {
 
 Factory.prototype = {
 
+	openType: Utills.openScope, 
+
+	closeType: function(name) {
+		return '\n};\n';
+	}, 
+
+	defineType: function( name, code ) {
+		var result = this.openType( name );
+		result += Utills.indent( code ); 
+		result += this.closeType( name );
+		return result;
+	},
+
 	openFunction: Utills.openScope,
 
 	closeFunction: function() {
@@ -30,7 +43,7 @@ Factory.prototype = {
 	defineFunction: function( name, code ) {
 		var result = this.openFunction( name );
 		result += Utills.indent( code );
-		result += this.closeFunction();
+		result += this.closeFunction( name );
 		return result;
 	},
 

@@ -10,6 +10,14 @@ function testFactory() {
 
 	test( testNamespaceFormat );
 	test( testFunctionFormat ); 
+	test( testTypeFormat );
+
+	function testTypeFormat( emitter ) {
+		var factory = new Factory()
+		  , source = factory.defineType( 'struct hello', 'world' ); 
+		assert.deepEqual( source, 'struct hello\n{\n\tworld\n};\n');
+		emitter.emit( 'end' );
+	}
 
 	function testFunctionFormat(emitter) {
 
