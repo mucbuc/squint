@@ -8,18 +8,35 @@ testFactory();
 
 function testFactory() {
 
-	test( testNamespaceFormat );
-	test( testFunctionFormat ); 
-	test( testTypeFormat );
+	test( testDefineNamespaceFormat );
+	test( testDefineFunctionFormat ); 
+	test( testDefineTypeFormat );
+	test( testDeclareTypeFormat ); 
+	test( testDeclareFunctionFormat );
 
-	function testTypeFormat( emitter ) {
+	function testDeclareFunctionFormat( emitter ) {
+		var factory = new Factory()
+		  , source = factory.declareFunction( 'void foo()' ); 
+		assert.deepEqual( source, 'void foo();\n' );
+		emitter.emit( 'end' );
+	}
+
+	function testDeclareTypeFormat( emitter ) {
+		var factory = new Factory()
+		  , source = factory.declareType( 'struct hello' ); 
+
+		assert.deepEqual( source, 'struct hello;\n' );
+		emitter.emit( 'end' );
+	}
+
+	function testDefineTypeFormat( emitter ) {
 		var factory = new Factory()
 		  , source = factory.defineType( 'struct hello', 'world' ); 
 		assert.deepEqual( source, 'struct hello\n{\n\tworld\n};\n');
 		emitter.emit( 'end' );
 	}
 
-	function testFunctionFormat(emitter) {
+	function testDefineFunctionFormat(emitter) {
 
 		var factory = new Factory()
 		  , source = factory.defineFunction( 'void foo()', 'hello' ); 
@@ -27,7 +44,7 @@ function testFactory() {
 		emitter.emit( 'end' );
 	}
 
-	function testNamespaceFormat(emitter) {
+	function testDefineNamespaceFormat(emitter) {
 	
 		var factory = new Factory()
 		  , source = factory.defineNamespace( 'namespace hello', 'world' ); 

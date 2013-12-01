@@ -21,6 +21,14 @@ function Factory() {
 
 Factory.prototype = {
 
+	declareFunction: function( name ) {
+		return name + ';\n';
+	},
+
+	declareType: function( name ) {
+		return name + ';\n';
+	},
+
 	openType: Utills.openScope, 
 
 	closeType: function(name) {
