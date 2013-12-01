@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
-//  , squint = require( '../src/squint' )
   , Builder = require( './base' ).Builder
   , test = Builder.test;
-
-  //, Namespacer = require( '../src/builder/namespacer' ).Namespacer;
-  
-//assert( typeof squint != 'undefined' );
 
 runTest();
 
@@ -18,9 +13,6 @@ function runTest() {
   require( './parser' ); 
   require( './scoper' );
   require( './type' ); 
-
-  //testExternals();
-  //test( forwardDeclarations );
 
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {
