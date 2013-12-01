@@ -9,26 +9,26 @@ function Builder(emitter, factory) {
 	}; 
 
 	emitter.on( 'define namespace', function( scope ) {
-		if (!product.namespaces.hasOwnProperty(scope.code))
-			  product.namespaces[scope.name] = '';
-		product.namespaces[scope.name] += scope.code; 
+		setProperty( product.namespaces, scope ); 
 	} ); 
 
 	emitter.on( 'define type', function( scope ) {
-		if (!product.types.hasOwnProperty(scope.code))
-			product.types[scope.name] = '';
-		product.types[scope.name] += scope.code;
+		setProperty( product.types, scope ); 
 	} );
 
 	emitter.on( 'define function', function( scope ) {
-		if (!product.functions.hasOwnProperty(scope.code))
-			product.functions[scope.name] = '';
-		product.functions[scope.name] += scope.code;
+		setProperty( product.functions, scope ); 
 	} );
 
 	this.__defineGetter__( 'product', function() { 
 		return product; 
 	} );
+
+	function setProperty( obj, scope ) {
+		if (!obj.hasOwnProperty(scope.code))
+			obj[scope.name] = '';
+		obj[scope.name] += scope.code;
+	}
 }
 
 exports.Builder = Builder;
