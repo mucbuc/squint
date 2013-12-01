@@ -14,12 +14,13 @@ function testBuilder() {
 	test( testNamespaces ); 
 	test( testTypes );
 	test( testFunctions ); 
+	test( testNestedNamespace );
 
-    function testNested( emitter, parser ) {
+    function testNestedNamespace( emitter, parser ) {
 
     	var builder = new Builder( emitter, {} );
-    	parser.process( 'namespace bla { struct bla; }' );
-    	assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], 'struct bla;' ); 
+    	parser.process( 'namespace bla { namespace blah { struct empty; } }', emitter );
+    	assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], 'namespace blah{struct empty;}' ); 
 	}
 
 	function testFunctions( emitter, parser ) {

@@ -32,7 +32,7 @@ function Scoper( openToken, closeToken ) {
 				content = '';
 			}
 			else {
-				content += '}' + code.trim();
+				content += code.trim() + '}';
 			}
 		} );
 
