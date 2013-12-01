@@ -12,7 +12,7 @@ function runTest() {
 
   require( './parser' ); 
   require( './scoper' );
-  require( './type' ); 
+  require( './definer' ); 
 
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {
