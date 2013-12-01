@@ -13,7 +13,8 @@ function runTest() {
   require( './parser' ); 
   require( './scoper' );
   require( './definer' ); 
-
+  require( './declarer' );
+  
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {
       assert( result.trim() == 'struct hello' );
@@ -28,7 +29,6 @@ function runTest() {
     require( './builder/function' );
     require( './builder/type' );
     require( './builder/forwarder' );
-    require( './builder/declarer' );
     require( './builder/definer' );
     require( './builder/namespacer' );
   }
