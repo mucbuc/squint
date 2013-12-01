@@ -24,6 +24,10 @@ function Builder(emitter, factory) {
 		appendScope( product.functions, scope ); 
 	} );
 
+	emitter.on( 'declare type', function( name ) {
+		appendScope( product.types, { name: name } );
+	} );
+
 	function appendScope( obj, scope ) {
 		if (!obj.hasOwnProperty(scope.code))
 			obj[scope.name] = '';
