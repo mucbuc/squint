@@ -17,25 +17,25 @@ function testBuilder() {
 
 	function testFunctions( emitter, parser ) {
 
-		var builder = new Builder( emitter, {});
+		var builder = new Builder( emitter, {} );
 		parser.process( 'void foo() { hello }', emitter );
 		assert.deepEqual( builder.product.functions[ 'void foo()' ], 'hello' ); 
 	}
 
 	function testTypes(emitter, parser) {
 		
-		var builder = new Builder( emitter, {});
+		var builder = new Builder( emitter, {} );
 		parser.process( 'struct bla{ blablabla }', emitter );
 		assert.deepEqual( builder.product.types[ 'struct bla' ], 'blablabla' ); 
 	}
 
 	function testNamespaces(emitter, parser) { 
 
-		var builder = new Builder(emitter, {}); 
-		parser.process( 'namespace bla{ } namespace bladf { saf3r23sfsd} namespace _ { dsfs }', emitter );
+		var builder = new Builder(emitter, {} ); 
+		parser.process( 'namespace bla{ } namespace bladf { saf3r23sfsd} namespace { dsfs }', emitter );
 		assert.deepEqual( builder.product.namespaces[ 'namespace bla' ], '' ); 
 		assert.deepEqual( builder.product.namespaces[ 'namespace bladf' ], 'saf3r23sfsd' ); 
-		assert.deepEqual( builder.product.namespaces[ 'namespace _' ], 'dsfs' ); 
+		assert.deepEqual( builder.product.namespaces[ 'namespace' ], 'dsfs' ); 
 	}
 	
 	function test(f) { 
