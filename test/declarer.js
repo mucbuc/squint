@@ -15,20 +15,20 @@ function testDeclarer() {
 
 	function declareNot(emitter, parser) {
 		emitter.expectNot( 'declare function' );
-		parser.process( 'bla bla;', emitter );
-		parser.process( 'bla += bla();', emitter );
+		parser.process( 'bla bla;' );
+		parser.process( 'bla += bla();' );
 	}
 
 	function declareFunction( emitter, parser ) {
 		emitter.expectNot( 'define function' );
 		emitter.expect( 'declare function', 'void foo()' );
-		parser.process( 'void foo();', emitter );
+		parser.process( 'void foo();' );
 	}
 
 	function typeDeclare( emitter, parser ) {
 	 	emitter.expectNot( 'define type' );
 		emitter.expect( 'declare type', 'struct bla' );
-		parser.process( 'struct bla;', emitter );
+		parser.process( 'struct bla;' );
 	}
 } 
 

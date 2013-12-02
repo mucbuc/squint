@@ -7,7 +7,7 @@ var assert = require( 'assert' )
 var Base = {
   test: function( f, Parser_Type ) {
       var emitter = new Test.Emitter()
-        , parser = new ((typeof Parser_Type === 'undefined') ? Parser : Parser_Type);
+        , parser = new ((typeof Parser_Type === 'undefined') ? Parser : Parser_Type)(emitter);
       
       emitter.setMaxListeners( 0 );
 

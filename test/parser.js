@@ -9,8 +9,7 @@ checkParser();
 
 function checkParser() {
 
-  var parser = new Parser()
-    , emitter = new TestEmitter();
+  var emitter = new TestEmitter();
 
   test( deliminator );
   test( nested );
@@ -24,14 +23,13 @@ function checkParser() {
   test( eventMap );
 
   function eventMap( emitter ) {
-    var parser = new Parser( { '<': 'open template', '>': 'close template' } );
+    var parser = new Parser( emitter, { '<': 'open template', '>': 'close template' } );
     emitter.expect( 'open template', 'text' ); 
     emitter.expect( 'close template', 'A' );
-    parser.process( 'text<A>', emitter );
+    parser.process( 'text<A>' );
   }
 
-  function statementEnd( emitter ) {
-    
+  function statementEnd( emitter, parser ) {
     var counter = 0;
     emitter.expect( 'statement', '' );
     emitter.expect( 'end', '' );
@@ -40,23 +38,23 @@ function checkParser() {
       assert( !counter ); 
       ++counter;
     } );
-    parser.process( ';', emitter );
+    parser.process( ';' );
   }
 
-  function falseEnd( emitter ) {
+  function falseEnd( emitter, parser ) {
     emitter.expect( 'open', '' );
     emitter.expect( 'end', '' );
-    parser.process( '{', emitter );
+    parser.process( '{' );
   }
 
   function empty( emitter, parser ) {
     emitter.expect( 'end', '' );
-    parser.process( '', emitter );
+    parser.process( '' );
   }
 
   function end( emitter, parser ) {
     emitter.expect( 'end', 'a' );
-    parser.process( ';a', emitter );
+    parser.process( ';a' );
   }
 
   function statments( emitter, parser ) {
@@ -66,7 +64,7 @@ function checkParser() {
     emitter.expect( 'statement', '3' );
     emitter.expect( 'statement' );
    
-    parser.process( '1; 2; 3;;', emitter );    
+    parser.process( '1; 2; 3;;' );    
   }
 
   function scopes( emitter, parser ) {
@@ -78,7 +76,7 @@ function checkParser() {
     emitter.expect( 'open', 'c' );
     emitter.expect( 'close' );
    
-    parser.process( 'a{} b{} c{}', emitter );    
+    parser.process( 'a{} b{} c{}' );    
   }
 
   function interleaved( emitter, parser ) { 
@@ -87,7 +85,7 @@ function checkParser() {
     emitter.expect( 'statement','b' );
     emitter.expect( 'close' );
      
-    parser.process( 'a{ b; }', emitter );    
+    parser.process( 'a{ b; }' );    
   }
 
   function nested( emitter, parser ) {
@@ -98,34 +96,34 @@ function checkParser() {
     emitter.expect( 'close' );
     emitter.expect( 'close' );
 
-    parser.process( 'a { b { c; } }', emitter );    
+    parser.process( 'a { b { c; } }' );    
   }
 
   function deliminator( emitter, parser ) {
         
     emitter.expect( 'statement', 'a' ); 
-    parser.process( 'a;', emitter );
+    parser.process( 'a;' );
     
     emitter.expect( 'statement', 'a' ); 
-    parser.process( 'a ;', emitter );
+    parser.process( 'a ;' );
 
     emitter.expect( 'statement', 'a' ); 
-    parser.process( ' a;', emitter );
+    parser.process( ' a;' );
 
     emitter.expect( 'statement', 'a' ); 
-    parser.process( ' a ;', emitter );
+    parser.process( ' a ;' );
 
     emitter.expect( 'open', 'a' ); 
-    parser.process( 'a {', emitter );
+    parser.process( 'a {' );
 
     emitter.expect( 'open', 'a' ); 
-    parser.process( 'a{', emitter );
+    parser.process( 'a{' );
 
     emitter.expect( 'open', 'a' ); 
-    parser.process( ' a {', emitter );
+    parser.process( ' a {' );
 
     emitter.expect( 'open', 'a' ); 
-    parser.process( ' a{', emitter );    
+    parser.process( ' a{' );    
   }
 
   function test( f ) { 
@@ -133,6 +131,6 @@ function checkParser() {
       console.log( f.name + ' passed' );
     } );
     
-    f( emitter, parser );
+    f( emitter, new Parser( emitter ) );
   }
 }

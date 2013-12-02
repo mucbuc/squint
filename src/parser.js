@@ -10,12 +10,12 @@ design:
   higher perspective, changing the deliminators doesn't seem like a clean solution.
 */ 
 
-function Parser( map ) {
+function Parser( emitter, map ) {
   
   var instance = this
     , deliminators = init( typeof map === 'undefined' ? Parser.prototype.defaultMap() : map );
 
-  this.process = function( code, emitter ) {
+  this.process = function( code ) {
 
     var pos = code.search( deliminators );
     while (pos != -1) {

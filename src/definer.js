@@ -12,16 +12,13 @@ var assert = require( 'assert' )
 
 assert( typeof Scoper === 'function' );
 
-function Definer() {
+function Definer(emitter) {
 	
-	var scoperProcess; 
+	Scoper.call( this, emitter );
 
-	Scoper.call( this );
+	listen();
 
-	scoperProcess = this.process;
-
-	this.process = function(code, emitter) {
-
+	function listen() {
 		emitter.on( 'open scope', function( code ) {
 			
 			if (isNamespace(code)) 
@@ -51,9 +48,7 @@ function Definer() {
 			}
 
 		} ); 
-	
-		scoperProcess( code, emitter );
-	};
+	}
 }
 
 Definer.prototype = new Scoper();

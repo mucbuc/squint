@@ -11,8 +11,14 @@ function Interpreter()
 	  , definitions = {};
 
 	this.process = function( code, emitter ) {
-		declarations = merge( declarations, declare( code, emitter ).types );
+		
+		//console.log( 'Interpreter proces b', declarations, code ); 
+
+		merge( declarations, declare( code, emitter ) );
 	//	definitions = merge( definitions, define( code, emitter ).definitions );	
+
+		//console.log( 'Interpreter proces e', declarations, code ); 
+
 	};
 
 	this.__defineGetter__( 'definitions', function() {
@@ -25,7 +31,11 @@ function Interpreter()
 
 	function declare( code, emitter ) {
 		var builder = new Builder( emitter, {} );
-		declarer.process( code, emitter ); 
+
+		console.log( 'builder.product', builder.product );
+
+		declarer.process( code, emitter );
+		builder.removeAll();
 		return builder.product; 
 	}
 
@@ -38,13 +48,17 @@ function Interpreter()
 	function merge( dst, src ) {
 		for (var property in src) {
 			if (dst.hasOwnProperty(property)) {
-				dst[property] += src[property]; 
+				if (dst[property] instanceof String) {
+					dst[property] += src[property]; 
+				}
+				else {
+					dst[property] = merge( dst[property], src[property] );
+				}
 			}
 			else {
 				dst[property] = src[property];
 			}
 		}
-		return dst;
 	}
 }
 

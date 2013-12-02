@@ -70,7 +70,7 @@ exports.declare = function( code, done ) {
 
 exports.define = function( code, done ) { 
     var emitter = new events.EventEmitter()
-      , parser = new Parser()
+      , parser = new Parser(emitter)
       , builder = new Definer( emitter );
   emitter.on( 'type implementation', function( defs ) {
     done( defs.toString().trim() );

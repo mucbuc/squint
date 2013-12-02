@@ -9,15 +9,16 @@ testInterpreter();
 
 function testInterpreter() {
 
-	Base.test( interpretDeclarationsAndDefinitions );
+//	Base.test( interpretDeclarationsAndDefinitions );
 	Base.test( interpretMergeProduct );
 
 	function interpretMergeProduct(emitter, parser) {
+		
 		var interpreter = new Interpreter();
 		interpreter.process( 'struct hello;', emitter );
 		interpreter.process( 'struct world;', emitter );
-
-		assert.deepEqual( interpreter.declarations, { 
+		
+		assert.deepEqual( interpreter.declarations.types, { 
 				'struct hello': 'undefined', 
 				'struct world': 'undefined', 
 			} );
@@ -27,7 +28,7 @@ function testInterpreter() {
 		var interpreter = new Interpreter();
 	
 		interpreter.process( 'struct hello;', emitter );
-		assert.deepEqual( interpreter.declarations, {'struct hello': 'undefined'} );
+		assert.deepEqual( interpreter.declarations.types, {'struct hello': 'undefined'} );
 	}
 	
 }

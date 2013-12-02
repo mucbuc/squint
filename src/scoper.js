@@ -2,19 +2,17 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( './parser' ).Parser;
 
-function Scoper( openToken, closeToken ) {
+function Scoper( emitter, openToken, closeToken ) {
 	
 	var depth = 0
 	  , content = ''
-	  , ParserProcess; 
+	  , sub = new events.EventEmitter();
 
-	Parser.call( this, initMap( openToken, closeToken ) );
+	Parser.call( this, sub, initMap( openToken, closeToken ) );
 
-	ParserProcess = this.process;
+	listen();
 
-	this.process = function(code, emitter) {
-
-		var sub = new events.EventEmitter();
+	function listen() {
 
 		sub.on( 'open', function(code) {
 			if (!depth)
@@ -39,9 +37,7 @@ function Scoper( openToken, closeToken ) {
 		sub.on( 'end', function(code) {
 			emitter.emit( 'end', code.trim() );
 		} );
-
-		ParserProcess( code, sub );
-	};
+	}
 
 	function initMap() {
 

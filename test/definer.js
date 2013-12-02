@@ -17,10 +17,10 @@ function testFunction() {
 		emitter.expectNot( 'define type' );
 
 		emitter.expect( 'define function', { name: 'void foo()', code: 'do something' } );
-		parser.process( 'void foo() { do something }', emitter );
+		parser.process( 'void foo() { do something }' );
 		
 		emitter.expect( 'define function', { name: 'void fool()', code: 'do nothing' } );
-		parser.process( 'void fool() { do nothing }', emitter );
+		parser.process( 'void fool() { do nothing }' );
 	}
 }
 
@@ -33,10 +33,10 @@ function testType() {
 		emitter.expectNot( 'define function' );
 
 		emitter.expect( 'define type', { name: 'struct hello', code: 'unsigned world;' } );
-		parser.process( 'struct hello { unsigned world; }', emitter );
+		parser.process( 'struct hello { unsigned world; }' );
 	
 		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
-		parser.process( 'struct cya { yes}', emitter );
+		parser.process( 'struct cya { yes}' );
 	}
 }
 
@@ -50,10 +50,10 @@ function testNamespace() {
 		emitter.expectNot( 'define function' );
 
 		emitter.expect( 'define namespace', { name: 'namespace hello', code: 'this is it' } );
-		parser.process( 'namespace hello { this is it }', emitter );
+		parser.process( 'namespace hello { this is it }' );
 	
 		emitter.expect( 'define namespace', { name: 'namespace world', code: 'wtf?' } );
-		parser.process( 'namespace world { wtf? }', emitter );
+		parser.process( 'namespace world { wtf? }' );
 	}
 }
 

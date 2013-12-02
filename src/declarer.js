@@ -10,16 +10,13 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( './parser' ).Parser;
 
-function Declarer() {
+function Declarer(emitter) {
 
-	var parserProcess; 
+	Parser.call( this, emitter );
 
-	Parser.call( this );
+	listen();
 
-	parserProcess = this.process;
-
-	this.process = function(code, emitter) {
-
+	function listen() {
 		emitter.on( 'statement', function(code) {
 			
 			if (isType(code)) {
@@ -37,9 +34,7 @@ function Declarer() {
 				return code.search( /(struct|class)/ ) != -1; 
 			}
 		} );
-
-		parserProcess( code, emitter );
-	}; 
+	}
 }
 
 Declarer.prototype = new Parser();
