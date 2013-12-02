@@ -2,15 +2,25 @@ var assert = require( 'assert' );
 
 function Builder(emitter, factory) {
 
-	var product = {
+	var product;
+	
+	this.init = function() {
+		product = {
 			namespaces: {}, 
 			types: {}, 
 			functions: {}
 		}; 
+	}; 
+
+	this.init();
 
 	this.__defineGetter__( 'product', function() { 
 		return product; 
 	} );
+
+	this.__defineSetter__( 'product', function( p ) { 
+		product = p;
+	} ); 
 
 	emitter.on( 'define namespace', function( scope ) {
 		appendScope( product.namespaces, scope ); 

@@ -14,9 +14,9 @@ function Declarer(emitter) {
 
 	Parser.call( this, emitter );
 
-	listen();
+	init();
 
-	function listen() {
+	function init() {
 		emitter.on( 'statement', function(code) {
 			
 			if (isType(code)) {

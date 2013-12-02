@@ -5,10 +5,11 @@ var Declarer = require( './declarer' ).Declarer
 
 function Interpreter(emitter)
 {
-	var declarer = new Declarer()
-	  , definer = new Definer()
-	  , declarations = {}
-	  , definitions = {};
+	var declarations = {}
+	  , definitions = {}
+	  , builder = new Builder( emitter, {} )
+	  , declarer = new Declarer(emitter)
+	  , definer = new Definer(emitter);
 
 	// merge( declarations, declare( code, emitter ) );
 	// merge( definitions, define( code, emitter ).definitions );	
@@ -21,21 +22,17 @@ function Interpreter(emitter)
 		return declarations;
 	} );
 
-	function declare( code, emitter ) {
-		var builder = new Builder( emitter, {} );
+	this.declare = function( code ) {
+		builder.init();
+		declarer.process( code );
+		merge( declarations, builder.product ); 
+	};
 
-		console.log( 'builder.product', builder.product );
-
-		declarer.process( code, emitter );
-		builder.removeAll();
-		return builder.product; 
-	}
-
-	function define( code, emitter ) {
-		var builder = new Builder( emitter, {} );
-		definer.process( code, emitter ); 
-		return builder.product; 
-	}
+	this.define = function( code ) {
+		builder.init();
+		definer.process( code ); 
+		merge( declarations, builder.product ); 
+	}; 
 
 	function merge( dst, src ) {
 		for (var property in src) {
@@ -44,7 +41,7 @@ function Interpreter(emitter)
 					dst[property] += src[property]; 
 				}
 				else {
-					dst[property] = merge( dst[property], src[property] );
+					merge( dst[property], src[property] );
 				}
 			}
 			else {
