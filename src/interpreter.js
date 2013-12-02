@@ -11,8 +11,8 @@ function Interpreter()
 	  , definitions = {};
 
 	this.process = function( code, emitter ) {
-		declarations = declare( code, emitter ); //merge
-		definitions = define( code, emitter );	//merge
+		declarations = merge( declarations, declare( code, emitter ).types );
+	//	definitions = merge( definitions, define( code, emitter ).definitions );	
 	};
 
 	this.__defineGetter__( 'definitions', function() {
@@ -33,7 +33,19 @@ function Interpreter()
 		var builder = new Builder( emitter, {} );
 		definer.process( code, emitter ); 
 		return builder.product; 
-	}		
+	}
+
+	function merge( dst, src ) {
+		for (var property in src) {
+			if (dst.hasOwnProperty(property)) {
+				dst[property] += src[property]; 
+			}
+			else {
+				dst[property] = src[property];
+			}
+		}
+		return dst;
+	}
 }
 
 exports.Interpreter = Interpreter; 

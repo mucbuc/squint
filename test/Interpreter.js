@@ -18,21 +18,16 @@ function testInterpreter() {
 		interpreter.process( 'struct world;', emitter );
 
 		assert.deepEqual( interpreter.declarations, { 
-				namespaces:{}, 
-				types:{ 'struct hello': 'undefined', 'struct world': 'undefined' }, 
-				functions:{} 
+				'struct hello': 'undefined', 
+				'struct world': 'undefined', 
 			} );
 	}
 
 	function interpretDeclarationsAndDefinitions(emitter, parser) {
 		var interpreter = new Interpreter();
-		interpreter.process( 'struct hello;', emitter );
 	
-		assert.deepEqual( interpreter.declarations, { 
-				namespaces:{}, 
-				types:{ 'struct hello': 'undefined' }, 
-				functions:{} 
-			} );
+		interpreter.process( 'struct hello;', emitter );
+		assert.deepEqual( interpreter.declarations, {'struct hello': 'undefined'} );
 	}
 	
 }
