@@ -11,9 +11,6 @@ function Interpreter(emitter)
 	  , declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter);
 
-	// merge( declarations, declare( code, emitter ) );
-	// merge( definitions, define( code, emitter ).definitions );	
-
 	this.__defineGetter__( 'definitions', function() {
 		return definitions;
 	} );
@@ -31,7 +28,7 @@ function Interpreter(emitter)
 	this.define = function( code ) {
 		builder.init();
 		definer.process( code ); 
-		merge( declarations, builder.product ); 
+		merge( definitions, builder.product ); 
 	}; 
 
 	function merge( dst, src ) {

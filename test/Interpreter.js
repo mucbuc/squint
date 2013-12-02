@@ -36,6 +36,9 @@ function testInterpreter() {
 	
 		interpreter.declare( 'struct hello;' );
 		assert.deepEqual( interpreter.declarations.types, {'struct hello': 'undefined'} );
+	
+		interpreter.define( 'struct hello{};' );
+		assert.deepEqual( interpreter.definitions.types, {'struct hello': ''} );
 	}
 	
 }
