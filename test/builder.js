@@ -14,6 +14,14 @@ testBuilderDeclarations();
 function testBuilderDeclarations() {
 
 	test( testTypeDeclaration );
+	test( testFunctionDeclaration );
+
+	function testFunctionDeclaration( emitter, parser ) {
+	
+		var builder = new Builder( emitter, {} );
+		parser.process( 'void empty();', emitter );
+	   	assert.deepEqual( builder.product.functions[ 'void empty()' ], 'undefined' ); 
+   	}
 
 	function testTypeDeclaration( emitter, parser ) {
 	
