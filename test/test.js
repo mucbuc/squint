@@ -16,6 +16,7 @@ function runTest() {
   require( './declarer' );
   require( './builder' );
   require( './factory' );
+  require( './interpreter' );
   
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {
