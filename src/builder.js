@@ -12,7 +12,6 @@ function Builder(emitter, factory) {
 		return product; 
 	} );
 
-/*
 	emitter.on( 'define namespace', function( scope ) {
 		appendScope( product.namespaces, scope ); 
 	} ); 
@@ -28,19 +27,10 @@ function Builder(emitter, factory) {
 	emitter.on( 'declare function', function( name ) {
 		appendScope( product.functions, { name: name } );
 	} );
-*/
 
-	emitter.on( 'declare type', declareType );
-
-	this.removeAll = function() {
-		console.log( 'end' );
-		emitter.removeListener( 'declare type', declareType );
-	};
-
-	function declareType( name ) {
-		console.log( 'declare type', name );
+	emitter.on( 'declare type', function( name ) {
 		appendScope( product.types, { name: name } );
-	}
+	} );
 
 	function appendScope( obj, scope ) {
 		if (!obj.hasOwnProperty(scope.code))

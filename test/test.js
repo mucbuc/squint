@@ -14,7 +14,7 @@ function runTest() {
   require( './scoper' );
   require( './definer' ); 
   require( './declarer' );
-//  require( './builder' );
+  require( './builder' );
   require( './factory' );
 //  require( './interpreter' );
   

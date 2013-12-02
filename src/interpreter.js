@@ -3,23 +3,15 @@ var Declarer = require( './declarer' ).Declarer
   , Builder = require( '../src/builder' ).Builder;
   
 
-function Interpreter()
+function Interpreter(emitter)
 {
 	var declarer = new Declarer()
 	  , definer = new Definer()
 	  , declarations = {}
 	  , definitions = {};
 
-	this.process = function( code, emitter ) {
-		
-		//console.log( 'Interpreter proces b', declarations, code ); 
-
-		merge( declarations, declare( code, emitter ) );
-	//	definitions = merge( definitions, define( code, emitter ).definitions );	
-
-		//console.log( 'Interpreter proces e', declarations, code ); 
-
-	};
+	// merge( declarations, declare( code, emitter ) );
+	// merge( definitions, define( code, emitter ).definitions );	
 
 	this.__defineGetter__( 'definitions', function() {
 		return definitions;
