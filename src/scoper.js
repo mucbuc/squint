@@ -9,36 +9,31 @@ function Scoper( emitter, openToken, closeToken ) {
 	  , sub = new events.EventEmitter();
 
 	Parser.call( this, sub, initMap( openToken, closeToken ) );
+	
+	sub.on( 'open', function(code) {
+		if (!depth)
+			emitter.emit( 'open scope', code.trim() );
+		else
+			content += code.trim() + '{'; 
+		++depth;
+	} ); 
 
-	listen();
+	sub.on( 'close', function(code) { 
+		assert( depth );
 
-	function listen() {
+		if (!--depth) {
+			emitter.emit( 'close scope', content + code.trim() );
+			content = '';
+		}
+		else {
+			content += code.trim() + '}';
+		}
+	} );
 
-		sub.on( 'open', function(code) {
-			if (!depth)
-				emitter.emit( 'open scope', code.trim() );
-			else
-				content += code.trim() + '{'; 
-			++depth;
-		} ); 
-
-		sub.on( 'close', function(code) { 
-			assert( depth );
-
-			if (!--depth) {
-				emitter.emit( 'close scope', content + code.trim() );
-				content = '';
-			}
-			else {
-				content += code.trim() + '}';
-			}
-		} );
-
-		sub.on( 'end', function(code) {
-			emitter.emit( 'end', code.trim() );
-		} );
-	}
-
+	sub.on( 'end', function(code) {
+		emitter.emit( 'end', code.trim() );
+	} );
+	
 	function initMap() {
 
 		var result = {};
@@ -67,7 +62,6 @@ function Scoper( emitter, openToken, closeToken ) {
 			}
 		} 
 	}
-	
 }
 
 Scoper.prototype = new Parser(); 
