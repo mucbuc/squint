@@ -4,69 +4,65 @@ var events = require( 'events' )
   
 function Interpreter(emitter)
 {
-	var functionDeclarations = {}
-	  , functionDefinitions = {}
-	  , typeDeclarations = {}
-	  , typeDefinitions = {}
-	  , namespaces = {}
-	  , declarer = new Declarer(emitter)
+	var declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
 	  , instance = this;
 
 	init(); 
 
-	this.__defineGetter__( 'functionDeclarations', function() {
-		return functionDeclarations;
-	} );
-
-	this.__defineGetter__( 'functionDefinitions', function() {
-		return functionDefinitions;
-	} );
-	
-	this.__defineGetter__( 'typeDeclarations', function() {
-		return typeDeclarations;
-	} );	
-
-	this.__defineGetter__( 'typeDefinitions', function() {
-		return typeDefinitions;
-	} );
-
-	this.__defineGetter__( 'namespaces', function() {
-		return namespaces;
-	} );
-
 	this.process = function( code ) { 
-		declarer.process( code );
 		definer.process( code ); 
 	}; 
 
 	function init() {
 
-		emitter.on( 'define namespace', function( context ) {
-		//	var emitter = new events.EventEmitter()
-		//	  , interpreter = new Interpreter( emitter ); 
+		instance.functionDeclarations = {};
+	  instance.functionDefinitions = {};
+	  instance.typeDeclarations = {};
+	  instance.typeDefinitions = {};
+	  instance.namespaces = {};
 
-			append( namespaces, context ); 
-		//	interpreter.process( context.code );
-			//merge( namespaces[context.name], interpreter );	
-		//	namespaces[context.name].typeDeclarations = interpreter.typeDeclarations;
-		//	console.log( interpreter.typeDeclarations ); 
-		} ); 
+		emitter.on( 'define namespace', function( context ) {
+			
+		 	var emitter = new events.EventEmitter()
+			  , interpreter = new Interpreter( emitter ); 
+			interpreter.process( context.code );
+
+			//**** we don't want to process the context.code ==> different namespace 
+//			declarer.process( context.name );	
+
+			
+			//console.log( ' interpreter result ' + JSON.stringify(context), interpreter ); 
+
+			// instance.namespaces[context.name] = {
+			// 	namespaces: interpreter.namespaces, 
+			// 	functionDeclarations: interpreter.functionDeclarations, 
+			// 	functionDefinitions: interpreter.functionDefinitions,
+			// 	typeDeclarations: interpreter.typeDeclarations,
+			// 	typeDefinitions: interpreter.typeDefinitions
+			// };.
+
+			instance.namespaces[context.name] = {
+				namespaces: interpreter.namespaces
+			};
+		} );
+
 
 		emitter.on( 'define type', function( context ) {
-			append( typeDefinitions, context ); 
+			append( instance.typeDefinitions, context ); 
 		} );
 
 		emitter.on( 'declare type', function( name ) {
-			append( typeDeclarations, { name: name } );
+			console.log( 'declare type', name );
+			append( instance.typeDeclarations, { name: name } );
 		} );
 
 		emitter.on( 'define function', function( context ) {
-			append( functionDefinitions, context ); 
+			append( instance.functionDefinitions, context ); 
 		} );
 
 		emitter.on( 'declare function', function( name ) {
-			append( functionDeclarations, { name: name } );
+			append( instance.functionDeclarations, { name: name } );
 		} );
 	}
 
