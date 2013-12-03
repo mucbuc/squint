@@ -9,7 +9,8 @@ function Interpreter(emitter)
 	  , definitions = {}
 	  , builder = new Builder( emitter, {} )
 	  , declarer = new Declarer(emitter)
-	  , definer = new Definer(emitter);
+	  , definer = new Definer(emitter)
+	  , instance = this;
 
 	this.__defineGetter__( 'definitions', function() {
 		return definitions;
@@ -18,6 +19,11 @@ function Interpreter(emitter)
 	this.__defineGetter__( 'declarations', function() {
 		return declarations;
 	} );
+
+	this.process = function( code ) { 
+		instance.declare( code );
+		instance.define( code );
+	}; 
 
 	this.declare = function( code ) {
 		builder.init();

@@ -12,14 +12,21 @@ function testInterpreter() {
 	Base.test( interpretSingelSingleDeclaration );
 	Base.test( interpretMergeProduct );
 	Base.test( interpretDeclarationsAndDefinitions );
+	Base.test( interpretNestedNamespaces ); 
 
-	function interpretSingelSingleDeclaration(emitter, parser) {
+	function interpretNestedNamespaces(emitter) {
+		var interpreter = new Interpreter( emitter );
+		interpreter.process( 'namespace out { namespace in { struct hello; } }' );	
+		assert.deepEqual( interpreter.definitions.namespaces, { 'namespace out': 'namespace in{struct hello;}' } );
+	}
+
+	function interpretSingelSingleDeclaration(emitter) {
 		var interpreter = new Interpreter( emitter );
 		interpreter.declare( 'struct hello;' );	
 		assert.deepEqual( interpreter.declarations.types, { 'struct hello': 'undefined' } ); 
 	}
 
-	function interpretMergeProduct(emitter, parser) {
+	function interpretMergeProduct(emitter) {
 		
 		var interpreter = new Interpreter( emitter );
 		interpreter.declare( 'struct hello;' );
@@ -37,7 +44,7 @@ function testInterpreter() {
 		 	} );
 	}
 
-	function interpretDeclarationsAndDefinitions(emitter, parser) {
+	function interpretDeclarationsAndDefinitions(emitter) {
 		var interpreter = new Interpreter( emitter );
 	
 		interpreter.declare( 'struct hello;' );
