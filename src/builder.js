@@ -2,7 +2,7 @@ var events = require( 'events' )
   , Declarer = require( './declarer' ).Declarer
   , Definer = require( './definer' ).Definer;
   
-function Interpreter(emitter)
+function Builder(emitter)
 {
 	var declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
@@ -26,23 +26,23 @@ function Interpreter(emitter)
 		emitter.on( 'define namespace', function( context ) {
 			
 		 	var emitter = new events.EventEmitter()
-			  , interpreter = new Interpreter( emitter ); 
-			interpreter.process( context.code );
+			  , builder = new Builder( emitter ); 
+			builder.process( context.code );
 
 			//**** don't want to process the context.code ==> different namespace 
 //			declarer.process( context.name );	
 
 			// instance.namespaces[context.name] = {
-			// 	namespaces: interpreter.namespaces, 
-			// 	functionDeclarations: interpreter.functionDeclarations, 
-			// 	functionDefinitions: interpreter.functionDefinitions,
-			// 	typeDeclarations: interpreter.typeDeclarations,
-			// 	typeDefinitions: interpreter.typeDefinitions
+			// 	namespaces: builder.namespaces, 
+			// 	functionDeclarations: builder.functionDeclarations, 
+			// 	functionDefinitions: builder.functionDefinitions,
+			// 	typeDeclarations: builder.typeDeclarations,
+			// 	typeDefinitions: builder.typeDefinitions
 			// };.
 
 			instance.namespaces[context.name] = {
-				namespaces: interpreter.namespaces,
-				typeDeclarations: interpreter.typeDeclarations
+				namespaces: builder.namespaces,
+				typeDeclarations: builder.typeDeclarations
 			};
 		} );
 
@@ -87,4 +87,4 @@ function Interpreter(emitter)
 	}
 }
 
-exports.Interpreter = Interpreter; 
+exports.Builder = Builder; 

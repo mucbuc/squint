@@ -1,13 +1,13 @@
 var assert = require( 'assert' ) 
   , events = require( 'events' )
-  , Interpreter = require( '../src/interpreter' ).Interpreter
+  , Builder = require( '../src/builder' ).Builder
   , Base = require( './base' ).Base;
 
-assert( typeof Interpreter !== 'undefined' ); 
+assert( typeof Builder !== 'undefined' ); 
 
-testInterpreter(); 
+testBuilder(); 
 
-function testInterpreter() {
+function testBuilder() {
 
 	test( interpretSingelDeclaration );
 	test( namespaceTreeBuilder );
@@ -118,6 +118,6 @@ function testInterpreter() {
 	}
 
 	function test(f) {
-		Base.test( f, Interpreter );
+		Base.test( f, Builder );
 	}
 }
