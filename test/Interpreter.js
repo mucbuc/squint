@@ -16,6 +16,8 @@ function testInterpreter() {
 
 	function interpretNestedNamespaces(emitter, parser) {
 		parser.process( 'namespace out { namespace in { struct hello; } }' );	
+
+//		console.log( parser.namespaces ); 
 		assert.deepEqual( parser.namespaces, { 'namespace out': 'namespace in{struct hello;}' } );
 	}
 

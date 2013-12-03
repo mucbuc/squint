@@ -1,4 +1,5 @@
-var Declarer = require( './declarer' ).Declarer
+var events = require( 'events' )
+  , Declarer = require( './declarer' ).Declarer
   , Definer = require( './definer' ).Definer;
   
 function Interpreter(emitter)
@@ -42,7 +43,14 @@ function Interpreter(emitter)
 	function init() {
 
 		emitter.on( 'define namespace', function( context ) {
+		//	var emitter = new events.EventEmitter()
+		//	  , interpreter = new Interpreter( emitter ); 
+
 			append( namespaces, context ); 
+		//	interpreter.process( context.code );
+			//merge( namespaces[context.name], interpreter );	
+		//	namespaces[context.name].typeDeclarations = interpreter.typeDeclarations;
+		//	console.log( interpreter.typeDeclarations ); 
 		} ); 
 
 		emitter.on( 'define type', function( context ) {
