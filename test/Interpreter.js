@@ -24,10 +24,16 @@ function testInterpreter() {
 		var interpreter = new Interpreter( emitter );
 		interpreter.declare( 'struct hello;' );
 		interpreter.declare( 'struct world;' );
-		
 		assert.deepEqual( interpreter.declarations.types, { 
 				'struct hello': 'undefined', 
 		 		'struct world': 'undefined', 
+		 	} );
+	
+		interpreter.define( 'struct hello { world };');
+		interpreter.define( 'struct world { moon };');
+		assert.deepEqual( interpreter.definitions.types, { 
+				'struct hello': 'world', 
+		 		'struct world': 'moon', 
 		 	} );
 	}
 
