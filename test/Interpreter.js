@@ -9,49 +9,48 @@ testInterpreter();
 
 function testInterpreter() {
 
-	Base.test( interpretSingelSingleDeclaration );
-	Base.test( interpretMergeProduct );
-	Base.test( interpretDeclarationsAndDefinitions );
-	Base.test( interpretNestedNamespaces ); 
+	test( interpretSingelSingleDeclaration );
+	test( interpretMergeProduct );
+	test( interpretDeclarationsAndDefinitions );
+	test( interpretNestedNamespaces ); 
 
-	function interpretNestedNamespaces(emitter) {
-		var interpreter = new Interpreter( emitter );
-		interpreter.process( 'namespace out { namespace in { struct hello; } }' );	
-		assert.deepEqual( interpreter.definitions.namespaces, { 'namespace out': 'namespace in{struct hello;}' } );
+	function interpretNestedNamespaces(emitter, parser) {
+		parser.process( 'namespace out { namespace in { struct hello; } }' );	
+		assert.deepEqual( parser.definitions.namespaces, { 'namespace out': 'namespace in{struct hello;}' } );
 	}
 
-	function interpretSingelSingleDeclaration(emitter) {
-		var interpreter = new Interpreter( emitter );
-		interpreter.declare( 'struct hello;' );	
-		assert.deepEqual( interpreter.declarations.types, { 'struct hello': 'undefined' } ); 
+	function interpretSingelSingleDeclaration(emitter, parser) {
+		parser.process( 'struct hello;' );	
+		assert.deepEqual( parser.declarations.types, { 'struct hello': 'undefined' } ); 
 	}
 
-	function interpretMergeProduct(emitter) {
+	function interpretMergeProduct(emitter, parser) {
 		
-		var interpreter = new Interpreter( emitter );
-		interpreter.declare( 'struct hello;' );
-		interpreter.declare( 'struct world;' );
-		assert.deepEqual( interpreter.declarations.types, { 
+		parser.process( 'struct hello;' );
+		parser.process( 'struct world;' );
+		assert.deepEqual( parser.declarations.types, { 
 				'struct hello': 'undefined', 
 		 		'struct world': 'undefined', 
 		 	} );
 	
-		interpreter.define( 'struct hello { world };');
-		interpreter.define( 'struct world { moon };');
-		assert.deepEqual( interpreter.definitions.types, { 
+		parser.process( 'struct hello { world };');
+		parser.process( 'struct world { moon };');
+		assert.deepEqual( parser.definitions.types, { 
 				'struct hello': 'world', 
 		 		'struct world': 'moon', 
 		 	} );
 	}
 
-	function interpretDeclarationsAndDefinitions(emitter) {
-		var interpreter = new Interpreter( emitter );
+	function interpretDeclarationsAndDefinitions(emitter, parser) {
 	
-		interpreter.declare( 'struct hello;' );
-		assert.deepEqual( interpreter.declarations.types, {'struct hello': 'undefined'} );
+		parser.process( 'struct hello;' );
+		assert.deepEqual( parser.declarations.types, {'struct hello': 'undefined'} );
 	
-		interpreter.define( 'struct hello{};' );
-		assert.deepEqual( interpreter.definitions.types, {'struct hello': ''} );
+		parser.process( 'struct hello{};' );
+		assert.deepEqual( parser.definitions.types, {'struct hello': ''} );
 	}
-	
+
+	function test(f) {
+		Base.test( f, Interpreter );
+	}
 }
