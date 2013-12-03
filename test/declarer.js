@@ -12,6 +12,12 @@ function testDeclarer() {
 	test( typeDeclare );
 	test( declareFunction );
 	test( declareNot );
+	test( ignoreSubScopes );
+
+	function ignoreSubScopes(emitter, parser) {
+		emitter.expectNot( 'declare type' );
+		parser.process( 'namespace { struct hello; }' );
+	}
 
 	function declareNot(emitter, parser) {
 		emitter.expectNot( 'declare function' );

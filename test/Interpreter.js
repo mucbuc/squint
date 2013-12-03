@@ -30,8 +30,6 @@ function testInterpreter() {
 			};
 
 		parser.process( 'namespace outside{ namespace inside { struct hello; } }', emitter );
-		console.log( parser.namespaces['namespace outside'] );
-		//assert.deepEqual( expect, parser.namespaces );
 	}	
 
 	function interpretSingelDeclaration(emitter, parser) {
@@ -69,8 +67,6 @@ function testInterpreter() {
 			};
 
 		parser.process( 'struct outside{ struct inside {} }', emitter );
-
-		console.log( 'typeDeclarations', parser.typeDeclarations );
 		//assert.deepEqual( expect, parser.typeDeclarations );
 	}
 
@@ -97,9 +93,6 @@ function testInterpreter() {
 
 		parser.process( 'namespace out { namespace in { struct hello; } }' );	
 
-		//console.log( expect );
-		console.log( parser.namespaces );
-		
 		assert.equal( parser.namespaces, expect );
 	}
 

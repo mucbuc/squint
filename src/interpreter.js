@@ -32,9 +32,6 @@ function Interpreter(emitter)
 			//**** we don't want to process the context.code ==> different namespace 
 //			declarer.process( context.name );	
 
-			
-			//console.log( ' interpreter result ' + JSON.stringify(context), interpreter ); 
-
 			// instance.namespaces[context.name] = {
 			// 	namespaces: interpreter.namespaces, 
 			// 	functionDeclarations: interpreter.functionDeclarations, 
@@ -55,7 +52,6 @@ function Interpreter(emitter)
 		} );
 
 		emitter.on( 'declare type', function( name ) {
-			console.log( 'declare type', name );
 			append( instance.typeDeclarations, { name: name } );
 		} );
 
