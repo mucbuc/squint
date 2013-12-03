@@ -1,41 +1,66 @@
 var Declarer = require( './declarer' ).Declarer
-  , Definer = require( './definer' ).Definer
-  , Builder = require( '../src/builder' ).Builder;
+  , Definer = require( './definer' ).Definer;
   
-
 function Interpreter(emitter)
 {
-	var declarations = {}
-	  , definitions = {}
-	  , builder = new Builder( emitter, {} )
+	var functionDeclarations = {}
+	  , functionDefinitions = {}
+	  , typeDeclarations = {}
+	  , typeDefinitions = {}
+	  , namespaces = {}
 	  , declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
 	  , instance = this;
 
-	this.__defineGetter__( 'definitions', function() {
-		return definitions;
+	init(); 
+
+	this.__defineGetter__( 'functionDeclarations', function() {
+		return functionDeclarations;
+	} );
+
+	this.__defineGetter__( 'functionDefinitions', function() {
+		return functionDefinitions;
 	} );
 	
-	this.__defineGetter__( 'declarations', function() {
-		return declarations;
+	this.__defineGetter__( 'typeDeclarations', function() {
+		return typeDeclarations;
+	} );	
+
+	this.__defineGetter__( 'typeDefinitions', function() {
+		return typeDefinitions;
+	} );
+
+	this.__defineGetter__( 'namespaces', function() {
+		return namespaces;
 	} );
 
 	this.process = function( code ) { 
-		declare( code );
-		define( code );
-	}; 
-
-	function declare( code ) {
-		builder.init();
 		declarer.process( code );
-		merge( declarations, builder.product ); 
-	};
-
-	function define( code ) {
-		builder.init();
 		definer.process( code ); 
-		merge( definitions, builder.product ); 
 	}; 
+
+	function init() {
+
+		emitter.on( 'define namespace', function( context ) {
+			append( namespaces, context ); 
+		} ); 
+
+		emitter.on( 'define type', function( context ) {
+			append( typeDefinitions, context ); 
+		} );
+
+		emitter.on( 'declare type', function( name ) {
+			append( typeDeclarations, { name: name } );
+		} );
+
+		emitter.on( 'define function', function( context ) {
+			append( functionDefinitions, context ); 
+		} );
+
+		emitter.on( 'declare function', function( name ) {
+			append( functionDeclarations, { name: name } );
+		} );
+	}
 
 	function merge( dst, src ) {
 		for (var property in src) {
@@ -51,6 +76,12 @@ function Interpreter(emitter)
 				dst[property] = src[property];
 			}
 		}
+	}
+
+	function append( obj, context ) {
+		if (!obj.hasOwnProperty(context.code))
+			obj[context.name] = '';
+		obj[context.name] += context.code;
 	}
 }
 
