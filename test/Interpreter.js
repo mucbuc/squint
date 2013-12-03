@@ -11,9 +11,11 @@ function testInterpreter() {
 
 	test( interpretSingelDeclaration );
 	test( namespaceTreeBuilder );
-	//test( namespaceDeclaration );
-	//test( typeTreeBuilder ); 
-
+	test( namespaceDeclaration );
+	test( interpretMergeProduct );
+	test( interpretDeclarationsAndDefinitions );
+	test( interpretNestedNamespaces ); 
+	
 	function namespaceDeclaration(emitter, parser) {
 		var expect = { 
 				'namespace outside': {
@@ -70,30 +72,23 @@ function testInterpreter() {
 		//assert.deepEqual( expect, parser.typeDeclarations );
 	}
 
-	// 
-	// test( interpretMergeProduct );
-	// test( interpretDeclarationsAndDefinitions );
-	//test( interpretNestedNamespaces ); 
-
 	function interpretNestedNamespaces(emitter, parser) {
 
 		var expect = { 
-			'namespace out': {
-				'namespaces': { 
-					'namespace in': {
-						'types': {
-							'struct hello': 'undefined'
-						}
+				'namespace outside': {
+						namespaces: {
+								'namespace inside': {
+										namespaces:{},
+										typeDeclarations: {}
+									}
+							}, 
+						typeDeclarations: {}
 					}
-				},
-				'types' : undefined, 
-				'functions' : undefined
-			}
-		};
+			};
 
-		parser.process( 'namespace out { namespace in { struct hello; } }' );	
+		parser.process( 'namespace outside { namespace inside {} }' );	
 
-		assert.equal( parser.namespaces, expect );
+		assert.deepEqual( parser.namespaces, expect );
 	}
 
 	function interpretMergeProduct(emitter, parser) {

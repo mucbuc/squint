@@ -29,7 +29,7 @@ function Interpreter(emitter)
 			  , interpreter = new Interpreter( emitter ); 
 			interpreter.process( context.code );
 
-			//**** we don't want to process the context.code ==> different namespace 
+			//**** don't want to process the context.code ==> different namespace 
 //			declarer.process( context.name );	
 
 			// instance.namespaces[context.name] = {
