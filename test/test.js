@@ -28,7 +28,7 @@ function runTest() {
   function testExternals() {
     require( './parser' );
     require( './squint' );
-    require( './builder/template' )
+    require( './builder/template' );
     require( './builder/function' );
     require( './builder/type' );
     require( './builder/forwarder' );

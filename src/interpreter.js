@@ -21,17 +21,17 @@ function Interpreter(emitter)
 	} );
 
 	this.process = function( code ) { 
-		instance.declare( code );
-		instance.define( code );
+		declare( code );
+		define( code );
 	}; 
 
-	this.declare = function( code ) {
+	function declare( code ) {
 		builder.init();
 		declarer.process( code );
 		merge( declarations, builder.product ); 
 	};
 
-	this.define = function( code ) {
+	function define( code ) {
 		builder.init();
 		definer.process( code ); 
 		merge( definitions, builder.product ); 
