@@ -9,30 +9,75 @@ testInterpreter();
 
 function testInterpreter() {
 
-	test( treeBuilder );
-	
+	test( interpretSingelDeclaration );
+	test( namespaceTreeBuilder );
+	//test( namespaceDeclaration );
+	//test( typeTreeBuilder ); 
 
-	function treeBuilder(emitter, parser) {
-		var expect = { 'namespace outside': 
-				{
-					namespaces: {
-						'namespace inside': {
-							"namespaces":{}
-						}
+	function namespaceDeclaration(emitter, parser) {
+		var expect = { 
+				'namespace outside': {
+						namespaces: {
+								'namespace inside': {
+										namespaces:{},
+										typeDeclarations: {
+												'struct inside': ''
+											}
+									}
+							}, 
+						typeDeclarations: {}
 					}
-				} 
+			};
+
+		parser.process( 'namespace outside{ namespace inside { struct hello; } }', emitter );
+		console.log( parser.namespaces['namespace outside'] );
+		//assert.deepEqual( expect, parser.namespaces );
+	}	
+
+	function interpretSingelDeclaration(emitter, parser) {
+		parser.process( 'struct hello;' );	
+		assert.deepEqual( parser.typeDeclarations, { 'struct hello': 'undefined' } ); 
+	}
+
+	function namespaceTreeBuilder(emitter, parser) {
+		var expect = { 
+				'namespace outside': {
+						namespaces: {
+								'namespace inside': {
+										namespaces:{}, 
+										typeDeclarations:{}
+									}
+							},
+						typeDeclarations:{}
+					} 
 			};
 
 		parser.process( 'namespace outside{ namespace inside {} }', emitter );
 		assert.deepEqual( expect, parser.namespaces );
 	}	
 
-	// test( interpretSingelSingleDeclaration );
+
+	function typeTreeBuilder(emitter, parser) {
+		var expect = { 'struct outside': 
+				{
+					typeDeclarations: {
+						'struct inside': {
+							typeDeclarations:{}
+						}
+					}
+				} 
+			};
+
+		parser.process( 'struct outside{ struct inside {} }', emitter );
+
+		console.log( 'typeDeclarations', parser.typeDeclarations );
+		//assert.deepEqual( expect, parser.typeDeclarations );
+	}
+
+	// 
 	// test( interpretMergeProduct );
 	// test( interpretDeclarationsAndDefinitions );
 	//test( interpretNestedNamespaces ); 
-
-
 
 	function interpretNestedNamespaces(emitter, parser) {
 
@@ -56,11 +101,6 @@ function testInterpreter() {
 		console.log( parser.namespaces );
 		
 		assert.equal( parser.namespaces, expect );
-	}
-
-	function interpretSingelSingleDeclaration(emitter, parser) {
-		parser.process( 'struct hello;' );	
-		assert.deepEqual( parser.typeDeclarations, { 'struct hello': 'undefined' } ); 
 	}
 
 	function interpretMergeProduct(emitter, parser) {

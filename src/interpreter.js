@@ -11,16 +11,17 @@ function Interpreter(emitter)
 	init(); 
 
 	this.process = function( code ) { 
-		definer.process( code ); 
-	}; 
+		definer.process( code );
+		declarer.process( code ); 
+	};
 
 	function init() {
 
 		instance.functionDeclarations = {};
-	  instance.functionDefinitions = {};
-	  instance.typeDeclarations = {};
-	  instance.typeDefinitions = {};
-	  instance.namespaces = {};
+		instance.functionDefinitions = {};
+		instance.typeDeclarations = {};
+		instance.typeDefinitions = {};
+		instance.namespaces = {};
 
 		emitter.on( 'define namespace', function( context ) {
 			
@@ -43,7 +44,8 @@ function Interpreter(emitter)
 			// };.
 
 			instance.namespaces[context.name] = {
-				namespaces: interpreter.namespaces
+				namespaces: interpreter.namespaces,
+				typeDeclarations: interpreter.typeDeclarations
 			};
 		} );
 
