@@ -29,26 +29,26 @@ function Builder(emitter)
 			  , builder = new Builder( emitter ); 
 			builder.process( context.code );
 
-			//**** don't want to process the context.code ==> different namespace 
-//			declarer.process( context.name );	
-
-			// instance.namespaces[context.name] = {
-			// 	namespaces: builder.namespaces, 
-			// 	functionDeclarations: builder.functionDeclarations, 
-			// 	functionDefinitions: builder.functionDefinitions,
-			// 	typeDeclarations: builder.typeDeclarations,
-			// 	typeDefinitions: builder.typeDefinitions
-			// };.
-
 			instance.namespaces[context.name] = {
 				namespaces: builder.namespaces,
-				typeDeclarations: builder.typeDeclarations
+				typeDeclarations: builder.typeDeclarations,
+				typeDefinitions: builder.typeDefinitions
 			};
 		} );
 
 
 		emitter.on( 'define type', function( context ) {
-			append( instance.typeDefinitions, context ); 
+
+			var emitter = new events.EventEmitter()
+			  , builder = new Builder( emitter );
+			builder.process( context.code );
+
+			instance.typeDefinitions[context.name] = {
+				typeDeclarations: builder.typeDeclarations,
+				typeDefinitions: builder.typeDefinitions
+			};
+
+			//append( instance.typeDefinitions, context ); 
 		} );
 
 		emitter.on( 'declare type', function( name ) {

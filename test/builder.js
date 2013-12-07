@@ -15,61 +15,24 @@ function testBuilder() {
   test( builderMergeProduct );
   test( builderDeclarationsAndDefinitions );
   test( builderNestedNamespaces ); 
-  
-  function namespaceDeclaration(emitter, parser) {
+  test( builderNestedTypes ); 
+
+  function builderNestedTypes(emitter, parser) 
+  {
     var expect = { 
-        'namespace outside': {
-            namespaces: {
-                'namespace inside': {
-                    namespaces:{},
-                    typeDeclarations: {
-                        'struct inside': ''
-                      }
+        'struct outside': {
+            typeDeclarations: {},
+            typeDefinitions: { 
+                'struct inside': {
+                    typeDeclarations: {},
+                    typeDefinitions: {}
                   }
-              }, 
-            typeDeclarations: {}
+              }
           }
       };
 
-    parser.process( 'namespace outside{ namespace inside { struct hello; } }', emitter );
-  } 
-
-  function builderSingelDeclaration(emitter, parser) {
-    parser.process( 'struct hello;' );  
-    assert.deepEqual( parser.typeDeclarations, { 'struct hello': 'undefined' } ); 
-  }
-
-  function namespaceTreeBuilder(emitter, parser) {
-    var expect = { 
-        'namespace outside': {
-            namespaces: {
-                'namespace inside': {
-                    namespaces:{}, 
-                    typeDeclarations:{}
-                  }
-              },
-            typeDeclarations:{}
-          } 
-      };
-
-    parser.process( 'namespace outside{ namespace inside {} }', emitter );
-    assert.deepEqual( expect, parser.namespaces );
-  } 
- 
-
-  function typeTreeBuilder(emitter, parser) {
-    var expect = { 'struct outside': 
-        {
-          typeDeclarations: {
-            'struct inside': {
-              typeDeclarations:{}
-            }
-          }
-        } 
-      };
-
-    parser.process( 'struct outside{ struct inside {} }', emitter );
-    //assert.deepEqual( expect, parser.typeDeclarations );
+    parser.process( 'struct outside { struct inside {}; };')
+    assert.deepEqual( parser.typeDefinitions, expect );
   }
 
   function builderNestedNamespaces(emitter, parser) {
@@ -79,16 +42,26 @@ function testBuilder() {
             namespaces: {
                 'namespace inside': {
                     namespaces:{},
-                    typeDeclarations: {}
+                    typeDeclarations: {},
+                    typeDefinitions: {}
                   }
               }, 
-            typeDeclarations: {}
+            typeDeclarations: {},
+            typeDefinitions: {}
           }
       };
 
     parser.process( 'namespace outside { namespace inside {} }' );  
-
     assert.deepEqual( parser.namespaces, expect );
+  }
+
+  function builderDeclarationsAndDefinitions(emitter, parser) {
+  
+    parser.process( 'struct hello;' );
+    assert.deepEqual( parser.typeDeclarations, {'struct hello': 'undefined'} );
+  
+    parser.process( 'struct hello{};' );
+    assert.deepEqual( parser.typeDefinitions, {'struct hello': { typeDeclarations: {}, typeDefinitions: {} } } );
   }
 
   function builderMergeProduct(emitter, parser) {
@@ -102,19 +75,55 @@ function testBuilder() {
   
     parser.process( 'struct hello { world };');
     parser.process( 'struct world { moon };');
+    
     assert.deepEqual( parser.typeDefinitions, { 
-        'struct hello': 'world', 
-        'struct world': 'moon', 
+        'struct hello': { typeDeclarations: {}, typeDefinitions: {} }, 
+        'struct world': { typeDeclarations: {}, typeDefinitions: {} }, 
       } );
   }
 
-  function builderDeclarationsAndDefinitions(emitter, parser) {
-  
-    parser.process( 'struct hello;' );
-    assert.deepEqual( parser.typeDeclarations, {'struct hello': 'undefined'} );
-  
-    parser.process( 'struct hello{};' );
-    assert.deepEqual( parser.typeDefinitions, {'struct hello': ''} );
+  function namespaceDeclaration(emitter, parser) {
+    var expect = { 
+        'namespace outside': {
+            namespaces: {
+                'namespace inside': {
+                    namespaces:{},
+                    typeDeclarations: {
+                        'struct inside': ''
+                      },
+                    typeDefinitions: {}
+                  }
+              }, 
+            typeDeclarations: {},
+            typeDefinitions: {}
+          }
+      };
+
+    parser.process( 'namespace outside{ namespace inside { struct hello; } }', emitter );
+  } 
+
+  function namespaceTreeBuilder(emitter, parser) {
+    var expect = { 
+        'namespace outside': {
+            namespaces: {
+                'namespace inside': {
+                    namespaces:{}, 
+                    typeDeclarations:{},
+                    typeDefinitions: {}
+                  }
+              },
+            typeDeclarations:{},
+            typeDefinitions: {}
+          } 
+      };
+
+    parser.process( 'namespace outside{ namespace inside {} }', emitter );
+    assert.deepEqual( expect, parser.namespaces );
+  } 
+ 
+  function builderSingelDeclaration(emitter, parser) {
+    parser.process( 'struct hello;' );  
+    assert.deepEqual( parser.typeDeclarations, { 'struct hello': 'undefined' } ); 
   }
 
   function test(f) {

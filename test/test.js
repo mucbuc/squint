@@ -23,17 +23,6 @@ function runTest() {
       emitter.emit( 'end' );
     } );
   }
-
-  function testExternals() {
-    require( './parser' );
-    require( './squint' );
-    require( './builder/template' );
-    require( './builder/function' );
-    require( './builder/type' );
-    require( './builder/forwarder' );
-    require( './builder/definer' );
-    require( './builder/namespacer' );
-  }
 }
 
 function oldTest() {
