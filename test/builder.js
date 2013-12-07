@@ -18,17 +18,24 @@ function testBuilder() {
   test( builderNestedTypes ); 
   test( builderFunctionDeclare ); 
   test( builderFunctonDefine);
+  test( builderFunctionDeclareAndDefine );
 
-  function builderFunctonDefine(emitter, parser) 
-  {
+  function builderFunctionDeclareAndDefine(emitter, parser) {
+    parser.process( 'void foo(); void foo() { hello }' );
+    assert.deepEqual( parser.functionDeclarations, { 'void foo()':'undefined' } );
+  
+    console.log( parser.functionDefinitions );
+    assert.deepEqual( parser.functionDefinitions, { 'void foo()':'hello' } );
+  }
+
+  function builderFunctonDefine(emitter, parser) {
     var expect = { 'void foo()': 'hello' };
     parser.process( 'void foo() { hello }' );
     
     assert.deepEqual( parser.functionDefinitions, expect );
   }
 
-  function builderFunctionDeclare(emitter, parser) 
-  {
+  function builderFunctionDeclare(emitter, parser) {
     var expect = {
         'void foo()': 'undefined'
       };
@@ -37,8 +44,7 @@ function testBuilder() {
     assert.deepEqual( parser.functionDeclarations, expect );
   }
 
-  function builderNestedTypes(emitter, parser) 
-  {
+  function builderNestedTypes(emitter, parser) {
     var expect = { 
         'struct outside': {
             typeDeclarations: {},
