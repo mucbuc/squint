@@ -16,6 +16,17 @@ function testBuilder() {
   test( builderDeclarationsAndDefinitions );
   test( builderNestedNamespaces ); 
   test( builderNestedTypes ); 
+  test( builderfunctionDeclare ); 
+
+  function builderfunctionDeclare(emitter, parser) 
+  {
+    var expect = {
+        'void foo()': 'undefined'
+      };
+
+    parser.process( 'void foo();' );
+    assert.deepEqual( parser.functionDeclarations, expect );
+  }
 
   function builderNestedTypes(emitter, parser) 
   {
