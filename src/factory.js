@@ -16,10 +16,7 @@ var Utills = {
 		}, 
 };
 
-function Factory() {
-}
-
-Factory.prototype = {
+Factory = {
 
 	declareFunction: function( name ) {
 		return name + ';\n';
