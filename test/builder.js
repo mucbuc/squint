@@ -20,22 +20,30 @@ function testBuilder() {
   test( builderNestedTypes ); 
   test( builderFunctionDeclare ); 
   test( builderFunctonDefine );
-  test( builderFunctionDeclareAndDefine );
   test( builderMemberFunctionDeclare );
+  test( builderBuild );
+
+  function builderBuild(emitter, parser){
+    parser.process( 'namespace outside{ namespace inside {} }', emitter );
+    
+    //process.once( 'exit', function() {
+      parser.build( {} );
+    //});
+  }
 
   function builderMemberFunctionDeclare(emitter, parser) {
     
     var obj;
     parser.process( 'struct text{void member();};', emitter );
     
-    assert( parser.hasOwnProperty( 'typeDefinitions' ) );
-    obj = parser.typeDefinitions;
+    assert( parser.hasOwnProperty( 'types' ) );
+    obj = parser.types;
 
     assert( obj.hasOwnProperty( 'struct text' ) ); 
     obj = obj[ 'struct text' ];
 
-    assert( obj.hasOwnProperty( 'functionDeclarations' ) ); 
-    obj = obj.functionDeclarations;
+    assert( obj.hasOwnProperty( 'functions' ) ); 
+    obj = obj.functions;
 
     assert( obj.hasOwnProperty( 'void member()' ) );
     obj = obj['void member()'];
@@ -43,17 +51,11 @@ function testBuilder() {
     assert.deepEqual( obj, 'undefined' );
   }
 
-  function builderFunctionDeclareAndDefine(emitter, parser) {
-    parser.process( 'void foo(); void foo() { hello }' );
-    assert.deepEqual( parser.functionDeclarations, { 'void foo()':'undefined' } );
-    assert.deepEqual( parser.functionDefinitions, { 'void foo()':'hello' } );
-  }
-
   function builderFunctonDefine(emitter, parser) {
     var expect = { 'void foo()': 'hello' };
     parser.process( 'void foo() { hello }' );
     
-    assert.deepEqual( parser.functionDefinitions, expect );
+    assert.deepEqual( parser.functions, expect );
   }
 
   function builderFunctionDeclare(emitter, parser) {
@@ -62,20 +64,20 @@ function testBuilder() {
       };
 
     parser.process( 'void foo();' );
-    assert.property( parser, 'functionDeclarations' );
-    assert.deepEqual( parser.functionDeclarations, expect );
+    assert.property( parser, 'functions' );
+    assert.deepEqual( parser.functions, expect );
   }
 
   function builderNestedTypes(emitter, parser) {
     var obj;
 
     parser.process( 'struct outside { struct inside {}; };')
-    assert.deepProperty( parser, 'typeDefinitions.struct outside' );
+    assert.deepProperty( parser, 'types.struct outside' );
 
-    obj = parser.typeDefinitions[ 'struct outside' ];
-    assert.deepProperty( obj, 'typeDefinitions.struct inside' );
+    obj = parser.types[ 'struct outside' ];
+    assert.deepProperty( obj, 'types.struct inside' );
 
-    obj = obj.typeDefinitions[ 'struct inside' ];
+    obj = obj.types[ 'struct inside' ];
     assert.isDefined( obj );
   }
 
@@ -93,29 +95,29 @@ function testBuilder() {
   function builderDeclarationsAndDefinitions(emitter, parser) {
   
     parser.process( 'struct hello;' );
-    assert.deepProperty( parser, 'typeDeclarations.struct hello' );
-    assert.deepEqual( parser.typeDeclarations[ 'struct hello' ], 'undefined' );
+    assert.deepProperty( parser, 'types.struct hello' );
+    assert.deepEqual( parser.types[ 'struct hello' ], 'undefined' );
   
     parser.process( 'struct hello{};' );
-    assert.deepProperty( parser, 'typeDefinitions.struct hello' );
-    assert.isDefined( parser.typeDefinitions['struct hello'] );
+    assert.deepProperty( parser, 'types.struct hello' );
+    assert.isDefined( parser.types['struct hello'] );
   }
 
   function builderMergeProduct(emitter, parser) {
     
     parser.process( 'struct hello;' );
-    assert.deepProperty( parser, 'typeDeclarations.struct hello' );
-    assert.deepEqual( parser.typeDeclarations['struct hello'], 'undefined' );
+    assert.deepProperty( parser, 'types.struct hello' );
+    assert.deepEqual( parser.types['struct hello'], 'undefined' );
 
     parser.process( 'struct world;' );
-    assert.deepProperty( parser, 'typeDeclarations.struct world' );
-    assert.deepEqual( parser.typeDeclarations['struct world'], 'undefined' );
+    assert.deepProperty( parser, 'types.struct world' );
+    assert.deepEqual( parser.types['struct world'], 'undefined' );
 
     parser.process( 'struct hello { world };');
     parser.process( 'struct world { moon };');
       
-    assert.isDefined( parser.typeDeclarations['struct hello'] );
-    assert.isDefined( parser.typeDeclarations['struct world'] );
+    assert.isDefined( parser.types['struct hello'] );
+    assert.isDefined( parser.types['struct world'] );
   }
 
   function namespaceDeclaration(emitter, parser) {
@@ -129,8 +131,8 @@ function testBuilder() {
     assert.deepProperty( obj, 'namespaces.namespace inside' );
     obj = obj.namespaces[ 'namespace inside' ];
 
-    assert.deepProperty( obj, 'typeDeclarations.struct hello' );
-    obj = obj.typeDeclarations['struct hello'];
+    assert.deepProperty( obj, 'types.struct hello' );
+    obj = obj.types['struct hello'];
     
     assert.deepEqual( obj, 'undefined' );
   } 
@@ -143,8 +145,8 @@ function testBuilder() {
  
   function builderSingelDeclaration(emitter, parser) {
     parser.process( 'struct hello;' );  
-    assert.deepProperty( parser, 'typeDeclarations.struct hello' ); 
-    assert.deepEqual( parser.typeDeclarations[ 'struct hello' ], 'undefined' ); 
+    assert.deepProperty( parser, 'types.struct hello' ); 
+    assert.deepEqual( parser.types[ 'struct hello' ], 'undefined' ); 
   }
 
   function test(f) {

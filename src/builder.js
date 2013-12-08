@@ -15,12 +15,28 @@ function Builder(emitter)
 		declarer.process( code ); 
 	};
 
+	this.build = function( factory ) {
+		// buildNamespaces( instance.namespaces );
+		// buildTypes( instance.types );
+		// buildFunctions( instance.functions );
+	}; 
+
+	function buildFunctions( functions ) {
+
+	}
+
+	function buildTypes( types ) {
+
+	}
+
+	function buildNamespaces( namespaces ) {
+
+	}
+
 	function init() {
 
-		instance.functionDeclarations = {};
-		instance.functionDefinitions = {};
-		instance.typeDeclarations = {};
-		instance.typeDefinitions = {};
+		instance.functions = {};
+		instance.types = {};
 		instance.namespaces = {};
 
 		emitter.on( 'define namespace', function( context ) {
@@ -31,8 +47,7 @@ function Builder(emitter)
 
 			instance.namespaces[context.name] = {
 				namespaces: builder.namespaces,
-				typeDeclarations: builder.typeDeclarations,
-				typeDefinitions: builder.typeDefinitions
+				types: builder.types,
 			};
 		} );
 
@@ -43,24 +58,23 @@ function Builder(emitter)
 			  , builder = new Builder( emitter );
 			builder.process( context.code );
 
-			instance.typeDefinitions[context.name] = {
-				typeDeclarations: builder.typeDeclarations,
-				typeDefinitions: builder.typeDefinitions,
-				functionDeclarations: builder.functionDeclarations
+			instance.types[context.name] = {
+				types: builder.types,
+				functions: builder.functions
 			};
 		} );
 
 		emitter.on( 'declare type', function( name ) {
-			append( instance.typeDeclarations, { name: name } );
+			append( instance.types, { name: name } );
 		} );
 
 		emitter.on( 'define function', function( context ) {
 			// get rid of declarations
-			append( instance.functionDefinitions, context ); 
+			append( instance.functions, context ); 
 		} );
 
 		emitter.on( 'declare function', function( name ) {
-			append( instance.functionDeclarations, { name: name } );
+			append( instance.functions, { name: name } );
 		} );
 	}
 
