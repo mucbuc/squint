@@ -45,10 +45,9 @@ function Builder(emitter)
 
 			instance.typeDefinitions[context.name] = {
 				typeDeclarations: builder.typeDeclarations,
-				typeDefinitions: builder.typeDefinitions
+				typeDefinitions: builder.typeDefinitions,
+				functionDeclarations: builder.functionDeclarations
 			};
-
-			//append( instance.typeDefinitions, context ); 
 		} );
 
 		emitter.on( 'declare type', function( name ) {
