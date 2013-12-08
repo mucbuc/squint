@@ -17,14 +17,12 @@ function testBuilder() {
   test( builderNestedNamespaces ); 
   test( builderNestedTypes ); 
   test( builderFunctionDeclare ); 
-  test( builderFunctonDefine);
+  test( builderFunctonDefine );
   test( builderFunctionDeclareAndDefine );
 
   function builderFunctionDeclareAndDefine(emitter, parser) {
     parser.process( 'void foo(); void foo() { hello }' );
     assert.deepEqual( parser.functionDeclarations, { 'void foo()':'undefined' } );
-  
-    console.log( parser.functionDefinitions );
     assert.deepEqual( parser.functionDefinitions, { 'void foo()':'hello' } );
   }
 

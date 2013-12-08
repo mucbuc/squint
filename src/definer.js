@@ -26,7 +26,7 @@ function Definer(emitter) {
 			initDefine( 'function' );
 
 		function initDefine( type ) {
-			var name = code.trim();
+			var name = code.replace( /.*?;/, '' ).trim();
 			emitter.once( 'close scope', function( code ) {
 				emitter.emit( 'define ' + type, { name: name, code: code.trim() } );
 			} );

@@ -56,6 +56,7 @@ function Builder(emitter)
 		} );
 
 		emitter.on( 'define function', function( context ) {
+			// get rid of declarations
 			append( instance.functionDefinitions, context ); 
 		} );
 
