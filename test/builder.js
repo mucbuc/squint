@@ -1,6 +1,7 @@
 var assert = require( 'chai' ).assert 
   , events = require( 'events' )
   , Builder = require( '../src/builder' ).Builder
+  , Factory = require( '../src/factory' ).Factory
   , Base = require( './base' ).Base;
 
 assert( typeof Builder !== 'undefined' ); 
@@ -24,11 +25,10 @@ function testBuilder() {
   test( builderBuild );
 
   function builderBuild(emitter, parser){
+    var result;
     parser.process( 'namespace outside{ namespace inside {} }', emitter );
-    
-    //process.once( 'exit', function() {
-      parser.build( {} );
-    //});
+    result = parser.build( Factory );
+    assert.match( result, /\s*namespace\s+outside\s*{\s*namespace\s+inside\s*{\s*}.*\s*}.*/ );
   }
 
   function builderMemberFunctionDeclare(emitter, parser) {

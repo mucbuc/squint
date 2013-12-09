@@ -16,21 +16,55 @@ function Builder(emitter)
 	};
 
 	this.build = function( factory ) {
-		// buildNamespaces( instance.namespaces );
-		// buildTypes( instance.types );
-		// buildFunctions( instance.functions );
-	}; 
+		return _build( factory, instance );
+	};
 
-	function buildFunctions( functions ) {
+	function _build( factory, obj ) {
+		
+		var result = '';
 
-	}
+		if (typeof obj === 'undefined') 
+			obj = instance;
 
-	function buildTypes( types ) {
+		buildNamespaces( obj );
+		buildTypes( obj );
+		buildFunctions( obj );
 
-	}
+		return result;
 
-	function buildNamespaces( namespaces ) {
+		function buildFunctions( obj ) {
+			if (obj.hasOwnProperty( 'functions' )) {
+				for (var p in obj.functions) {
+					console.log( 'function:' );
+				}
+			}
+		}
 
+		function buildTypes( obj ) {
+			if (obj.hasOwnProperty( 'types' )) {
+				for (var p in obj.types) {
+					buildType( obj.types[p] );
+				}
+			}
+
+			if (obj.hasOwnProperty( 'function' ))
+				buildFunction( obj.functions );
+		}
+
+		function buildNamespaces( obj ) {
+			
+			if (obj.hasOwnProperty( 'namespaces' )) {
+				for (var p in obj.namespaces) {
+					var content = _build( factory, obj.namespaces[p] );
+					result += factory.defineNamespace( p, content ); 
+				}
+			}
+
+			if (obj.hasOwnProperty( 'types' ))
+				buildTypes( obj.types );
+			if (obj.hasOwnProperty( 'functions' ))
+				buildFunctions( obj.functions );
+		}
 	}
 
 	function init() {

@@ -8,15 +8,17 @@ notes:
 
 var Utills = { 
 	indent: function( code ) {
-			code = '\t' + code;
-			return code.replace( /\n/, '\n\t' ); 
-		}, 
+		code = '\t' + code;
+		return code.replace( /\n/, '\n\t' ); 
+	}, 
 	openScope: function( name ) {
-			return name + '\n{\n';
-		}, 
+		return name + '\n{\n';
+	}, 
 };
 
 Factory = {
+
+	Utills: Utills,
 
 	declareFunction: function( name ) {
 		return name + ';\n';
@@ -47,8 +49,7 @@ Factory = {
 
 	defineFunction: function( name, code ) {
 		var result = this.openFunction( name );
-		result += Utills.indent( code );
-		result += this.closeFunction( name );
+		result += Utills.indent( code + this.closeFunction( name ) );
 		return result;
 	},
 
@@ -59,9 +60,9 @@ Factory = {
 	},
 
 	defineNamespace: function( name, code ) {
-		var result = this.openNamespace( name );
-		result += Utills.indent( code );
-		result += this.closeNamespace( name ); 
+		var result = code + this.closeNamespace( name );
+		result = Utills.indent( result );
+		result = this.openNamespace( name ) + result;
 		return result;
 	},
 
