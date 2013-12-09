@@ -35,7 +35,10 @@ function Builder(emitter)
 		function buildFunctions( obj ) {
 			if (obj.hasOwnProperty( 'functions' )) {
 				for (var p in obj.functions) {
-					console.log( 'function:' );
+					if (obj.functions[p] == 'undefined')
+						result += factory.declareFunction( p.trim() );
+					else
+						result += factory.defineFunction( p.trim(), obj.functions[p] );
 				}
 			}
 		}

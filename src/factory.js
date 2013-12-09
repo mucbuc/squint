@@ -8,7 +8,7 @@ notes:
 
 var Utills = { 
 	indent: function( code ) {
-		code = '\n' + code;
+		code = '\t' + code;
 		return code.replace( /\n/g, '\n\t' ); 
 	}, 
 	openScope: function( name ) {
@@ -31,7 +31,7 @@ Factory = {
 	openType: Utills.openScope, 
 
 	closeType: function(name) {
-		return '\n' + '};';
+		return '\n};';
 	}, 
 
 	defineType: function( name, code ) {

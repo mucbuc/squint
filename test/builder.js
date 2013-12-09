@@ -12,18 +12,26 @@ testBuilder();
 
 function testBuilder() {
 
-  // test( builderSingelDeclaration );
-  // test( namespaceTreeBuilder );
-  // test( namespaceDeclaration );
-  // test( builderMergeProduct );
-  // test( builderDeclarationsAndDefinitions );
-  // test( builderNestedNamespaces ); 
-  // test( builderNestedTypes ); 
-  // test( builderFunctionDeclare ); 
-  // test( builderFunctonDefine );
-  // test( builderMemberFunctionDeclare );
-  // test( builderBuildNestedNamespaces );
-  test( builderBuildNestedTypes ); 
+  test( builderSingelDeclaration );
+  test( namespaceTreeBuilder );
+  test( namespaceDeclaration );
+  test( builderMergeProduct );
+  test( builderDeclarationsAndDefinitions );
+  test( builderNestedNamespaces ); 
+  test( builderNestedTypes ); 
+  test( builderFunctionDeclare ); 
+  test( builderFunctonDefine );
+  test( builderMemberFunctionDeclare );
+  test( builderBuildNestedNamespaces );
+  test( builderBuildNestedTypes );
+  test( builderBuildMemberFunctions );
+
+  function builderBuildMemberFunctions(emitter, parser) {
+    var result;
+    parser.process( 'struct bla { void foo(); };' );
+    result = parser.build( Factory );
+    assert.match( result, /\s*struct\s+bla\s*{\s*void\s+foo\s*\(\s*\)\s*;\s*};/ );
+  }
 
   function builderBuildNestedTypes(emitter, parser) {
     var result;
