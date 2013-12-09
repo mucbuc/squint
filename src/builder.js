@@ -43,7 +43,11 @@ function Builder(emitter)
 		function buildTypes( obj ) {
 			if (obj.hasOwnProperty( 'types' )) {
 				for (var p in obj.types) {
-					buildType( obj.types[p] );
+					var content = _build( factory, obj.types[p] );
+					if (obj.types[p] == 'undefined')
+						result += factory.declareType( p.trim(), content );
+					else
+						result += factory.defineType( p.trim(), content );
 				}
 			}
 

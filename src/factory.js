@@ -8,11 +8,11 @@ notes:
 
 var Utills = { 
 	indent: function( code ) {
-		code = '\t' + code;
-		return code.replace( /\n/, '\n\t' ); 
+		code = '\n' + code;
+		return code.replace( /\n/g, '\n\t' ); 
 	}, 
 	openScope: function( name ) {
-		return name + '\n{\n';
+		return '\n' + name + '\n{';
 	}, 
 };
 
@@ -21,22 +21,23 @@ Factory = {
 	Utills: Utills,
 
 	declareFunction: function( name ) {
-		return name + ';\n';
+		return '\n' + name + ';';
 	},
 
 	declareType: function( name ) {
-		return name + ';\n';
+		return '\n' + name + ';';
 	},
 
 	openType: Utills.openScope, 
 
 	closeType: function(name) {
-		return '\n};\n';
+		return '\n' + '};';
 	}, 
 
 	defineType: function( name, code ) {
 		var result = this.openType( name );
-		result += Utills.indent( code ); 
+		if (code.length)
+			result += Utills.indent( code );
 		result += this.closeType( name );
 		return result;
 	},
@@ -44,25 +45,26 @@ Factory = {
 	openFunction: Utills.openScope,
 
 	closeFunction: function() {
-		return '\n}\n'; 
+		return '\n}'; 
 	},
 
 	defineFunction: function( name, code ) {
 		var result = this.openFunction( name );
-		result += Utills.indent( code + this.closeFunction( name ) );
+		result += Utills.indent( code );
+		result += this.closeFunction( name );
 		return result;
 	},
 
 	openNamespace: Utills.openScope,
 
 	closeNamespace: function( name ) { 
-		return '\n} // ' + name + '\n'; 
+		return '\n} // ' + name; 
 	},
 
 	defineNamespace: function( name, code ) {
-		var result = code + this.closeNamespace( name );
-		result = Utills.indent( result );
-		result = this.openNamespace( name ) + result;
+		var result = this.openNamespace( name );
+		result += Utills.indent( code );
+		result += this.closeNamespace( name );
 		return result;
 	},
 

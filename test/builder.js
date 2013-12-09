@@ -12,19 +12,27 @@ testBuilder();
 
 function testBuilder() {
 
-  test( builderSingelDeclaration );
-  test( namespaceTreeBuilder );
-  test( namespaceDeclaration );
-  test( builderMergeProduct );
-  test( builderDeclarationsAndDefinitions );
-  test( builderNestedNamespaces ); 
-  test( builderNestedTypes ); 
-  test( builderFunctionDeclare ); 
-  test( builderFunctonDefine );
-  test( builderMemberFunctionDeclare );
-  test( builderBuild );
+  // test( builderSingelDeclaration );
+  // test( namespaceTreeBuilder );
+  // test( namespaceDeclaration );
+  // test( builderMergeProduct );
+  // test( builderDeclarationsAndDefinitions );
+  // test( builderNestedNamespaces ); 
+  // test( builderNestedTypes ); 
+  // test( builderFunctionDeclare ); 
+  // test( builderFunctonDefine );
+  // test( builderMemberFunctionDeclare );
+  // test( builderBuildNestedNamespaces );
+  test( builderBuildNestedTypes ); 
 
-  function builderBuild(emitter, parser){
+  function builderBuildNestedTypes(emitter, parser) {
+    var result;
+    parser.process( 'struct outside { struct inside{}; struct dec; };' );
+    result = parser.build( Factory );
+    assert.match( result, /\s*struct\s+outside\s*{\s*struct\s+inside\s*{\s*};\s*struct\s*dec;\s*};/ );
+  }
+
+  function builderBuildNestedNamespaces(emitter, parser){
     var result;
     parser.process( 'namespace outside{ namespace inside {} }', emitter );
     result = parser.build( Factory );
