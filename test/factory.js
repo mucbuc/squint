@@ -45,7 +45,5 @@ function testFactory() {
 		var source = Factory.defineNamespace( 'namespace hello', 'world' ); 
 		assert.deepEqual( source, '\nnamespace hello\n{\tworld\n} // namespace hello' );
 		emitter.emit( 'end' );
-
-		console.log( 'source', source );
 	}
 }	

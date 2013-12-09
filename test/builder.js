@@ -12,28 +12,25 @@ testBuilder();
 
 function testBuilder() {
 
-  // test( builderSingelDeclaration );
-  // test( namespaceTreeBuilder );
-  // test( namespaceDeclaration );
-  // test( builderMergeProduct );
-  // test( builderDeclarationsAndDefinitions );
-  // test( builderNestedNamespaces ); 
-  // test( builderNestedTypes ); 
-  // test( builderFunctionDeclare ); 
-  // test( builderFunctonDefine );
-  // test( builderMemberFunctionDeclare );
-  // test( builderBuildNestedNamespaces );
-  // test( builderBuildNestedTypes );
-  // test( builderBuildMemberFunctions );
-
+  test( builderSingelDeclaration );
+  test( namespaceTreeBuilder );
+  test( namespaceDeclaration );
+  test( builderMergeProduct );
+  test( builderDeclarationsAndDefinitions );
+  test( builderNestedNamespaces ); 
+  test( builderNestedTypes ); 
+  test( builderFunctionDeclare ); 
+  test( builderFunctonDefine );
+  test( builderMemberFunctionDeclare );
+  test( builderBuildNestedNamespaces );
+  test( builderBuildNestedTypes );
+  test( builderBuildMemberFunctions );
   test( builderBuildNamespaceFunction ); 
 
   function builderBuildNamespaceFunction(emitter, parser) {
     var result;
     parser.process( 'namespace bla{ void foo(); }' );
     result = parser.build( Factory );
-
-    console.log( result );
     assert.match( result, /\s*namespace\s+bla\s*{\s*void\s+foo\s*\(\s*\)\s*;\s*}.*/ );
   }
 

@@ -89,6 +89,7 @@ function Builder(emitter)
 			instance.namespaces[context.name] = {
 				namespaces: builder.namespaces,
 				types: builder.types,
+				functions: builder.functions,
 			};
 		} );
 
