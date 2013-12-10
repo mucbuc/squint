@@ -11,10 +11,16 @@ function checkTemplate() {
 	test( singleParameter );
 	test( multipleParameters );
 	test( macroParameters );
+	test( templateNestedParameters );
+
+	function templateNestedParameters(emitter, parser) {
+
+		emitter.expect( 'template parameters', 'template<typename>, template<typename>' );
+		parser.process( 'template< template< typename >, template< typename > >;', emitter );
+	}
 
 	function macroParameters(emitter, parser) {
 		
-		var builder = new Template( emitter ); 
 		emitter.expect( 'template parameters', 'MACRO(), MACRO' );
 		parser.process( 'template< MACRO(), MACRO >;', emitter );
 
@@ -26,8 +32,7 @@ function checkTemplate() {
 	}
 
 	function multipleParameters(emitter, parser) {
-
-		var builder = new Template( emitter ); 
+		
 		emitter.expect( 'template parameters', 'class A, class B' );
 		parser.process( 'template< class A, class B>;', emitter );
 
@@ -49,7 +54,6 @@ function checkTemplate() {
 
 	function singleParameter(emitter, parser) {
 
-	    var builder = new Template( emitter ); 
 	    emitter.expect( 'template parameters', 'class A' );
 	  	parser.process( 'template<class A>{', emitter );
 

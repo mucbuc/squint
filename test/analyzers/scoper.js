@@ -10,8 +10,21 @@ function testScoper() {
 
 	test( basicScope );
 	test( nestedScopes );
-	test( aggregateScopes ); 
+	test( aggregateScopes );
+	test( alternativeScopeTag );
+
+	function alternativeScopeTag( emitter ) {
+		var parser = new Scoper( emitter, '<' );
+
+		emitter.expect( 'open scope', 'template' );
+		emitter.expect( 'close scope', 'typename' );
+		parser.process( 'template< typename >', emitter );
 	
+		emitter.expect( 'open scope', 'template' );
+		emitter.expect( 'close scope', 'template<typename>' );
+		parser.process( 'template< template< typename > >', emitter );
+	}	
+
 	function aggregateScopes( emitter, parser ) { 
 
 		emitter.expectNot( 'open' );

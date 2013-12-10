@@ -21,7 +21,7 @@ function Scoper( emitter, openToken, closeToken ) {
 		if (!depth)
 			emitter.emit( 'open scope', code.trim() );
 		else
-			content += code.trim() + '{'; 
+			content += code.trim() + openToken; 
 		++depth;
 	} ); 
 
@@ -33,7 +33,7 @@ function Scoper( emitter, openToken, closeToken ) {
 			content = '';
 		}
 		else {
-			content += code.trim() + '}';
+			content += code.trim() + closeToken;
 		}
 	} );
 
