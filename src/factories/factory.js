@@ -6,7 +6,10 @@ notes:
 	- doesn't holds product specific states
 */ 
 
-Factory = {
+function Factory() {
+};
+
+Factory.prototype = {
 	indent: function( code ) {
 		code = '\t' + code;
 		return code.replace( /\n/g, '\n\t' ); 

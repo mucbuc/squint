@@ -16,7 +16,6 @@ var assert = require( 'assert' )
 
 assert( typeof Forward !== 'undefined' );
 
-
 exports.stripArrayInitializerBlocks = function( code ) {
   code = code.replace( arrayInitBlock, ';' );
   return code;
@@ -50,7 +49,7 @@ exports.forward = function( code, done ) {
     , parser = new Builder( emitter );
 
   parser.process( code );
-  done( parser.build( Forward ) );
+  done( parser.build( new Forward() ) );
 };
 
 exports.declare = function( code, done ) { 

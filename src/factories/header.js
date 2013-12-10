@@ -1,15 +1,21 @@
-var Header = require( './factory' ).Factory
+var Factory = require( './factory' ).Factory
 
-Header.function = function( name ) {
-	return '\n' + name + ';'; 
+function Header() {
+	
+	Factory.call( this );
+
+	this.function = function( name ) {
+		return '\n' + name + ';'; 
+	}; 
+	this.type = function( name, code ) {
+		var result = this.openScope( name );
+		if (code.length)
+			result += this.indent( code );
+		result += this.closeScope( name ) + ';';
+		return result;
+	};
 };
 
-Header.type = function( name, code ) {
-	var result = this.openScope( name );
-	if (code.length)
-		result += this.indent( code );
-	result += this.closeScope( name ) + ';';
-	return result;
-};
+Header.prototype = new Factory();
 
 exports.Header = Header; 

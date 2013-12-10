@@ -1,11 +1,17 @@
-var Implement = require( './factory' ).Factory
+var Factory = require( './factory' ).Factory
 
-Implement.function = function( name ) {
-	return '\n' + name + ';'; 
+function Implement() {
+
+	Factory.call( this );
+
+	this.function = function( name ) {
+		return '\n' + name + ';'; 
+	};
+	this.type = function() {
+		return '';
+	};
 };
 
-Implement.type = function() {
-	return '';
-};
+Implement.prototype = new Factory();
 
 exports.Implement = Implement; 

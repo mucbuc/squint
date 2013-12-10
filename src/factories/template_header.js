@@ -1,11 +1,17 @@
-var TemplateHeader = require( './factory' ).Factory
+var Factory = require( './factory' ).Factory
 
-TemplateHeader.function = function( name ) {
-	return '\n' + name + ';'; 
+function TemplateHeader() {
+
+	Factory.call( this );
+
+	this.function = function( name ) {
+		return '\n' + name + ';'; 
+	};
+	this.type = function() {
+		return '';
+	};
 };
 
-TemplateHeader.type = function() {
-	return '';
-};
+TemplateHeader.prototype = new Factory();
 
 exports.TemplateHeader = TemplateHeader; 

@@ -41,6 +41,7 @@ function Builder(emitter)
 		}
 
 		function buildTypes( obj ) {
+			
 			if (obj.hasOwnProperty( 'types' )) {
 				for (var p in obj.types) {
 					var content = _build( factory, obj.types[p] );
