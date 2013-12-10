@@ -48,8 +48,6 @@ function testBuilder() {
     parser.process( 'class bla { void foo(); };' );
     result = parser.build( new Implement() );
     assert.match( result, /\s*void\s+bla::foo\s*\(\s*\)\s*{\s*}/ );
-
-    console.log( result );
   } 
 
   function builderBuildNestedTypes(emitter, parser) {
