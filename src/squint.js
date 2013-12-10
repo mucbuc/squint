@@ -9,7 +9,10 @@ var assert = require( 'assert' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
   , Builder = require( './builder' ).Builder
-  , Forward = require( './factories/forward' ).Forward;
+  , Forward = require( './factories/forward' ).Forward
+  , Header = require( './factories/header' ).Header
+  , Implement = require( './factories/implement' ).Implement
+  , TemplateHeader = require( './factories/template_header' ).TemplateHeader;
 
 assert( typeof Forward !== 'undefined' );
 
@@ -51,24 +54,26 @@ exports.forward = function( code, done ) {
 };
 
 exports.declare = function( code, done ) { 
-    var emitter = new events.EventEmitter()
-      , parser = new Parser()
-      , builder = new Declarer( emitter );
-  emitter.on( 'declare types', function( types ) {
-    done( types.toString().trim() );
-  } );
+  var emitter = new events.EventEmitter()
+    , parser = new Builder( emitter );
 
-  parser.process( code, emitter );
+  parser.process( code );
+  done( parser.build( Header ) );
+};
+
+exports.templateDeclare = function( code, done ) { 
+  var emitter = new events.EventEmitter()
+    , parser = new Builder( emitter );
+
+  parser.process( code );
+  done( parser.build( TemplateHeader ) );
 };
 
 exports.define = function( code, done ) { 
-    var emitter = new events.EventEmitter()
-      , parser = new Parser(emitter)
-      , builder = new Definer( emitter );
-  emitter.on( 'type implementation', function( defs ) {
-    done( defs.toString().trim() );
-  } );
+  var emitter = new events.EventEmitter()
+    , parser = new Builder( emitter );
 
-  parser.process( code, emitter );
+  parser.process( code );
+  done( parser.build( Implement ) );
 };
   
