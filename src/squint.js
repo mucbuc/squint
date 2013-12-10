@@ -57,7 +57,7 @@ exports.declare = function( code, done ) {
     , parser = new Builder( emitter );
 
   parser.process( code );
-  done( parser.build( Header ) );
+  done( parser.build( new Header() ) );
 };
 
 exports.templateDeclare = function( code, done ) { 
@@ -65,7 +65,7 @@ exports.templateDeclare = function( code, done ) {
     , parser = new Builder( emitter );
 
   parser.process( code );
-  done( parser.build( TemplateHeader ) );
+  done( parser.build( new TemplateHeader() ) );
 };
 
 exports.define = function( code, done ) { 
@@ -73,6 +73,6 @@ exports.define = function( code, done ) {
     , parser = new Builder( emitter );
 
   parser.process( code );
-  done( parser.build( Implement ) );
+  done( parser.build( new Implement() ) );
 };
   

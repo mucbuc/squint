@@ -4,11 +4,23 @@ function Implement() {
 
 	Factory.call( this );
 
-	this.function = function( name ) {
-		return '\n' + name + ';'; 
+	this.function = function( name, code ) {
+		var result = this.openScope( name ); 
+		if (code !== 'undefined')
+			result += '\n' + this.indent( code );
+		result += this.closeScope( name ); 
+		return result; 
 	};
-	this.type = function() {
-		return '';
+	this.type = function(name, code) {
+		return code;
+	};
+
+	this.defineMemberName = function( member, type ) {
+		if (typeof type !== 'undefined') {
+			return type + '::' + member;
+		}
+
+		return member; 
 	};
 };
 

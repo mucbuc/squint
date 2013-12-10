@@ -18,7 +18,24 @@ function runTest() {
   test( stripIncludes );
   test( stripArrayInitializerBlocks );
   test( stripStrings );
-  test( testForward ); 
+  test( testForward );
+  test( testDeclare );
+  test( testDefine ); 
+
+  function testDefine() {
+    squint.define( 'namespace hello { void foo(); }', function( result ) {
+      assert.match( result, /\s*namespace\s+hello\s*{\s*void\s+foo\s*\(\s*\)\s*{\s*}\s*}.*/ );
+    } ); 
+    // squint.define( 'namespace hello { struct world { void foo(); }; }', function( result ) {
+    //   console.log( result );   
+    // } ); 
+  }
+
+  function testDeclare() {
+    squint.declare( 'namespace hello { struct world {}; }', function( result ) {
+      assert.match( result, /\s*namespace\s+hello\s*{\s*struct\s+world\s*{\s*};\s*}/ ); 
+    } );
+  }
 
   function testForward() {
     squint.forward( 'namespace hello { struct world {}; }', function( result ) {

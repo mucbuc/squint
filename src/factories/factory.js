@@ -25,6 +25,9 @@ Factory.prototype = {
 		result += this.indent( code );
 		result += this.closeScope( name ) + ' // ' + name;
 		return result;
+	},
+	defineMemberName: function( member ) {
+		return member; 
 	}
 };
 

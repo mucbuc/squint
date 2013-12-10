@@ -1,4 +1,5 @@
-var events = require( 'events' )
+var assert = require( 'assert' )
+  , events = require( 'events' )
   , Declarer = require( './analyzers/declarer' ).Declarer
   , Definer = require( './analyzers/definer' ).Definer;
   
@@ -19,7 +20,7 @@ function Builder(emitter)
 		return _build( factory, instance );
 	};
 
-	function _build( factory, obj ) {
+	function _build( factory, obj, prefix ) {
 		
 		var result = '';
 
@@ -35,7 +36,8 @@ function Builder(emitter)
 		function buildFunctions( obj ) {
 			if (obj.hasOwnProperty( 'functions' )) {
 				for (var p in obj.functions) {
-					result += factory.function( p.trim(), obj.functions[p] ); 
+					var name = factory.defineMemberName( p.trim(), prefix ); 
+					result += factory.function( name, obj.functions[p] ); 
 				}
 			}
 		}
@@ -44,8 +46,9 @@ function Builder(emitter)
 			
 			if (obj.hasOwnProperty( 'types' )) {
 				for (var p in obj.types) {
-					var content = _build( factory, obj.types[p] );
-					result += factory.type( p.trim(), content );
+					var name = p.trim()
+					  , content = _build( factory, obj.types[p], name );
+					result += factory.type( name, content );
 				}
 			}
 

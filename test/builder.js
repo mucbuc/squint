@@ -32,7 +32,7 @@ function testBuilder() {
   function builderBuildNamespaceFunction(emitter, parser) {
     var result;
     parser.process( 'namespace bla{ void foo(); }' );
-    result = parser.build( new Implement() );
+    result = parser.build( new Header() );
     assert.match( result, /\s*namespace\s+bla\s*{\s*void\s+foo\s*\(\s*\)\s*;\s*}.*/ );
   }
 
