@@ -15,7 +15,7 @@ function runTest() {
   cp.fork( './analyzers/definer' ); 
   cp.fork( './analyzers/declarer' );
 //  cp.fork( 'factory' );
-  //cp.fork( 'builder' );
+  cp.fork( 'builder' );
   
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {
