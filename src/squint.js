@@ -8,7 +8,7 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , Parser = require( './parser' ).Parser
+  , Parser = require( 'mucbuc-jsthree' ).Parser
   , Forwarder = require( './builder/forwarder').Forwarder
   , Declarer = require( './builder/declarer').Declarer
   , Definer = require( './builder/definer').Definer;

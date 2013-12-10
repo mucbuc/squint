@@ -11,9 +11,9 @@ function runTest() {
 
   process.setMaxListeners( 0 );
   
-  cp.fork( 'scoper' );
-  cp.fork( 'definer' ); 
-  cp.fork( 'declarer' );
+  cp.fork( './analyzer/scoper' );
+  cp.fork( './analyzer/definer' ); 
+  cp.fork( './analyzer/declarer' );
   cp.fork( 'factory' );
   cp.fork( 'builder' );
   
