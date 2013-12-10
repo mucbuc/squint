@@ -1,7 +1,7 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Definer = require( '../../src/analyzer/definer' ).Definer;
+  , Definer = require( '../../src/analyzers/definer' ).Definer;
 
 assert( typeof Definer !== 'undefined' );
 

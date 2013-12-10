@@ -1,5 +1,5 @@
 var assert = require( 'assert' )
-  , Scoper = require( '../../src/analyzer/scoper').Scoper
+  , Scoper = require( '../../src/analyzers/scoper').Scoper
   , Base = require( '../base' ).Base;
 
 assert( typeof Scoper !== 'undefined' );

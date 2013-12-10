@@ -1,6 +1,6 @@
 var events = require( 'events' )
-  , Declarer = require( './analyzer/declarer' ).Declarer
-  , Definer = require( './analyzer/definer' ).Definer;
+  , Declarer = require( './analyzers/declarer' ).Declarer
+  , Definer = require( './analyzers/definer' ).Definer;
   
 function Builder(emitter)
 {

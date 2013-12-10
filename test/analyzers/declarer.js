@@ -1,7 +1,7 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Declarer = require( '../../src/analyzer/declarer' ).Declarer;
+  , Declarer = require( '../../src/analyzers/declarer' ).Declarer;
 
 assert( typeof Declarer !== 'undefined' );
 
