@@ -26,7 +26,9 @@ function testBuilder() {
   test( builderMemberFunctionDeclare );
   test( builderBuildNestedNamespaces );
   test( builderBuildNestedTypes );
-  test( builderBuildMemberFunctions );
+  
+  //test( builderBuildMemberFunctions );
+
   test( builderBuildNamespaceFunction ); 
 
   function builderBuildNamespaceFunction(emitter, parser) {
@@ -41,7 +43,12 @@ function testBuilder() {
     parser.process( 'struct bla { void foo(); };' );
     result = parser.build( new Header() );
     assert.match( result, /\s*struct\s+bla\s*{\s*void\s+foo\s*\(\s*\)\s*;\s*};/ );
-  }
+
+    result = parser.build( new Implement() );
+    assert.match( result, /\s*void\s+bla::foo\s*\(\s*\)\s*{\s*}/ );
+
+    console.log( result );
+  } 
 
   function builderBuildNestedTypes(emitter, parser) {
     var result;

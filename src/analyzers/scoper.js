@@ -8,8 +8,13 @@ function Scoper( emitter, openToken, closeToken ) {
 	
 	var depth = 0
 	  , content = ''
-	  , sub = new events.EventEmitter();
+	  , sub;
 
+	if (typeof emitter === 'undefined')
+		return; 
+	
+	sub = new events.EventEmitter();
+	
 	Parser.call( this, sub, initMap( openToken, closeToken ) );
 	
 	sub.on( 'open', function(code) {
