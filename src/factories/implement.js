@@ -29,7 +29,7 @@ function Implement() {
 
 			returnType = member.substr( 0, member.length - functionName.length );
 
-			return returnType + ' ' + type.replace( 'struct', '' ) + '::' + functionName;
+			return returnType + ' ' + type.replace( /struct|class/, '' ) + '::' + functionName;
 		}
 
 		return member; 

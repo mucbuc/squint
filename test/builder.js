@@ -45,6 +45,9 @@ function testBuilder() {
     result = parser.build( new Implement() );
     assert.match( result, /\s*void\s+bla::foo\s*\(\s*\)\s*{\s*}/ );
 
+    parser.process( 'class bla { void foo(); };' );
+    result = parser.build( new Implement() );
+    assert.match( result, /\s*void\s+bla::foo\s*\(\s*\)\s*{\s*}/ );
   } 
 
   function builderBuildNestedTypes(emitter, parser) {
