@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
+  , cp = require( 'child_process' )
   , Base = require( './base' ).Base
   , test = Base.test;
 
@@ -9,13 +10,12 @@ runTest();
 function runTest() {
 
   process.setMaxListeners( 0 );
-
-  require( './parser' ); 
-  require( './scoper' );
-  require( './definer' ); 
-  require( './declarer' );
-  require( './factory' );
-  require( './builder' );
+  
+  cp.fork( 'scoper' );
+  cp.fork( 'definer' ); 
+  cp.fork( 'declarer' );
+  cp.fork( 'factory' );
+  cp.fork( 'builder' );
   
   function forwardDeclarations(emitter) {
     squint.forward( 'struct hello {};', function( result ) {

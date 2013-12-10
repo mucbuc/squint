@@ -2,7 +2,7 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Test = require( 'mucbuc-jsthree' ).Test
   , finalLog = Test.finalLog
-  , Parser = require( '../src/parser' ).Parser;
+  , Parser = require( 'mucbuc-jsthree' ).Parser;
 
 var Base = {
   test: function( f, Parser_Type ) {

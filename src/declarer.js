@@ -8,7 +8,7 @@
 
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , Parser = require( './parser' ).Parser
+  , Parser = require( 'mucbuc-jsthree' ).Parser
   , Scoper = require( './scoper' ).Scoper;
 
 function Declarer(emitter) {

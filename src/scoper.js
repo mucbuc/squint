@@ -1,6 +1,8 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , Parser = require( './parser' ).Parser;
+  , Parser = require( 'mucbuc-jsthree' ).Parser;
+
+assert( typeof Parser !== 'undefined' );
 
 function Scoper( emitter, openToken, closeToken ) {
 	
