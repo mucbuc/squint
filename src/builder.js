@@ -36,7 +36,18 @@ function Builder(emitter)
 		function buildFunctions( obj ) {
 			if (obj.hasOwnProperty( 'functions' )) {
 				for (var p in obj.functions) {
-					var name = factory.defineMemberName( p.trim(), prefix ); 
+					var name = p.trim();
+
+					if (typeof prefix !== 'undefined') {
+						var matches = prefix.match( /(.*>)(.*)/ );
+
+						if (matches) {
+							assert( matches.length == 2 );
+							name = factory.defineMemberName( name, matches[0].trim(), matches[1].trim() ); 
+						}
+						else 
+							name = factory.defineMemberName( name, prefix )
+					}
 					result += factory.function( name, obj.functions[p] ); 
 				}
 			}

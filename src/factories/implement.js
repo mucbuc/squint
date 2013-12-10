@@ -1,4 +1,5 @@
-var Factory = require( './factory' ).Factory
+var assert = require( 'assert' )
+  , Factory = require( './factory' ).Factory
 
 function Implement() {
 
@@ -16,8 +17,19 @@ function Implement() {
 	};
 
 	this.defineMemberName = function( member, type ) {
+
 		if (typeof type !== 'undefined') {
-			return type + '::' + member;
+			var functionName = ''
+			  , match = member.match( /(\w+\s*\(.*)/g )
+			  , returnType
+			  , functionName; 
+
+			assert( match && match.length == 1);
+			functionName = match[0];
+
+			returnType = member.substr( 0, member.length - functionName.length );
+
+			return returnType + ' ' + type.replace( 'struct', '' ) + '::' + functionName;
 		}
 
 		return member; 
