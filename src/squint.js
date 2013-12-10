@@ -8,14 +8,11 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Forwarder = require( './builder/forwarder').Forwarder
-  , Declarer = require( './builder/declarer').Declarer
-  , Definer = require( './builder/definer').Definer;
-  
-assert( typeof Forwarder !== 'undefined' );
-assert( typeof Declarer !== 'undefined' );
-assert( typeof Definer !== 'undefined' );
+  , Builder = require( './builder' ).Builder
+  , Forward = require( './factories/forward' ).Forward;
+
+assert( typeof Forward !== 'undefined' );
+
 
 exports.stripArrayInitializerBlocks = function( code ) {
   code = code.replace( arrayInitBlock, ';' );
@@ -46,15 +43,11 @@ exports.stripComments = function( code ) {
 };
 
 exports.forward = function( code, done ) { 
-    var emitter = new events.EventEmitter()
-      , parser = new Parser()
-      , builder = new Forwarder( emitter );
-  
-  emitter.on( 'forward declare', function( types ) {
-    done( types.toString().trim() );
-  } );
+  var emitter = new events.EventEmitter()
+    , parser = new Builder( emitter );
 
-  parser.process( code, emitter );
+  parser.process( code );
+  done( parser.build( Forward ) );
 };
 
 exports.declare = function( code, done ) { 

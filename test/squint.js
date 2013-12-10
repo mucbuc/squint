@@ -1,22 +1,30 @@
 #!/usr/bin/env node
 
-var assert = require( 'assert' )
+var assert = require( 'chai' ).assert
   , squint = require( '../src/squint' )
-  , Test = require( 'mucbuc-jsthree' ).Test;
+  , Test = require( 'mucbuc-jsthree' ).Test
+  , test = require( './base').test;
 
 assert( typeof squint != 'undefined' );
 
 process.setMaxListeners( 0 );
 
-testStrip();
+runTest(); 
 
-function testStrip() {
+function runTest() {
 
   test( stripComments );
   test( stripDefines );
   test( stripIncludes );
   test( stripArrayInitializerBlocks );
   test( stripStrings );
+  test( testForward ); 
+
+  function testForward() {
+    squint.forward( 'namespace hello { struct world {}; }', function( result ) {
+      assert.match( result, /\s*namespace\s+hello\s*{\s*struct\s+world;\s*}/ ); 
+    } );
+  }
 
   function stripStrings() {
     var strip = squint.stripStrings;
@@ -95,7 +103,7 @@ function testStrip() {
     assert.equal( strip( '/* text */' ), '' ); 
     assert.equal( strip( '/* text */text /*text*/' ), 'text ' ); 
   }
-
+  
   function test(f) {
     f();
     Test.finalLog( f.name + ' passed' );

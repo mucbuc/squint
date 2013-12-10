@@ -35,10 +35,7 @@ function Builder(emitter)
 		function buildFunctions( obj ) {
 			if (obj.hasOwnProperty( 'functions' )) {
 				for (var p in obj.functions) {
-					if (obj.functions[p] == 'undefined')
-						result += factory.declareFunction( p.trim() );
-					else
-						result += factory.defineFunction( p.trim(), obj.functions[p] );
+					result += factory.function( p.trim(), obj.functions[p] ); 
 				}
 			}
 		}
@@ -47,10 +44,7 @@ function Builder(emitter)
 			if (obj.hasOwnProperty( 'types' )) {
 				for (var p in obj.types) {
 					var content = _build( factory, obj.types[p] );
-					if (obj.types[p] == 'undefined')
-						result += factory.declareType( p.trim(), content );
-					else
-						result += factory.defineType( p.trim(), content );
+					result += factory.type( p.trim(), content );
 				}
 			}
 
@@ -63,7 +57,7 @@ function Builder(emitter)
 			if (obj.hasOwnProperty( 'namespaces' )) {
 				for (var p in obj.namespaces) {
 					var content = _build( factory, obj.namespaces[p] );
-					result += factory.defineNamespace( p, content ); 
+					result += factory.namespace( p, content ); 
 				}
 			}
 
