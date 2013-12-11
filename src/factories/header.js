@@ -12,7 +12,8 @@ Header.prototype.function = function( name ) {
 
 Header.prototype.type = function( name, code ) {
 	var result = this.openScope( name );
-	if (code.length)
+	if (	typeof code !== 'undefined'
+		&& 	code.length)
 		result += this.indent( code );
 	result += this.closeScope( name ) + ';';
 	return result;
