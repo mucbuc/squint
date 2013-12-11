@@ -12,7 +12,8 @@ var assert = require( 'assert' )
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
   , Implement = require( './factories/implement' ).Implement
-  , TemplateHeader = require( './factories/template_header' ).TemplateHeader;
+  , TemplateHeader = require( './factories/template_header' ).TemplateHeader
+  , Compiler = require( './analyzers/compiler' ).Compiler;
 
 assert( typeof Forward !== 'undefined' );
 
@@ -46,33 +47,49 @@ exports.stripComments = function( code ) {
 
 exports.forward = function( code, done ) { 
   var emitter = new events.EventEmitter()
-    , parser = new Builder( emitter );
+    , parser = new Compiler( emitter );
 
-  parser.process( code );
-  done( parser.build( new Forward() ) );
+  emitter.once( 'compile', function( model ) {
+    var builder = new Builder( model );
+    done( builder.build( new Forward() ) );
+  } );
+
+  parser.process( code, emitter );
 };
 
 exports.declare = function( code, done ) { 
   var emitter = new events.EventEmitter()
-    , parser = new Builder( emitter );
+    , parser = new Compiler( emitter );
 
-  parser.process( code );
-  done( parser.build( new Header() ) );
+  emitter.once( 'compile', function( model ) {
+    var builder = new Builder( model );
+    done( builder.build( new Header() ) );
+  } );
+
+  parser.process( code, emitter );
 };
 
 exports.templateDeclare = function( code, done ) { 
   var emitter = new events.EventEmitter()
-    , parser = new Builder( emitter );
+    , parser = new Compiler( emitter );
 
-  parser.process( code );
-  done( parser.build( new TemplateHeader() ) );
+  emitter.once( 'compile', function( model ) {
+    var builder = new Builder( model );
+    done( builder.build( new TemplateHeader() ) );
+  } );
+
+  parser.process( code, emitter );
 };
 
 exports.define = function( code, done ) { 
   var emitter = new events.EventEmitter()
-    , parser = new Builder( emitter );
+    , parser = new Compiler( emitter );
 
-  parser.process( code );
-  done( parser.build( new Implement() ) );
+  emitter.once( 'compile', function( model ) {
+    var builder = new Builder( model );
+    done( builder.build( new Implement() ) );
+  } );
+
+  parser.process( code, emitter );
 };
   

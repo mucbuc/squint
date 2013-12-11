@@ -1,32 +1,20 @@
-var assert = require( 'assert' )
-  , events = require( 'events' )
-  , Declarer = require( './analyzers/declarer' ).Declarer
-  , Definer = require( './analyzers/definer' ).Definer;
+var assert = require( 'assert' );
   
-function Builder(emitter)
+function Builder( model )
 {
-	var declarer = new Declarer(emitter)
-	  , definer = new Definer(emitter)
-	  , instance = this;
-
-	init(); 
-
-	this.process = function( code ) { 
-		definer.process( code );
-		declarer.process( code ); 
-	};
+	var instance = this;
 
 	this.build = function( factory ) {
-		return _build( factory, instance );
+		return _build( factory, model );
 	};
 
 	function _build( factory, obj, prefix ) {
-		
+
 		var result = '';
 
-		if (typeof obj === 'undefined') 
-			obj = instance;
-
+		if (typeof obj === 'undefined' )
+			obj = model;
+			
 		buildNamespaces( obj );
 		buildTypes( obj );
 		buildFunctions( obj );
@@ -81,58 +69,6 @@ function Builder(emitter)
 			if (obj.hasOwnProperty( 'functions' ))
 				buildFunctions( obj.functions );
 		}
-	}
-
-	function init() {
-
-		instance.functions = {};
-		instance.types = {};
-		instance.namespaces = {};
-
-		emitter.on( 'define namespace', function( context ) {
-			
-		 	var emitter = new events.EventEmitter()
-			  , builder = new Builder( emitter ); 
-			builder.process( context.code );
-
-			instance.namespaces[context.name] = {
-				namespaces: builder.namespaces,
-				types: builder.types,
-				functions: builder.functions,
-			};
-		} );
-
-
-		emitter.on( 'define type', function( context ) {
-
-			var emitter = new events.EventEmitter()
-			  , builder = new Builder( emitter );
-			builder.process( context.code );
-
-			instance.types[context.name] = {
-				types: builder.types,
-				functions: builder.functions
-			};
-		} );
-
-		emitter.on( 'declare type', function( name ) {
-			append( instance.types, { name: name } );
-		} );
-
-		emitter.on( 'define function', function( context ) {
-			// get rid of declarations
-			append( instance.functions, context ); 
-		} );
-
-		emitter.on( 'declare function', function( name ) {
-			append( instance.functions, { name: name } );
-		} );
-	}
-
-	function append( obj, context ) {
-		if (!obj.hasOwnProperty(context.code))
-			obj[context.name] = '';
-		obj[context.name] += context.code;
 	}
 }
 
