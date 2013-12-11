@@ -18,11 +18,4 @@ function runTest() {
   cp.fork( 'factory' );
   cp.fork( 'builder' );
   cp.fork( 'squint' );
-  
-  function forwardDeclarations(emitter) {
-    squint.forward( 'struct hello {};', function( result ) {
-      assert( result.trim() == 'struct hello' );
-      emitter.emit( 'end' );
-    } );
-  }
 }
