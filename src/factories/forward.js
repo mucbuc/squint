@@ -2,16 +2,16 @@ var Factory = require( './factory' ).Factory
 
 function Forward() {
 	Factory.call( this ); 
-
-	this.function = function( name ) {
-		return ''; 
-	}; 
-	
-	this.type = function( name ) {
-		return '\n' + name + ';';
-	};
 }
 
 Forward.prototype = new Factory();
+
+Forward.prototype.function = function( name ) {
+	return ''; 
+}; 
+
+Forward.prototype.type = function( name ) {
+	return '\n' + name + ';';
+};
 
 exports.Forward = Forward; 

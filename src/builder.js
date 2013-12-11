@@ -2,8 +2,6 @@ var assert = require( 'assert' );
   
 function Builder( model )
 {
-	var instance = this;
-
 	this.build = function( factory ) {
 		return _build( factory, model );
 	};

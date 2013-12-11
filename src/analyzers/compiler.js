@@ -10,7 +10,11 @@ function Compiler( emitter ) {
 
 	var declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
-	  , model = emptyModel();
+	  , model = {
+	  		functions: {},
+		  	types: {},
+		  	namespaces: {}
+		};
 
 	init(); 
 
@@ -70,7 +74,6 @@ function Compiler( emitter ) {
 
 		emitter.on( 'end', function() { 
 			emitter.emit( 'compile', model ); 
-			//model = emptyModel();
 		} );
 
 		function append( obj, context ) {
@@ -79,14 +82,6 @@ function Compiler( emitter ) {
 			obj[context.name] += context.code;
 		}
 	}
-
-	function emptyModel() {
-	return { 
-		functions: {},
-	  types: {},
-	  namespaces: {},
-  };
-}
 }
 
 exports.Compiler = Compiler; 
