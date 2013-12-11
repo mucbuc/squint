@@ -17,79 +17,68 @@ var assert = require( 'assert' )
 
 assert( typeof Forward !== 'undefined' );
 
-exports.stripArrayInitializerBlocks = function( code ) {
-  code = code.replace( arrayInitBlock, ';' );
-  return code;
-};
+var Squint = { 
+  stripArrayInitializerBlocks: function( code ) {
+    code = code.replace( arrayInitBlock, ';' );
+    return code;
+  },
+
+  stripStrings: function( code ) { 
+    code = code.replace( stringLiteral, '' );
+    return code;
+  },
+
+  stripDefines: function( code ) {
+    code = code.replace( defineNewLine, '' );
+    code = code.replace( define, '' );
+    code = code.replace( undefine, '' );
+    return code;
+  },
+
+  stripIncludes: function( code ) {
+    code = code.replace( include, '' );
+    return code;
+  },
+
+  stripComments: function( code ) {
+    code = code.replace( commentSingle, '' );
+    code = code.replace( commentMultiple, '' );
+    return code;
+  },
+
+  compile: function( code, done ) {
+    var emitter = new events.EventEmitter()
+      , parser = new Compiler( emitter );
+
+    emitter.once( 'compile', function( model ) {
+      done( model );
+    } );
   
-exports.stripStrings = function( code ) { 
-  code = code.replace( stringLiteral, '' );
-  return code;
-};
+    parser.process( code, emitter );
+  }, 
 
-exports.stripDefines = function( code ) {
-  code = code.replace( defineNewLine, '' );
-  code = code.replace( define, '' );
-  code = code.replace( undefine, '' );
-  return code;
-};
+  forward: function( model, done ) { 
 
-exports.stripIncludes = function( code ) {
-  code = code.replace( include, '' );
-  return code;
-}; 
-
-exports.stripComments = function( code ) {
-  code = code.replace( commentSingle, '' );
-  code = code.replace( commentMultiple, '' );
-  return code;
-};
-
-exports.forward = function( code, done ) { 
-  var emitter = new events.EventEmitter()
-    , parser = new Compiler( emitter );
-
-  emitter.once( 'compile', function( model ) {
     var builder = new Builder( model );
     done( builder.build( new Forward() ) );
-  } );
+  },
 
-  parser.process( code, emitter );
-};
-
-exports.declare = function( code, done ) { 
-  var emitter = new events.EventEmitter()
-    , parser = new Compiler( emitter );
-
-  emitter.once( 'compile', function( model ) {
+  declare: function( model, done ) {
     var builder = new Builder( model );
     done( builder.build( new Header() ) );
-  } );
+  },
 
-  parser.process( code, emitter );
-};
-
-exports.templateDeclare = function( code, done ) { 
-  var emitter = new events.EventEmitter()
-    , parser = new Compiler( emitter );
-
-  emitter.once( 'compile', function( model ) {
+  templateDeclare: function( model, done ) { 
     var builder = new Builder( model );
     done( builder.build( new TemplateHeader() ) );
-  } );
+  },
 
-  parser.process( code, emitter );
-};
-
-exports.define = function( code, done ) { 
-  var emitter = new events.EventEmitter()
-    , parser = new Compiler( emitter );
-
-  emitter.once( 'compile', function( model ) {
+  define: function( model, done ) { 
     var builder = new Builder( model );
     done( builder.build( new Implement() ) );
-  } );
-
-  parser.process( code, emitter );
+  }
 };
-  
+
+for (var p in Squint) {
+  exports[p] = Squint[p];
+}

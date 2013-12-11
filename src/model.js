@@ -5,9 +5,7 @@ function Model() {
 	var instance = this;
 
 	this.types = {};
-
 	this.functions = {};
-
 	this.namespaces = {};
 
 	this.appendNamespace = function( name, obj ) {
