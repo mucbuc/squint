@@ -26,9 +26,10 @@ function runTest() {
     squint.define( 'namespace hello { void foo(); }', function( result ) {
       assert.match( result, /\s*namespace\s+hello\s*{\s*void\s+foo\s*\(\s*\)\s*{\s*}\s*}.*/ );
     } ); 
-    // squint.define( 'namespace hello { struct world { void foo(); }; }', function( result ) {
-    //   console.log( result );   
-    // } ); 
+
+    squint.define( 'namespace hello { struct world { void foo(); }; }', function( result ) {
+      assert.match( result, /\s*namespace\s+hello\s*{\s*void\s+world::foo\(\s*\)\s*{\s*}\s*}.*/ );
+    } ); 
   }
 
   function testDeclare() {
