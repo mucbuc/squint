@@ -1,20 +1,18 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Declarer = require( './declarer' ).Declarer
-  , Definer = require( './definer' ).Definer;
+  , Definer = require( './definer' ).Definer
+  , Model = require( '../model' ).Model;
 
 assert( typeof Declarer === 'function' ); 
 assert( typeof Definer === 'function' );
-  
+assert( typeof Model === 'function' ); 
+
 function Compiler( emitter ) {
 
 	var declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
-	  , model = {
-	  		functions: {},
-		  	types: {},
-		  	namespaces: {}
-		};
+	  , model = new Model(); 
 
 	init(); 
 
@@ -30,16 +28,10 @@ function Compiler( emitter ) {
 		 	var subEmitter = new events.EventEmitter()
 			  , compiler = new Compiler( subEmitter ); 
 			
-			subEmitter.once( 'compile', appendModel ); 
+			subEmitter.once( 'compile', function(obj) { 
+				model.appendNamespace( context.name, obj );
+			} ); 
 			compiler.process( context.code, subEmitter );
-
-			function appendModel( sub ) {
-				model.namespaces[context.name] = {
-					namespaces: sub.namespaces,
-					types: sub.types,
-					functions: sub.functions,
-				};
-			}
 		} );
 
 		emitter.on( 'define type', function( context ) {
@@ -47,40 +39,28 @@ function Compiler( emitter ) {
 			var subEmitter = new events.EventEmitter()
 			  , compiler = new Compiler( subEmitter );
 
-			subEmitter.once( 'compile', appendModel ); 
+			subEmitter.once( 'compile', function( obj ) {
+				model.appendType( context.name, obj );
+			} ); 
 
 			compiler.process( context.code, subEmitter );
-			
-			function appendModel( sub ) {
-				model.types[context.name] = {
-					types: sub.types,
-					functions: sub.functions,
-				};
-			}
-
 		} );
 
 		emitter.on( 'declare type', function( name ) {
-			append( model.types, { name: name } );
+			model.appendType( name );
 		} );
 
 		emitter.on( 'define function', function( context ) {
-			append( model.functions, context ); 
+			model.appendFunction( context.name, context.code );
 		} );
 
 		emitter.on( 'declare function', function( name ) {
-			append( model.functions, { name: name } );
+			model.appendFunction( name );
 		} );
 
 		emitter.on( 'end', function() { 
 			emitter.emit( 'compile', model ); 
 		} );
-
-		function append( obj, context ) {
-			if (!obj.hasOwnProperty(context.code))
-				obj[context.name] = '';
-			obj[context.name] += context.code;
-		}
 	}
 }
 

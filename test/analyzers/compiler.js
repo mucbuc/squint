@@ -14,7 +14,7 @@ function testCompiler() {
   test( namespaceDeclaration );
   test( compilerMergeProduct );
   test( compilerDeclarationsAndDefinitions );
-	test( compilerNestedNamespaces ); 
+  test( compilerNestedNamespaces ); 
   test( compilerNestedTypes ); 
   test( compilerFunctionDeclare ); 
   test( compilerFunctonDefine );
