@@ -129,22 +129,6 @@ function Builder(emitter)
 		} );
 	}
 
-	function merge( dst, src ) {
-		for (var property in src) {
-			if (dst.hasOwnProperty(property)) {
-				if (dst[property] instanceof String) {
-					dst[property] += src[property]; 
-				}
-				else {
-					merge( dst[property], src[property] );
-				}
-			}
-			else {
-				dst[property] = src[property];
-			}
-		}
-	}
-
 	function append( obj, context ) {
 		if (!obj.hasOwnProperty(context.code))
 			obj[context.name] = '';
