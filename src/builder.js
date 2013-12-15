@@ -2,6 +2,8 @@ var assert = require( 'assert' );
   
 function Builder( model )
 {
+	assert( typeof model !== 'undefined' );
+
 	this.build = function( factory ) {
 		return _build( factory, model );
 	};

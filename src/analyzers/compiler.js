@@ -25,8 +25,8 @@ function Compiler( emitter ) {
 
 		emitter.on( 'define namespace', function( context ) {
 			
-		 	var subEmitter = new events.EventEmitter()
-			  , compiler = new Compiler( subEmitter ); 
+		 	var subEmitter = Object.create( emitter.constructor.prototype )
+		 	  , compiler = new Compiler( subEmitter ); 
 			
 			subEmitter.once( 'compile', function(obj) { 
 				model.appendNamespace( context.name, obj );
@@ -36,7 +36,7 @@ function Compiler( emitter ) {
 
 		emitter.on( 'define type', function( context ) {
 
-			var subEmitter = new events.EventEmitter()
+			var subEmitter = Object.create( emitter.constructor.prototype ) 
 			  , compiler = new Compiler( subEmitter );
 
 			subEmitter.once( 'compile', function( obj ) {

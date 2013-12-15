@@ -25,7 +25,7 @@ function Declarer(emitter) {
 
 	function declare(code) {
 		
-		var sub = new events.EventEmitter()
+		var sub = Object.create( emitter.constructor.prototype )  
 		  , parser = new Parser( sub );
 
 		sub.on( 'statement', function(code) {

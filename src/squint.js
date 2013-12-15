@@ -58,7 +58,6 @@ var Squint = {
   }, 
 
   forward: function( model, done ) { 
-
     var builder = new Builder( model );
     done( builder.build( new Forward() ) );
   },

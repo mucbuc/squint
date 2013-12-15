@@ -1,8 +1,7 @@
 var assert = require( 'assert' )
-  , events = require( 'events' )
   , Parser = require( 'mucbuc-jsthree' ).Parser;
 
-assert( typeof Parser !== 'undefined' );
+assert( typeof Parser === 'function' );
 
 function Scoper( emitter, openToken, closeToken ) {
 	
@@ -13,7 +12,7 @@ function Scoper( emitter, openToken, closeToken ) {
 	if (typeof emitter === 'undefined')
 		return; 
 	
-	sub = new events.EventEmitter();
+	sub = Object.create( emitter.constructor.prototype );
 	
 	Parser.call( this, sub, initMap( openToken, closeToken ) );
 	
