@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , commentSingle = new RegExp( '\/\/.*\n?', 'g' )
-  , commentMultiple = new RegExp( '\/\\*.*?\\*\/', 'mg' )
+  , commentMultiple = /\/\*[\s\S]*?\*\//mg
   , include = new RegExp( '#.*include.*\n?', 'g' )
   , defineNewLine = new RegExp( '\\\\[ \t]*\n', 'mg' )
   , define = new RegExp( '#.*define.*\s*\n?', 'g' )
