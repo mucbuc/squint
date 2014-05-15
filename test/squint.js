@@ -127,7 +127,9 @@ function runTest() {
     assert.equal( strip( '// text \ntext // text' ), 'text ' );
     
     assert.equal( strip( '/* text */' ), '' ); 
-    assert.equal( strip( '/* text */text /*text*/' ), 'text ' ); 
+    assert.equal( strip( '/* text */text /*text*/' ), 'text ' );
+
+    assert.equal( strip( '/*\ntext\n/*/' ), '' ); 
   }
   
   function test(f) {
