@@ -8,6 +8,7 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
+  , preProcessorLine = /^\s*#.*/mg
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
@@ -25,6 +26,11 @@ var Squint = {
 
   stripStrings: function( code ) { 
     code = code.replace( stringLiteral, '' );
+    return code;
+  },
+
+  stripPreprocessor: function( code ) {
+    code = code.replace( preProcessorLine, '' );
     return code;
   },
 

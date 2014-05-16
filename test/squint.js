@@ -21,6 +21,18 @@ function runTest() {
   test( testForward );
   test( testDeclare );
   test( testDefine ); 
+  test( testPreprocessor );
+
+  function testPreprocessor() {
+    var strip = Squint.stripPreprocessor;
+    
+    assert.equal( strip( '#ifndef TEExT_032_H' ), '' );
+    assert.equal( strip( '#endif' ), '' );
+    assert.equal( strip( '      #pragma dfadfasfa' ), '' );
+    assert.equal( strip( '"#pragma dfadfasfa"' ), '"#pragma dfadfasfa"' );
+    assert.equal( strip( '#ifndef E_H\n' ), '\n' );
+    assert.equal( strip( '#ifndef E_H\n#define E_H\nclass forward;' ), '\n\nclass forward;' );
+  }
 
   function testDefine() {
     Squint.compile( 'namespace hello { void foo(); }', function( result ) {
