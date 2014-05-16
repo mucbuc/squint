@@ -1,13 +1,14 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , commentSingle = new RegExp( '\/\/.*\n?', 'g' )
-  , commentMultiple = new RegExp( '\/\\*.*?\\*\/', 'mg' )
+  , commentMultiple = /\/\*[\s\S]*?\*\//mg
   , include = new RegExp( '#.*include.*\n?', 'g' )
   , defineNewLine = new RegExp( '\\\\[ \t]*\n', 'mg' )
   , define = new RegExp( '#.*define.*\s*\n?', 'g' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
+  , preProcessorLine = /^\s*#.*/mg
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
@@ -25,6 +26,11 @@ var Squint = {
 
   stripStrings: function( code ) { 
     code = code.replace( stringLiteral, '' );
+    return code;
+  },
+
+  stripPreprocessor: function( code ) {
+    code = code.replace( preProcessorLine, '' );
     return code;
   },
 
