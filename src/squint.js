@@ -28,6 +28,10 @@ var Squint = {
     return code;
   },
 
+  stripProprocessor: function( code ) {
+    return code;
+  },
+
   stripDefines: function( code ) {
     code = code.replace( defineNewLine, '' );
     code = code.replace( define, '' );

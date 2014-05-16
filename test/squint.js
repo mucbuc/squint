@@ -13,14 +13,22 @@ runTest();
 
 function runTest() {
 
-  test( stripComments );
-  test( stripDefines );
-  test( stripIncludes );
-  test( stripArrayInitializerBlocks );
-  test( stripStrings );
-  test( testForward );
-  test( testDeclare );
-  test( testDefine ); 
+  // test( stripComments );
+  // test( stripDefines );
+  // test( stripIncludes );
+  // test( stripArrayInitializerBlocks );
+  // test( stripStrings );
+  // test( testForward );
+  // test( testDeclare );
+  // test( testDefine ); 
+  test( testPreprocessor );
+
+  function testPreprocessor() {
+    var strip = Squint.stripProprocessor;
+    
+    assert.equal( strip( '#ifndef TEExT_032_H' ), '' );
+    assert.equal( strip( '#endif' ), '' );
+  }
 
   function testDefine() {
     Squint.compile( 'namespace hello { void foo(); }', function( result ) {
