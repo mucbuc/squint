@@ -13,14 +13,14 @@ runTest();
 
 function runTest() {
 
-  // test( stripComments );
-  // test( stripDefines );
-  // test( stripIncludes );
-  // test( stripArrayInitializerBlocks );
-  // test( stripStrings );
-  // test( testForward );
-  // test( testDeclare );
-  // test( testDefine ); 
+  test( stripComments );
+  test( stripDefines );
+  test( stripIncludes );
+  test( stripArrayInitializerBlocks );
+  test( stripStrings );
+  test( testForward );
+  test( testDeclare );
+  test( testDefine ); 
   test( testPreprocessor );
 
   function testPreprocessor() {
@@ -28,6 +28,9 @@ function runTest() {
     
     assert.equal( strip( '#ifndef TEExT_032_H' ), '' );
     assert.equal( strip( '#endif' ), '' );
+    assert.equal( strip( '      #pragma dfadfasfa' ), '' );
+    assert.equal( strip( '"#pragma dfadfasfa"' ), '"#pragma dfadfasfa"' );
+
   }
 
   function testDefine() {

@@ -9,7 +9,7 @@ if (process.argv.length == 3) {
 		
 		var cleaned = squint.stripComments( data.toString() );
 		cleaned = squint.stripDefines( cleaned );
-		cleaned = squint.stripIncludes( cleaned ); 
+		cleaned = squint.stripPreprocessor( cleaned ); 
 		cleaned = squint.stripStrings( cleaned );
 		squint.compile( cleaned, function( model ) {
   			console.log( model );
