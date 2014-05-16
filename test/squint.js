@@ -13,24 +13,25 @@ runTest();
 
 function runTest() {
 
-  test( stripComments );
-  test( stripDefines );
-  test( stripIncludes );
-  test( stripArrayInitializerBlocks );
-  test( stripStrings );
-  test( testForward );
-  test( testDeclare );
-  test( testDefine ); 
+  // test( stripComments );
+  // test( stripDefines );
+  // test( stripIncludes );
+  // test( stripArrayInitializerBlocks );
+  // test( stripStrings );
+  // test( testForward );
+  // test( testDeclare );
+  // test( testDefine ); 
   test( testPreprocessor );
 
   function testPreprocessor() {
-    var strip = Squint.stripProprocessor;
+    var strip = Squint.stripPreprocessor;
     
     assert.equal( strip( '#ifndef TEExT_032_H' ), '' );
     assert.equal( strip( '#endif' ), '' );
     assert.equal( strip( '      #pragma dfadfasfa' ), '' );
     assert.equal( strip( '"#pragma dfadfasfa"' ), '"#pragma dfadfasfa"' );
-
+    assert.equal( strip( '#ifndef E_H\n' ), '\n' );
+    assert.equal( strip( '#ifndef E_H\n#define E_H\nclass forward;' ), 'class forward;' );
   }
 
   function testDefine() {

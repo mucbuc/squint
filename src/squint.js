@@ -29,7 +29,7 @@ var Squint = {
     return code;
   },
 
-  stripProprocessor: function( code ) {
+  stripPreprocessor: function( code ) {
     code = code.replace( preProcessorLine, '' );
     return code;
   },
