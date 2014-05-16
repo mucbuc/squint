@@ -8,7 +8,7 @@ var assert = require( 'assert' )
   , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , preProcessorLine = /^\s*#.*/g
+  , preProcessorLine = /^\s*#.*/mg
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
