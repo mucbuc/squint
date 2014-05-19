@@ -9,6 +9,7 @@ var assert = require( 'assert' )
   , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
   , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
   , preProcessorLine = /^\s*#.*/mg
+  , typeDef = /typedef.*?;/mg
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
@@ -18,7 +19,13 @@ var assert = require( 'assert' )
 
 assert( typeof Forward !== 'undefined' );
 
-var Squint = { 
+var Squint = {
+
+  stripTypedefs: function( code ) {
+    code = code.replace( typeDef, '' );
+    return code;
+  },
+
   stripArrayInitializerBlocks: function( code ) {
     code = code.replace( arrayInitBlock, ';' );
     return code;

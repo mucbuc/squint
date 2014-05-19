@@ -13,6 +13,7 @@ runTest();
 
 function runTest() {
 
+  test( stripTypedefs );
   test( stripComments );
   test( stripDefines );
   test( stripIncludes );
@@ -22,6 +23,11 @@ function runTest() {
   test( testDeclare );
   test( testDefine ); 
   test( testPreprocessor );
+
+  function stripTypedefs() {
+    var strip = Squint.stripTypedefs;
+    assert.equal( strip( 'typedef str::string string_type;' ), '' );
+  }
 
   function testPreprocessor() {
     var strip = Squint.stripPreprocessor;
