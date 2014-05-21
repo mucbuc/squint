@@ -10,6 +10,7 @@ testType();
 testFunction();
 
 function testFunction() {
+
 	test( defineFunction );
 
 	function defineFunction(emitter, parser) {
@@ -21,6 +22,9 @@ function testFunction() {
 		
 		emitter.expect( 'define function', { name: 'void fool()', code: 'do nothing' } );
 		parser.process( 'void fool() { do nothing }' );
+ 
+		emitter.expect( 'define function', { name: 'hello::hello()', code: 'bla bla' } );
+		parser.process( 'hello::hello() : base() {bla bla}' );
 	}
 }
 
