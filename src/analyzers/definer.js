@@ -26,8 +26,12 @@ function Definer(emitter) {
 			initDefine( 'type' );
 		else if (isFunction(code)) {
 			var matches = name.match( /(.*\))\s*:(.*)/, ')' );
-			name = matches[0];
-			initDefine( 'function', matches[1] );
+			if (matches) {
+				name = matches[1];
+				initDefine( 'function', matches[2].trim() );
+			}
+			else 
+				initDefine( 'function' );
 		}
 
 		function initDefine( type, initializers ) {
@@ -36,7 +40,7 @@ function Definer(emitter) {
 				emitter.emit( 'define ' + type, { 
 					name: name, 
 					code: code.trim(), 
-					initializers: initializers.trim() 
+					initializers: initializers
 				} );
 			} );
 		}
