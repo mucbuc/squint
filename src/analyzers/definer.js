@@ -19,20 +19,25 @@ function Definer(emitter) {
 	emitter.on( 'open scope', function( code ) {
 
 		var name = code.replace( /.*?;/, '' ).trim();
-		
+			
 		if (isNamespace(code)) 
 			initDefine( 'namespace' ); 
 		else if (isType(code)) 
 			initDefine( 'type' );
 		else if (isFunction(code)) {
-			name = name.replace( /\)\s*:.*/, ')' );
-			initDefine( 'function' );
+			var matches = name.match( /(.*\))\s*:(.*)/, ')' );
+			name = matches[0];
+			initDefine( 'function', matches[1] );
 		}
 
-		function initDefine( type ) {
+		function initDefine( type, initializers ) {
 			
 			emitter.once( 'close scope', function( code ) {
-				emitter.emit( 'define ' + type, { name: name, code: code.trim() } );
+				emitter.emit( 'define ' + type, { 
+					name: name, 
+					code: code.trim(), 
+					initializers: initializers.trim() 
+				} );
 			} );
 		}
 
