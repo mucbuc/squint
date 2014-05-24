@@ -8,16 +8,6 @@ assert( typeof Definer !== 'undefined' );
 testNamespace();
 testType(); 
 testFunction();
-testTypedef();
-
-function testTypedef() {
-	test( defineTypedef ); 
-
-	function defineTypedef(emitter, parser) {
-		emitter.expect( 'define typedef', { name: 'temp', code: 'typedef string string_type;' } );
-		parser.process( 'typedef string string_type;' ); 
-	}
-}	
 
 function testFunction() {
 

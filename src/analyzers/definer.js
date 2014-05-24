@@ -8,9 +8,14 @@
 
 
 var assert = require( 'assert' )
-  , Scoper = require( './scoper' ).Scoper;
+  , Scoper = require( './scoper' ).Scoper
+  , regexMap = require( '../regexmap' ).regexMap;
 
 assert( typeof Scoper === 'function' );
+assert( typeof regexMap !== 'undefined' );
+assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
+assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
+
 
 function Definer(emitter) {
 	
@@ -18,14 +23,16 @@ function Definer(emitter) {
 
 	emitter.on( 'open scope', function( code ) {
 
-		var name = code.replace( /.*?;/, '' ).trim();
-			
+		assert( code.search(  /.*?;/ ) === -1 ); // TODO: write test for this
+		
+		var name = code.trim();
+
 		if (isNamespace(code)) 
 			initDefine( 'namespace', name ); 
 		else if (isType(code)) 
-			initDefine( 'type', name, name.match( /(.*)\s*:(.*)/, '' ) );
+			initDefine( 'type', name, name.match( regexMap.typeDefinitionSplitter, '' ) );
 		else if (isFunction(code)) 
-			initDefine( 'function', name, name.match( /(.*\))\s*:(.*)/, '' ) );
+			initDefine( 'function', name, name.match( regexMap.constructorSplitter, '' ) );
 
 		function isFunction( code ) {
 			return code[code.length - 1] == ')';
@@ -53,19 +60,6 @@ function Definer(emitter) {
 						code: code 
 					} );
 			} );
-		}
-	} ); 
-
-	emitter.on( 'end', function( code ) {
-		if (isTypedef(code)) {
-			emitter.emit( 'define typedef', { 
-				name: 'temp',
-				code: code 
-			} );
-		}
-
-		function isTypedef( code ) {
-			return code.search( /typedef/ ) != -1; 
 		}
 	} ); 
 }

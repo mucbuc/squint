@@ -35,6 +35,13 @@ function Declarer(emitter) {
 			else if (isFunctionDeclaration(code)) { 
 				emitter.emit( 'declare function', code );
 			}	
+			else if (isTypedef(code)) {
+				emitter.emit( 'define typedef', code ); 
+			}
+		
+			function isTypedef( code ) {
+				return code.search( /typedef/ ) != -1; 
+			}
 
 			function isFunctionDeclaration(code) {
 				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
@@ -48,7 +55,6 @@ function Declarer(emitter) {
 		parser.process( code );
 	}
 }
-
 Declarer.prototype = new Scoper();
 
 exports.Declarer = Declarer;
