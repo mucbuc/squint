@@ -1,61 +1,52 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
-  , commentSingle = new RegExp( '\/\/.*\n?', 'g' )
-  , commentMultiple = /\/\*[\s\S]*?\*\//mg
-  , include = new RegExp( '#.*include.*\n?', 'g' )
-  , defineNewLine = new RegExp( '\\\\[ \t]*\n', 'mg' )
-  , define = new RegExp( '#.*define.*\s*\n?', 'g' )
-  , undefine = new RegExp( '#.*undef.*\n?', 'mg' )
-  , stringLiteral = new RegExp( '".*?([^\\\\]")', 'g' )
-  , arrayInitBlock = RegExp( '\\s*=.*?;', 'g' )
-  , preProcessorLine = /^\s*#.*/mg
-  , typeDef = /typedef.*?;/mg
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
   , Implement = require( './factories/implement' ).Implement
   , TemplateHeader = require( './factories/template_header' ).TemplateHeader
-  , Compiler = require( './analyzers/compiler' ).Compiler;
+  , Compiler = require( './analyzers/compiler' ).Compiler
+  , regexMap = require( './regexmap' ).regexMap;
 
 assert( typeof Forward !== 'undefined' );
 
 var Squint = {
 
   stripTypedefs: function( code ) {
-    code = code.replace( typeDef, '' );
+    code = code.replace( regexMap.typeDef, '' );
     return code;
   },
 
   stripArrayInitializerBlocks: function( code ) {
-    code = code.replace( arrayInitBlock, ';' );
+    code = code.replace( regexMap.arrayInitBlock, ';' );
     return code;
   },
 
   stripStrings: function( code ) { 
-    code = code.replace( stringLiteral, '' );
+    code = code.replace( regexMap.stringLiteral, '' );
     return code;
   },
 
   stripPreprocessor: function( code ) {
-    code = code.replace( preProcessorLine, '' );
+    code = code.replace( regexMap.preProcessorLine, '' );
     return code;
   },
 
   stripDefines: function( code ) {
-    code = code.replace( defineNewLine, '' );
-    code = code.replace( define, '' );
-    code = code.replace( undefine, '' );
+    code = code.replace( regexMap.defineNewLine, '' );
+    code = code.replace( regexMap.define, '' );
+    code = code.replace( regexMap.undefine, '' );
     return code;
   },
 
   stripIncludes: function( code ) {
-    code = code.replace( include, '' );
+    code = code.replace( regexMap.include, '' );
     return code;
   },
 
   stripComments: function( code ) {
-    code = code.replace( commentSingle, '' );
-    code = code.replace( commentMultiple, '' );
+    code = code.replace( regexMap.commentSingle, '' );
+    code = code.replace( regexMap.commentMultiple, '' );
     return code;
   },
 
