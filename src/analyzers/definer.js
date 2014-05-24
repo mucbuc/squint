@@ -23,16 +23,15 @@ function Definer(emitter) {
 		if (isNamespace(code)) 
 			initDefine( 'namespace', name ); 
 		else if (isType(code)) 
-			initDefine( 'type', name );
+			initDefine( 'type', name, name.match( /(.*)\s*:(.*)/, '' ) );
 		else if (isFunction(code)) 
-			initDefine( 'function', name );
+			initDefine( 'function', name, name.match( /(.*\))\s*:(.*)/, '' ) );
 		
-		function initDefine( type, name ) {
+		function initDefine( type, name, matches ) {
 			emitter.once( 'close scope', function( code ) {
-				var matches = name.match( /(.*\))\s*:(.*)/, '' );
 				if (matches)
 					emitter.emit( 'define ' + type, { 
-						name: matches[1],
+						name: matches[1].trim(),
 						code: code, 
 						meta: matches[2].trim(), 
 					} );
