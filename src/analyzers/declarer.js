@@ -34,7 +34,7 @@ function Declarer(emitter) {
 			}
 			else if (isFunctionDeclaration(code)) { 
 				emitter.emit( 'declare function', code );
-			}	
+			} 
 			else if (isTypedef(code)) {
 				emitter.emit( 'define typedef', code ); 
 			}
@@ -42,7 +42,7 @@ function Declarer(emitter) {
 			function isTypedef( code ) {
 				return code.search( /typedef/ ) != -1; 
 			}
-
+				
 			function isFunctionDeclaration(code) {
 				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
 			}

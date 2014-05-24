@@ -23,9 +23,7 @@ function Definer(emitter) {
 
 	emitter.on( 'open scope', function( code ) {
 
-		assert( code.search(  /.*?;/ ) === -1 ); // TODO: write test for this
-		
-		var name = code.trim();
+		var name = code.replace(  /.*?;/, '' ).trim();
 
 		if (isNamespace(code)) 
 			initDefine( 'namespace', name ); 
@@ -33,7 +31,7 @@ function Definer(emitter) {
 			initDefine( 'type', name, name.match( regexMap.typeDefinitionSplitter, '' ) );
 		else if (isFunction(code)) 
 			initDefine( 'function', name, name.match( regexMap.constructorSplitter, '' ) );
-
+		
 		function isFunction( code ) {
 			return code[code.length - 1] == ')';
 		}
@@ -61,7 +59,34 @@ function Definer(emitter) {
 					} );
 			} );
 		}
-	} ); 
+	} );
+	
+/*
+
+else 
+		
+
+
+	emitter.on( 'end', parseTypedefs ); 
+	emitter.on( 'statement', parseTypedefs ); 
+
+	function parseTypedefs( code ) {
+
+		console.log( 'parseTypedefs', code );
+
+		if (isTypedef(code)) {
+			emitter.emit( 'define typedef', { 
+				name: 'temp',
+				code: code 
+			} );
+		}
+
+		function isTypedef( code ) {
+			return code.search( /typedef/ ) != -1; 
+		}
+	}
+*/ 
+
 }
 
 Definer.prototype = new Scoper();

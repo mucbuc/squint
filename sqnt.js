@@ -11,7 +11,7 @@ if (process.argv.length == 3) {
 		//cleaned = squint.stripDefines( cleaned );
 		cleaned = squint.stripPreprocessor( cleaned ); 
 		cleaned = squint.stripStrings( cleaned );
-		cleaned = squint.stripTypedefs( cleaned ); 
+		//cleaned = squint.stripTypedefs( cleaned ); 
 		squint.compile( cleaned, function( model ) {
   			console.log( model );
   		} );
