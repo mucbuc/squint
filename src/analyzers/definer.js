@@ -21,27 +21,26 @@ function Definer(emitter) {
 		var name = code.replace( /.*?;/, '' ).trim();
 			
 		if (isNamespace(code)) 
-			initDefine( 'namespace' ); 
+			initDefine( 'namespace', name ); 
 		else if (isType(code)) 
-			initDefine( 'type' );
-		else if (isFunction(code)) {
-			var matches = name.match( /(.*\))\s*:(.*)/, ')' );
-			if (matches) {
-				name = matches[1];
-				initDefine( 'function', matches[2].trim() );
-			}
-			else 
-				initDefine( 'function' );
-		}
-
-		function initDefine( type, initializers ) {
-			
+			initDefine( 'type', name );
+		else if (isFunction(code)) 
+			initDefine( 'function', name );
+		
+		function initDefine( type, name ) {
 			emitter.once( 'close scope', function( code ) {
-				emitter.emit( 'define ' + type, { 
-					name: name, 
-					code: code.trim(), 
-					initializers: initializers
-				} );
+				var matches = name.match( /(.*\))\s*:(.*)/, '' );
+				if (matches)
+					emitter.emit( 'define ' + type, { 
+						name: matches[1],
+						code: code, 
+						meta: matches[2].trim(), 
+					} );
+				else 
+					emitter.emit( 'define ' + type, { 
+						name: name,
+						code: code 
+					} );
 			} );
 		}
 
