@@ -26,7 +26,19 @@ function Definer(emitter) {
 			initDefine( 'type', name, name.match( /(.*)\s*:(.*)/, '' ) );
 		else if (isFunction(code)) 
 			initDefine( 'function', name, name.match( /(.*\))\s*:(.*)/, '' ) );
-		
+
+		function isFunction( code ) {
+			return code[code.length - 1] == ')';
+		}
+
+		function isType( code ) {
+			return code.search( /(struct|class)/ ) != -1; 
+		}
+
+		function isNamespace( code ) {
+			return code.indexOf( 'namespace' ) == 0;
+		}
+
 		function initDefine( type, name, matches ) {
 			emitter.once( 'close scope', function( code ) {
 				if (matches)
@@ -42,19 +54,19 @@ function Definer(emitter) {
 					} );
 			} );
 		}
+	} ); 
 
-		function isFunction( code ) {
-			return code[code.length - 1] == ')';
+	emitter.on( 'end', function( code ) {
+		if (isTypedef(code)) {
+			emitter.emit( 'define typedef', { 
+				name: 'temp',
+				code: code 
+			} );
 		}
 
-		function isType( code ) {
-			return code.search( /(struct|class)/ ) != -1; 
+		function isTypedef( code ) {
+			return code.search( /typedef/ ) != -1; 
 		}
-
-		function isNamespace( code ) {
-			return code.indexOf( 'namespace' ) == 0;
-		}
-
 	} ); 
 }
 
