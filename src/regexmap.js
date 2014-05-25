@@ -11,5 +11,5 @@ exports.regexMap = {
 	typeDef: /typedef.*?;/mg,
 	typeDefinitionSplitter: /(.*)\s*:(.*)/,
 	constructorSplitter: /(.*\))\s*:(.*)/,
-	preProcessorDirective: /^\s*#.*?[^\\]\n/mg
+	preProcessorDirectirive: /^\s*#.*\n/gm
 };

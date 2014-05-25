@@ -11,8 +11,8 @@ test( preprocessorSingleLine );
 test( preprocessorMultiLine );
 
 function preprocessorMultiLine(emitter, parser) {
-	emitter.expect( 'preprocess', '#define hello hello\\n\hello\n' );
-	parser.process( '#define hello hello\\nhello\nblblb\n' ); 
+	emitter.expect( 'preprocess', '#define hello hello\\\nhello\n' );
+	parser.process( '#define hello hello\\\nhello\n' ); 
 }
 
 function preprocessorSingleLine(emitter, parser) {
@@ -23,3 +23,4 @@ function preprocessorSingleLine(emitter, parser) {
 function test(f) {
 	Base.test( f, Preprocessor );
 }
+
