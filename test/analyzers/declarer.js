@@ -9,7 +9,7 @@ testDeclarer();
 
 function testDeclarer() {
 
-  test( typeDeclare );
+  test( declareType );
   test( declareFunction );
   test( declareNot );
   test( ignoreSubScopes );
@@ -31,7 +31,7 @@ function testDeclarer() {
     parser.process( 'void foo();' );
   }
 
-  function typeDeclare( emitter, parser ) {
+  function declareType( emitter, parser ) {
     emitter.expectNot( 'define type' );
     emitter.expect( 'declare type', 'struct bla' );
     parser.process( 'struct bla;' );

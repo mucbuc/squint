@@ -17,18 +17,29 @@ function Definer(emitter) {
 	Scoper.call( this, emitter );
 
 	emitter.on( 'open scope', function( code ) {
-		
-		if (isNamespace(code)) 
-			initDefine( 'namespace' ); 
-		else if (isType(code)) 
-			initDefine( 'type' );
-		else if (isFunction(code)) 
-			initDefine( 'function' );
 
-		function initDefine( type ) {
-			var name = code.replace( /.*?;/, '' ).trim();
+		var name = code.replace( /.*?;/, '' ).trim();
+			
+		if (isNamespace(code)) 
+			initDefine( 'namespace', name ); 
+		else if (isType(code)) 
+			initDefine( 'type', name, name.match( /(.*)\s*:(.*)/, '' ) );
+		else if (isFunction(code)) 
+			initDefine( 'function', name, name.match( /(.*\))\s*:(.*)/, '' ) );
+		
+		function initDefine( type, name, matches ) {
 			emitter.once( 'close scope', function( code ) {
-				emitter.emit( 'define ' + type, { name: name, code: code.trim() } );
+				if (matches)
+					emitter.emit( 'define ' + type, { 
+						name: matches[1].trim(),
+						code: code, 
+						meta: matches[2].trim(), 
+					} );
+				else 
+					emitter.emit( 'define ' + type, { 
+						name: name,
+						code: code 
+					} );
 			} );
 		}
 

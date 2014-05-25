@@ -10,6 +10,7 @@ testType();
 testFunction();
 
 function testFunction() {
+
 	test( defineFunction );
 
 	function defineFunction(emitter, parser) {
@@ -21,12 +22,20 @@ function testFunction() {
 		
 		emitter.expect( 'define function', { name: 'void fool()', code: 'do nothing' } );
 		parser.process( 'void fool() { do nothing }' );
+ 
+		emitter.expect( 'define function', { 
+			name: 'hello::hello()', 
+			code: 'bla bla', 
+			meta: 'base()' 
+		} );
+		parser.process( 'hello::hello() : base() {bla bla}' );
 	}
 }
 
 function testType() {
 
-	test( defineType ); 
+	test( defineType );
+	test( defineSubType );
 	
 	function defineType(emitter, parser) {
 		emitter.expectNot( 'define namespace' );
@@ -37,6 +46,11 @@ function testType() {
 	
 		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
 		parser.process( 'struct cya { yes}' );
+	}
+
+	function defineSubType( emitter, parser ) {
+		emitter.expect( 'define type', { name: 'struct cya', code: 'yes', meta: 'blu' } );
+		parser.process( 'struct cya : blu { yes }' );
 	}
 }
 
