@@ -12,12 +12,12 @@ test( preprocessorMultiLine );
 
 function preprocessorMultiLine(emitter, parser) {
 	emitter.expect( 'preprocess', '#define hello hello\\n\hello\n' );
-	parser.process( '#define hello hello\\nhello\n' ); 
+	parser.process( '#define hello hello\\nhello\nblblb\n' ); 
 }
 
 function preprocessorSingleLine(emitter, parser) {
 	emitter.expect( 'preprocess', '#define hello hello\n' );
-	parser.process( '#define hello hello\n' ); 
+	parser.process( '#define hello hello\nasdfaasdf\n' ); 
 }
 
 function test(f) {
