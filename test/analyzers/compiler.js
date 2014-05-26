@@ -21,38 +21,17 @@ function testCompiler() {
 	test( compilerFunctionDeclare ); 
 	test( compilerFunctonDefine );
 	test( compilerMemberFunctionDeclare );
-  // test( declareTypeAfterPreproesorDirective ); 
-  // test( declareTypeAfterPreproesorDirectives ); 
+  test( declareTypeAfterPreproesorDirective ); 
+  test( declareTypeAfterPreproesorDirectives ); 
 
   function declareTypeAfterPreproesorDirectives( emitter, parser ) {
-    
-  	emitter.on( 'compile', function( model ) {
-		var obj;
-	    assert( model.hasOwnProperty( 'types' ) );
-	    obj = model.types;
-
-	    assert( obj.hasOwnProperty( 'struct bla' ) ); 
-	    obj = obj[ 'struct bla' ];
-
-	    assert.deepEqual( obj, 'undefined' );
-	} ); 
-
-    parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;', emitter );
+   	emitter.expect( 'declare type', 'struct bla' );
+	  parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;', emitter );
   }
   
   function declareTypeAfterPreproesorDirective( emitter, parser ) {
-    emitter.on( 'compile', function( model ) {
-		var obj;
-	    assert( model.hasOwnProperty( 'types' ) );
-	    obj = model.types;
-
-	    assert( obj.hasOwnProperty( 'struct bla' ) ); 
-	    obj = obj[ 'struct bla' ];
-
-	    assert.deepEqual( obj, 'undefined' );
-	} ); 
-
-    parser.process( '#define hello asd\nstruct bla;', emitter );
+    emitter.expect( 'declare type', 'struct bla' );
+  	parser.process( '#define hello asd\nstruct bla;', emitter );
   }
 
   function compilerMemberFunctionDeclare(emitter, parser) {
