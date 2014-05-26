@@ -1,9 +1,13 @@
+#!/usr/bin/env node
+
 var assert = require( 'chai' ).assert
   , events = require( 'events' )
   , Compiler = require( '../../src/analyzers/compiler' ).Compiler
   , Base = require( '../base' ).Base;
 
 assert( typeof Compiler === 'function' );
+
+process.setMaxListeners( 0 );
 
 testCompiler();
 
@@ -19,7 +23,39 @@ function testCompiler() {
   test( compilerFunctionDeclare ); 
   test( compilerFunctonDefine );
   test( compilerMemberFunctionDeclare );
-  test( compilerTypedef ); 
+  test( declareTypeAfterPreproesorDirective ); 
+  test( declareTypeAfterPreproesorDirectives ); 
+
+  function declareTypeAfterPreproesorDirectives( emitter, parser ) {
+    
+  	emitter.on( 'compile', function( model ) {
+		var obj;
+	    assert( model.hasOwnProperty( 'types' ) );
+	    obj = model.types;
+
+	    assert( obj.hasOwnProperty( 'struct bla' ) ); 
+	    obj = obj[ 'struct bla' ];
+
+	    assert.deepEqual( obj, 'undefined' );
+	} ); 
+
+    parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;', emitter );
+  }
+  
+  function declareTypeAfterPreproesorDirective( emitter, parser ) {
+    emitter.on( 'compile', function( model ) {
+		var obj;
+	    assert( model.hasOwnProperty( 'types' ) );
+	    obj = model.types;
+
+	    assert( obj.hasOwnProperty( 'struct bla' ) ); 
+	    obj = obj[ 'struct bla' ];
+
+	    assert.deepEqual( obj, 'undefined' );
+	} ); 
+
+    parser.process( '#define hello asd\nstruct bla;', emitter );
+  }
 
   function compilerMemberFunctionDeclare(emitter, parser) {
     

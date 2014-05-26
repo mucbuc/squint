@@ -9,8 +9,7 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Scoper = require( './scoper' ).Scoper
-  , Preprocessor = require( './preprocessor' ).Preprocessor;
+  , Scoper = require( './scoper' ).Scoper;
 
 function Declarer(emitter) {
 
@@ -30,30 +29,20 @@ function Declarer(emitter) {
 		  , parser = new Parser( sub );
 
 		sub.on( 'statement', function(code) {
-			var subEmitter = Object.create( emitter.constructor.prototype )
-			  , preprocessor = new Preprocessor( subEmitter ); 
-			
-			subEmitter.on( 'preprocess', function( prepCode ) {
-				code = code.replace( prepCode, '' ).trim();
+			if (isType(code)) {
+				emitter.emit( 'declare type', code );
+			}
+			else if (isFunctionDeclaration(code)) { 
+				emitter.emit( 'declare function', code );
+			} 
+				
+			function isFunctionDeclaration(code) {
+				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
+			}
 
-				if (isType(code)) {
-					emitter.emit( 'declare type', code );
-				}
-				else if (isFunctionDeclaration(code)) { 
-					emitter.emit( 'declare function', code );
-				} 
-					
-				function isFunctionDeclaration(code) {
-					return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
-				}
-
-				function isType() {
-					return code.search( /(struct|class)/ ) != -1; 
-				}
-			} );
-
-			preprocessor.process( code ); 
-			
+			function isType() {
+				return code.search( /(struct|class)/ ) != -1; 
+			}
 		} );
 
 		parser.process( code );

@@ -2,11 +2,13 @@ var assert = require( 'assert' )
   , events = require( 'events' )
   , Declarer = require( './declarer' ).Declarer
   , Definer = require( './definer' ).Definer
+  , Preprocessor = require( './preprocessor' ).Preprocessor
   , Model = require( '../model' ).Model;
 
 assert( typeof Declarer === 'function' ); 
 assert( typeof Definer === 'function' );
 assert( typeof Model === 'function' ); 
+assert( typeof Preprocessor !== 'undefined' );
 
 function Compiler( emitter ) {
 
@@ -16,9 +18,14 @@ function Compiler( emitter ) {
 
 	init(); 
 
-	this.process = function( code ) { 
-		definer.process( code );
-		declarer.process( code ); 
+	this.process = function( code ) {
+		var subEmitter = Object.create( emitter.constructor.prototype )
+		  , preprocessor = new Preprocessor( subEmitter ); 
+		subEmitter.on( 'preprocess', function( prepCode ) {
+			code = code.replace( prepCode, '' ).trim();
+			definer.process( code );
+			declarer.process( code ); 
+		} );
 	};
 
 	function init() {
