@@ -72,6 +72,9 @@ function testNamespace() {
 	
 		emitter.expect( 'define namespace', { name: 'namespace world', code: 'wtf?' } );
 		parser.process( 'namespace world { wtf? }' );
+
+		emitter.expect( 'define namespace', { name: 'namespace world', code: '' } );
+		parser.process( 'namespace world{}' );
 	}
 }
 

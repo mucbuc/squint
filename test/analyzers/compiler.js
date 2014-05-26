@@ -16,13 +16,11 @@ function testCompiler() {
 	test( compilerSingelDeclaration );
 	test( namespaceTreeCompiler );
   test( namespaceDeclaration );
-  // test( compilerMergeProduct );
-  // test( compilerDeclarationsAndDefinitions );
-  // test( compilerNestedNamespaces ); 
-  // test( compilerNestedTypes ); 
-  // test( compilerFunctionDeclare ); 
-  // test( compilerFunctonDefine );
-  // test( compilerMemberFunctionDeclare );
+	test( compilerDeclarationsAndDefinitions );
+	test( compilerNestedTypes ); 
+	test( compilerFunctionDeclare ); 
+	test( compilerFunctonDefine );
+	test( compilerMemberFunctionDeclare );
   // test( declareTypeAfterPreproesorDirective ); 
   // test( declareTypeAfterPreproesorDirectives ); 
 
@@ -58,73 +56,38 @@ function testCompiler() {
   }
 
   function compilerMemberFunctionDeclare(emitter, parser) {
-    
-	emitter.on( 'compile', function( model ) {
+    emitter.expect( 'define type' ); 
+  	emitter.once( 'define type', function( context ) {
+  		emitter.expect( 'declare function', 'void member()' ); 
+  		parser.process( context.code ); 
+  	} ); 
 
-	    var obj;
-	    assert( model.hasOwnProperty( 'types' ) );
-	    obj = model.types;
-
-	    assert( obj.hasOwnProperty( 'struct text' ) ); 
-	    obj = obj[ 'struct text' ];
-
-	    assert( obj.hasOwnProperty( 'functions' ) ); 
-	    obj = obj.functions;
-
-	    assert( obj.hasOwnProperty( 'void member()' ) );
-	    obj = obj['void member()'];
-
-	    assert.deepEqual( obj, 'undefined' );
-  
-	} );
-    
     parser.process( 'struct text{void member();};', emitter );
   }
 
   function compilerFunctonDefine(emitter, parser) {
-
-  	emitter.once( 'compile', function( model ) {
-	    var expect = { 'void foo()': 'hello' };
-	    assert.deepEqual( model.functions, expect );
-  	} );
-
-    parser.process( 'void foo() { hello }', emitter );
+  	emitter.expect( 'define function', { name: 'void foo()', code: 'hello' } ); 
+  	parser.process( 'void foo() { hello }' );
   }
 
   function compilerFunctionDeclare(emitter, parser) {
-    
-  	emitter.once( 'compile', function( model ) {
-	    var expect = {
-	        'void foo()': 'undefined'
-	      };
-
-	    assert.property( model, 'functions' );
-	    assert.deepEqual( model.functions, expect );
-	  } );
-
-    parser.process( 'void foo();', emitter );
-
+		emitter.expect( 'declare function', 'void foo()' );
+  	parser.process( 'void foo();' );
   }
 
 	function compilerNestedTypes(emitter, parser) {
 	    
-		emitter.once( 'compile', function( model ) {
+		emitter.expect( 'define type', { name: 'struct outside', code: 'struct inside{};' } );
+		emitter.once( 'define type', function( context ) {
+			emitter.expect( 'define type', { name: 'struct inside', code: 'struct inside{}' } ); 
+			parser.process( context.code ); 
+		}	); 	
 
-	    var obj;
-	    assert.deepProperty( model, 'types.struct outside' );
-
-	    obj = model.types[ 'struct outside' ];
-	    assert.deepProperty( obj, 'types.struct inside' );
-
-	    obj = obj.types[ 'struct inside' ];
-	    assert.isDefined( obj );
-	  } );
-
-    parser.process( 'struct outside { struct inside {}; };', emitter );
+    parser.process( 'struct outside { struct inside {}; };');
   }
 
   function compilerNestedNamespaces(emitter, parser) {
-
+  	expect( )
   	emitter.once( 'compile', function( model ) {
 	    var obj;
 	    assert.deepProperty( model, 'namespaces.namespace outside' );
@@ -136,44 +99,12 @@ function testCompiler() {
   }
 
   function compilerDeclarationsAndDefinitions(emitter, parser) {
-  
-    emitter.once( 'compile', function( model ) {
-	    assert.deepProperty( model, 'types.struct hello' );
-	    assert.deepEqual( model.types[ 'struct hello' ], 'undefined' );
-		} );
-    parser.process( 'struct hello;', emitter );
+  	
+  	emitter.expect( 'declare type', 'struct hello' ); 
+    parser.process( 'struct hello;' );
 
-		emitter.once( 'compile', function(model) {
-			assert.deepProperty( model, 'types.struct hello' );
-	    assert.isDefined( model.types['struct hello'] );
-		} );	
-		parser.process( 'struct hello{};', emitter );
-  }
-
-  function compilerMergeProduct(emitter, parser) {
-    
-    emitter.once( 'compile', function( model ) {
-	    assert.deepProperty( model, 'types.struct hello' );
-	    assert.deepEqual( model.types['struct hello'], 'undefined' );
-	  } ); 
-	  parser.process( 'struct hello;', emitter );
-
-	  emitter.once( 'compile', function( model ) {
-	 	  assert.deepProperty( model, 'types.struct world' );
-	    assert.deepEqual( model.types['struct world'], 'undefined' );
-    } );
-		parser.process( 'struct world;', emitter );
-
-		emitter.once( 'compile', function( model ) {
-			assert.isDefined( model.types['struct hello'] );
-
-			emitter.once( 'compile', function( model ) {
-				assert.isDefined( model.types['struct world'] );
-			} );
-
-			parser.process( 'struct world { moon };', emitter );
-		} );
-    parser.process( 'struct hello { world };', emitter );
+		emitter.expect( 'define type', { name: 'struct hello', code: '' } ); 
+		parser.process( 'struct hello{};' );
   }
 
   function namespaceDeclaration(emitter, parser) {
@@ -192,18 +123,17 @@ function testCompiler() {
 
   function namespaceTreeCompiler(emitter, parser) {
     
-    emitter.expect( 'define namespace' );
+    emitter.expect( 'define namespace', { name: 'namespace outside', code: 'namespace inside{}' } );
     emitter.expect( 'end' ); 
 
   	emitter.once( 'define namespace', function( context ) {
-  		assert( context.name === 'namespace outside' );
-     	emitter.expect( 'define namespace' ); // , { name: 'namespace inside', code: 'namespace inside{}' } ); 
+  		emitter.expect( 'define namespace', { name: 'namespace inside', code: '' } ); 
 			emitter.expect( 'end' ); 
 			
 			parser.process( context.code )
 		} );
 
-    parser.process( 'namespace outside{ namespace inside {} }', emitter );
+    parser.process( 'namespace outside{ namespace inside {} }' );
   } 
  
   function compilerSingelDeclaration(emitter, parser) {
