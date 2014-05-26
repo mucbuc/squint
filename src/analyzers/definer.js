@@ -24,10 +24,10 @@ function Definer(emitter) {
 
 	emitter.on( 'open scope', function( code ) {
 
-		var preper = new Preprocessor( emitter ); 
+		var preprocessor = new Preprocessor( emitter ); 
 
 		code = code.replace( /.*?;/, '' ).trim()
-		code = preper.process( code ).trim();
+		code = preprocessor.process( code ).trim();
 
 		if (isNamespace(code)) 
 			initDefine( 'namespace', code ); 

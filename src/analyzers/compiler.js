@@ -46,10 +46,6 @@ function Compiler( emitter ) {
 			compiler.process( context.code, subEmitter );
 		} );
 
-		emitter.on( 'define typedef', function( name ) { 
-			model.appendTypedef( name ); 
-		} ); 
-
 		emitter.on( 'declare type', function( name ) {
 			model.appendType( name );
 		} );
