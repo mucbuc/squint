@@ -4,7 +4,7 @@ var assert = require( 'assert' )
 function Preprocessor( emitter ) {
 	this.process = function( code ) {
 		var result = '';
-		if (code.search( regexMap.preProcessorDirective ) == 0) {
+		while (code.search( regexMap.preProcessorDirective ) == 0) {
 			do {
 				var chunk = code.search( '\n' ) + 1; 
 				result += code.substr( 0, chunk ); 
