@@ -9,7 +9,8 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Scoper = require( './scoper' ).Scoper;
+  , Scoper = require( './scoper' ).Scoper
+  , Preprocessor = require( './preprocessor' ).Preprocessor;
 
 function Declarer(emitter) {
 
@@ -29,6 +30,10 @@ function Declarer(emitter) {
 		  , parser = new Parser( sub );
 
 		sub.on( 'statement', function(code) {
+
+			var preprocessor = new Preprocessor( emitter ); 
+			code = preprocessor.process( code ); 
+
 			if (isType(code)) {
 				emitter.emit( 'declare type', code );
 			}

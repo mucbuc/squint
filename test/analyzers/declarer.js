@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
@@ -14,6 +15,7 @@ function testDeclarer() {
   test( declareNot );
   test( ignoreSubScopes );
   //test( defineTypedef );
+  test( declareTypeAfterPreproesorDirective ); 
   
   function defineTypedef(emitter, parser) {
     emitter.expect( 'define typedef', { name: 'temp', code: 'typedef string string_type;' } );
@@ -39,8 +41,16 @@ function testDeclarer() {
 
   function declareType( emitter, parser ) {
     emitter.expectNot( 'define type' );
+    
     emitter.expect( 'declare type', 'struct bla' );
     parser.process( 'struct bla;' );
+  }
+
+  function declareTypeAfterPreproesorDirective( emitter, parser ) {
+    emitter.expectNot( 'define type' );
+
+    emitter.expect( 'declare type', 'struct bla' );
+    parser.process( '#define hello asd\nstruct bla;' );
   }
 } 
 
