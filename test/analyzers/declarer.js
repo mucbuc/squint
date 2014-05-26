@@ -16,6 +16,21 @@ function testDeclarer() {
   test( ignoreSubScopes );
   //test( defineTypedef );
   test( declareTypeAfterPreproesorDirective ); 
+  test( declareTypeAfterPreproesorDirectives ); 
+
+  function declareTypeAfterPreproesorDirectives( emitter, parser ) {
+    emitter.expectNot( 'define type' );
+
+    emitter.expect( 'declare type', 'struct bla' );
+    parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;' );
+  }
+  
+  function declareTypeAfterPreproesorDirective( emitter, parser ) {
+    emitter.expectNot( 'define type' );
+
+    emitter.expect( 'declare type', 'struct bla' );
+    parser.process( '#define hello asd\nstruct bla;' );
+  }
   
   function defineTypedef(emitter, parser) {
     emitter.expect( 'define typedef', { name: 'temp', code: 'typedef string string_type;' } );
@@ -44,13 +59,6 @@ function testDeclarer() {
     
     emitter.expect( 'declare type', 'struct bla' );
     parser.process( 'struct bla;' );
-  }
-
-  function declareTypeAfterPreproesorDirective( emitter, parser ) {
-    emitter.expectNot( 'define type' );
-
-    emitter.expect( 'declare type', 'struct bla' );
-    parser.process( '#define hello asd\nstruct bla;' );
   }
 } 
 

@@ -12,8 +12,6 @@ function Preprocessor( emitter ) {
 			}	
 			while (result[result.length - 2] === '\\' );
 			emitter.emit( 'preprocess', result );
-
-			return code;
 		}
 		return code;
 	}; 
