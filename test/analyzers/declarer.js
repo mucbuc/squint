@@ -13,6 +13,12 @@ function testDeclarer() {
   test( declareFunction );
   test( declareNot );
   test( ignoreSubScopes );
+  //test( defineTypedef );
+  
+  function defineTypedef(emitter, parser) {
+    emitter.expect( 'define typedef', { name: 'temp', code: 'typedef string string_type;' } );
+    parser.process( 'typedef string string_type;' ); 
+  }
 
   function ignoreSubScopes(emitter, parser) {
     emitter.expectNot( 'declare type' );

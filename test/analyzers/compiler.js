@@ -19,6 +19,7 @@ function testCompiler() {
   test( compilerFunctionDeclare ); 
   test( compilerFunctonDefine );
   test( compilerMemberFunctionDeclare );
+  test( compilerTypedef ); 
 
   function compilerMemberFunctionDeclare(emitter, parser) {
     

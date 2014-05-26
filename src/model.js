@@ -7,12 +7,18 @@ function Model() {
 	this.types = {};
 	this.functions = {};
 	this.namespaces = {};
+	this.typedefs = {};
+
+	this.appendTypedef = function( name ) {
+		instance.typedefs[ name ] = name; 
+	};
 
 	this.appendNamespace = function( name, obj ) {
 		instance.namespaces[name] = {
 			namespaces: obj.namespaces,
 			types: obj.types,
 			functions: obj.functions,
+			typedefs: obj.typedefs,
 		};
 	};
 
@@ -21,6 +27,7 @@ function Model() {
 			instance.types[name] = {
 				types: obj.types,
 				functions: obj.functions,
+				typedefs: obj.typedefs
 			};
 		}	
 		else {

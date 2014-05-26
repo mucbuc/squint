@@ -8,9 +8,14 @@
 
 
 var assert = require( 'assert' )
-  , Scoper = require( './scoper' ).Scoper;
+  , Scoper = require( './scoper' ).Scoper
+  , regexMap = require( '../regexmap' ).regexMap;
 
 assert( typeof Scoper === 'function' );
+assert( typeof regexMap !== 'undefined' );
+assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
+assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
+
 
 function Definer(emitter) {
 	
@@ -18,15 +23,27 @@ function Definer(emitter) {
 
 	emitter.on( 'open scope', function( code ) {
 
-		var name = code.replace( /.*?;/, '' ).trim();
-			
+		var name = code.replace(  /.*?;/, '' ).trim();
+
 		if (isNamespace(code)) 
 			initDefine( 'namespace', name ); 
 		else if (isType(code)) 
-			initDefine( 'type', name, name.match( /(.*)\s*:(.*)/, '' ) );
+			initDefine( 'type', name, name.match( regexMap.typeDefinitionSplitter, '' ) );
 		else if (isFunction(code)) 
-			initDefine( 'function', name, name.match( /(.*\))\s*:(.*)/, '' ) );
+			initDefine( 'function', name, name.match( regexMap.constructorSplitter, '' ) );
 		
+		function isFunction( code ) {
+			return code[code.length - 1] == ')';
+		}
+
+		function isType( code ) {
+			return code.search( /(struct|class)/ ) != -1; 
+		}
+
+		function isNamespace( code ) {
+			return code.indexOf( 'namespace' ) == 0;
+		}
+
 		function initDefine( type, name, matches ) {
 			emitter.once( 'close scope', function( code ) {
 				if (matches)
@@ -42,20 +59,34 @@ function Definer(emitter) {
 					} );
 			} );
 		}
+	} );
+	
+/*
 
-		function isFunction( code ) {
-			return code[code.length - 1] == ')';
+else 
+		
+
+
+	emitter.on( 'end', parseTypedefs ); 
+	emitter.on( 'statement', parseTypedefs ); 
+
+	function parseTypedefs( code ) {
+
+		console.log( 'parseTypedefs', code );
+
+		if (isTypedef(code)) {
+			emitter.emit( 'define typedef', { 
+				name: 'temp',
+				code: code 
+			} );
 		}
 
-		function isType( code ) {
-			return code.search( /(struct|class)/ ) != -1; 
+		function isTypedef( code ) {
+			return code.search( /typedef/ ) != -1; 
 		}
+	}
+*/ 
 
-		function isNamespace( code ) {
-			return code.indexOf( 'namespace' ) == 0;
-		}
-
-	} ); 
 }
 
 Definer.prototype = new Scoper();
