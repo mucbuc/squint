@@ -13,8 +13,8 @@ testCompiler();
 
 function testCompiler() {
 
-  // test( compilerSingelDeclaration );
-  // test( namespaceTreeCompiler );
+	test( compilerSingelDeclaration );
+	test( namespaceTreeCompiler );
   test( namespaceDeclaration );
   // test( compilerMergeProduct );
   // test( compilerDeclarationsAndDefinitions );
@@ -182,11 +182,9 @@ function testCompiler() {
   	emitter.expect( 'end' ); 
 
   	emitter.once( 'define namespace', function( context ) {
-  		var c = new Compiler( emitter ); 
   		emitter.expect( 'declare type', 'struct hello' );
   		emitter.expect( 'end' ); 
-
-  		c.process( context.code );
+			parser.process( context.code );
   	} ); 
 
   	parser.process( 'namespace outside{ struct hello; }' );
@@ -194,20 +192,23 @@ function testCompiler() {
 
   function namespaceTreeCompiler(emitter, parser) {
     
-    emitter.once( 'compile', function( model ) {
-	    assert.deepProperty( model, 'namespaces.namespace outside' );
-	    assert.deepProperty( model.namespaces['namespace outside'], 'namespaces.namespace inside' );
+    emitter.expect( 'define namespace' );
+    emitter.expect( 'end' ); 
+
+  	emitter.once( 'define namespace', function( context ) {
+  		assert( context.name === 'namespace outside' );
+     	emitter.expect( 'define namespace' ); // , { name: 'namespace inside', code: 'namespace inside{}' } ); 
+			emitter.expect( 'end' ); 
+			
+			parser.process( context.code )
 		} );
 
     parser.process( 'namespace outside{ namespace inside {} }', emitter );
   } 
  
   function compilerSingelDeclaration(emitter, parser) {
-  	emitter.once( 'compile', function( model ) {
-  		assert.deepProperty( model, 'types.struct hello' ); 
-  		assert.deepEqual( model.types[ 'struct hello' ], 'undefined' ); 
-  	} );
-    parser.process( 'struct hello;', emitter );  
+  	emitter.expect( 'declare type', 'struct hello' );
+  	parser.process( 'struct hello;', emitter );  
   }
 
   function test(f) {
