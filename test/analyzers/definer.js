@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
@@ -49,6 +50,9 @@ function testType() {
 
 		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
 		parser.process( 'typedef hello string; struct cya { yes}' );
+
+		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
+		parser.process( '#define hello\n struct cya { yes}' );
 	}
 
 	function defineSubType( emitter, parser ) {

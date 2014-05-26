@@ -9,13 +9,14 @@
 
 var assert = require( 'assert' )
   , Scoper = require( './scoper' ).Scoper
-  , regexMap = require( '../regexmap' ).regexMap;
+  , Preprocessor = require( './preprocessor' ).Preprocessor
+  , regexMap = require( '../regexmap' ).regexMap; 
 
 assert( typeof Scoper === 'function' );
 assert( typeof regexMap !== 'undefined' );
 assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
 assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
-
+assert( typeof Preprocessor !== 'undefined' );
 
 function Definer(emitter) {
 	
@@ -23,14 +24,17 @@ function Definer(emitter) {
 
 	emitter.on( 'open scope', function( code ) {
 
-		var name = code.replace(  /.*?;/, '' ).trim();
+		var preper = new Preprocessor( emitter ); 
+
+		code = code.replace( /.*?;/, '' ).trim()
+		code = preper.process( code ).trim();
 
 		if (isNamespace(code)) 
-			initDefine( 'namespace', name ); 
+			initDefine( 'namespace', code ); 
 		else if (isType(code)) 
-			initDefine( 'type', name, name.match( regexMap.typeDefinitionSplitter, '' ) );
+			initDefine( 'type', code, code.match( regexMap.typeDefinitionSplitter, '' ) );
 		else if (isFunction(code)) 
-			initDefine( 'function', name, name.match( regexMap.constructorSplitter, '' ) );
+			initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
 		
 		function isFunction( code ) {
 			return code[code.length - 1] == ')';
