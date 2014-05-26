@@ -26,19 +26,14 @@ function Compiler( emitter ) {
 			definer.process( code );
 			declarer.process( code ); 
 		} );
+		preprocessor.process( code );
 	};
 
 	function init() {
 
 		emitter.on( 'define namespace', function( context ) {
-			
-		 	var subEmitter = Object.create( emitter.constructor.prototype )
-		 	  , compiler = new Compiler( subEmitter ); 
-			
-			subEmitter.once( 'compile', function(obj) { 
-				model.appendNamespace( context.name, obj );
-			} ); 
-			compiler.process( context.code, subEmitter );
+			var compiler = new Compiler( emitter ); 
+			compiler.process( context.code );
 		} );
 
 		emitter.on( 'define type', function( context ) {
