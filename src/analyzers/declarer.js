@@ -30,31 +30,30 @@ function Declarer(emitter) {
 		  , parser = new Parser( sub );
 
 		sub.on( 'statement', function(code) {
+			var subEmitter = Object.create( emitter.constructor.prototype )
+			  , preprocessor = new Preprocessor( subEmitter ); 
+			
+			subEmitter.on( 'preprocess', function( prepCode ) {
+				code = code.replace( prepCode, '' ).trim();
 
-			var preprocessor = new Preprocessor( emitter ); 
-			code = preprocessor.process( code ); 
+				if (isType(code)) {
+					emitter.emit( 'declare type', code );
+				}
+				else if (isFunctionDeclaration(code)) { 
+					emitter.emit( 'declare function', code );
+				} 
+					
+				function isFunctionDeclaration(code) {
+					return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
+				}
 
-			if (isType(code)) {
-				emitter.emit( 'declare type', code );
-			}
-			else if (isFunctionDeclaration(code)) { 
-				emitter.emit( 'declare function', code );
-			} 
-			else if (isTypedef(code)) {
-				emitter.emit( 'define typedef', code ); 
-			}
-		
-			function isTypedef( code ) {
-				return code.search( /typedef/ ) != -1; 
-			}
-				
-			function isFunctionDeclaration(code) {
-				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
-			}
+				function isType() {
+					return code.search( /(struct|class)/ ) != -1; 
+				}
+			} );
 
-			function isType() {
-				return code.search( /(struct|class)/ ) != -1; 
-			}
+			preprocessor.process( code ); 
+			
 		} );
 
 		parser.process( code );

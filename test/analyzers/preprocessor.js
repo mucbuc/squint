@@ -11,18 +11,13 @@ test( preprocessorSingleLine );
 test( preprocessorMultiLine );
 
 function preprocessorMultiLine(emitter, parser) {
-	var remainder; 
 	emitter.expect( 'preprocess', '#define hello hello\\\nhello\n' );
-	remainder = parser.process( '#define hello hello\\\nhello\nbla' );
-	assert( remainder === 'bla' );
+	parser.process( '#define hello hello\\\nhello\nbla' );
 }
 
 function preprocessorSingleLine(emitter, parser) {
-	var remainder; 
-
 	emitter.expect( 'preprocess', '#define hello hello\n' );
-	remainder = parser.process( '#define hello hello\nasdfaasdf\nbla' ); 
-	assert( remainder === 'asdfaasdf\nbla' );
+	parser.process( '#define hello hello\nasdfaasdf\nbla' ); 
 }
 
 function test(f) {

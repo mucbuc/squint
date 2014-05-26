@@ -16,7 +16,7 @@ function testDeclarer() {
   test( ignoreSubScopes );
   //test( defineTypedef );
   test( declareTypeAfterPreproesorDirective ); 
-  test( declareTypeAfterPreproesorDirectives ); 
+  //test( declareTypeAfterPreproesorDirectives ); 
 
   function declareTypeAfterPreproesorDirectives( emitter, parser ) {
     emitter.expectNot( 'define type' );

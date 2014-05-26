@@ -23,46 +23,53 @@ function Definer(emitter) {
 	Scoper.call( this, emitter );
 
 	emitter.on( 'open scope', function( code ) {
+		
+		var subEmitter = Object.create( emitter.constructor.prototype )
+		  , preprocessor = new Preprocessor( subEmitter ); 
 
-		var preprocessor = new Preprocessor( emitter ); 
+		subEmitter.on( 'preprocess', function( prepCode ) {
+
+			code = code.replace( prepCode, '' ).trim();
+
+			if (isNamespace(code)) 
+				initDefine( 'namespace', code ); 
+			else if (isType(code)) 
+				initDefine( 'type', code, code.match( regexMap.typeDefinitionSplitter, '' ) );
+			else if (isFunction(code)) 
+				initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
+			
+			function isFunction( code ) {
+				return code[code.length - 1] == ')';
+			}
+
+			function isType( code ) {
+				return code.search( /(struct|class)/ ) != -1; 
+			}
+
+			function isNamespace( code ) {
+				return code.indexOf( 'namespace' ) == 0;
+			}
+
+			function initDefine( type, name, matches ) {
+				emitter.once( 'close scope', function( code ) {
+					if (matches)
+						emitter.emit( 'define ' + type, { 
+							name: matches[1].trim(),
+							code: code, 
+							meta: matches[2].trim(), 
+						} );
+					else 
+						emitter.emit( 'define ' + type, { 
+							name: name,
+							code: code 
+						} );
+				} );
+			}
+		} );
 
 		code = code.replace( /.*?;/, '' ).trim()
-		code = preprocessor.process( code ).trim();
+		preprocessor.process( code );
 
-		if (isNamespace(code)) 
-			initDefine( 'namespace', code ); 
-		else if (isType(code)) 
-			initDefine( 'type', code, code.match( regexMap.typeDefinitionSplitter, '' ) );
-		else if (isFunction(code)) 
-			initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
-		
-		function isFunction( code ) {
-			return code[code.length - 1] == ')';
-		}
-
-		function isType( code ) {
-			return code.search( /(struct|class)/ ) != -1; 
-		}
-
-		function isNamespace( code ) {
-			return code.indexOf( 'namespace' ) == 0;
-		}
-
-		function initDefine( type, name, matches ) {
-			emitter.once( 'close scope', function( code ) {
-				if (matches)
-					emitter.emit( 'define ' + type, { 
-						name: matches[1].trim(),
-						code: code, 
-						meta: matches[2].trim(), 
-					} );
-				else 
-					emitter.emit( 'define ' + type, { 
-						name: name,
-						code: code 
-					} );
-			} );
-		}
 	} );
 	
 /*
