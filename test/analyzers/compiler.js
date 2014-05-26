@@ -25,11 +25,13 @@ function testCompiler() {
   test( declareTypeAfterPreproesorDirectives ); 
 
   function declareTypeAfterPreproesorDirectives( emitter, parser ) {
+   	emitter.expect( 'preprocessor' );
    	emitter.expect( 'declare type', 'struct bla' );
 	  parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;', emitter );
   }
   
   function declareTypeAfterPreproesorDirective( emitter, parser ) {
+    emitter.expect( 'preprocessor' );
     emitter.expect( 'declare type', 'struct bla' );
   	parser.process( '#define hello asd\nstruct bla;', emitter );
   }

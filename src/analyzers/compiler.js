@@ -12,11 +12,10 @@ function Compiler( emitter ) {
 
 	var declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter);
-	  
+
 	this.process = function( code ) {
-		var subEmitter = Object.create( emitter.constructor.prototype )
-		  , preprocessor = new Preprocessor( subEmitter ); 
-		subEmitter.on( 'preprocess', function( prepCode ) {
+		var preprocessor = new Preprocessor( emitter ); 
+		emitter.on( 'preprocess', function( prepCode ) {
 			code = code.replace( prepCode, '' ).trim();
 			definer.process( code );
 			declarer.process( code ); 
