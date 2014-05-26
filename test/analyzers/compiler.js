@@ -177,11 +177,18 @@ function testCompiler() {
   }
 
   function namespaceDeclaration(emitter, parser) {
-    
-  	emitter.expect( 'define namespace' );
-  	emitter.expect( 'declare type', 'struct hello' );
+  	
+  	emitter.expect( 'define namespace', { name: 'namespace outside', code: 'struct hello;' } );
   	emitter.expect( 'end' ); 
-  	emitter.expect( 'end' ); 
+
+  	emitter.once( 'define namespace', function( context ) {
+  		var c = new Compiler( emitter ); 
+  		emitter.expect( 'declare type', 'struct hello' );
+  		emitter.expect( 'end' ); 
+
+  		c.process( context.code );
+  	} ); 
+
   	parser.process( 'namespace outside{ struct hello; }' );
   } 
 
