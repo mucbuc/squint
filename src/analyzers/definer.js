@@ -13,8 +13,6 @@ var assert = require( 'assert' )
 
 assert( typeof Scoper === 'function' );
 assert( typeof regexMap !== 'undefined' );
-assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
-assert( typeof regexMap.typeDefinitionSplitter !== 'function' ); 
 
 function Definer(emitter) {
 	
