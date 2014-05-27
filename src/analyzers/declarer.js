@@ -1,13 +1,4 @@
-/* 
-	think of this type as of scope "type". 
-
-		namespace
-		type
-		function
-*/ 
-
 var assert = require( 'assert' )
-  , events = require( 'events' )
   , Parser = require( 'mucbuc-jsthree' ).Parser
   , Scoper = require( './scoper' ).Scoper
   , regexMap = require( '../regexmap' ).regexMap; 
