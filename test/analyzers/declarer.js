@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
@@ -33,6 +34,7 @@ function testDeclarer() {
 
   function declareType( emitter, parser ) {
     emitter.expectNot( 'define type' );
+    
     emitter.expect( 'declare type', 'struct bla' );
     parser.process( 'struct bla;' );
   }

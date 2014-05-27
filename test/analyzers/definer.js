@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
@@ -36,6 +37,11 @@ function testType() {
 
 	test( defineType );
 	test( defineSubType );
+
+	function defineSubType( emitter, parser ) {
+		emitter.expect( 'define type', { name: 'struct cya', code: 'yes', meta: 'blu' } );
+		parser.process( 'struct cya : blu { yes }' );
+	}
 	
 	function defineType(emitter, parser) {
 		emitter.expectNot( 'define namespace' );
@@ -46,11 +52,9 @@ function testType() {
 	
 		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
 		parser.process( 'struct cya { yes}' );
-	}
 
-	function defineSubType( emitter, parser ) {
-		emitter.expect( 'define type', { name: 'struct cya', code: 'yes', meta: 'blu' } );
-		parser.process( 'struct cya : blu { yes }' );
+		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
+		parser.process( 'typedef hello string; struct cya { yes}' );
 	}
 }
 
@@ -68,6 +72,9 @@ function testNamespace() {
 	
 		emitter.expect( 'define namespace', { name: 'namespace world', code: 'wtf?' } );
 		parser.process( 'namespace world { wtf? }' );
+
+		emitter.expect( 'define namespace', { name: 'namespace world', code: '' } );
+		parser.process( 'namespace world{}' );
 	}
 }
 

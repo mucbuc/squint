@@ -8,5 +8,10 @@ exports.regexMap = {
 	stringLiteral: /".*?([^\\]")/g,
 	arrayInitBlock: /\s*=.*?;/g, 
 	preProcessorLine: /^\s*#.*/mg, 
-	typeDef: /typedef.*?;/mg
+	typeDef: /typedef.*?;/mg,
+	typeDefinitionSplitter: /(.*)\s*:(.*)/,
+	constructorSplitter: /(.*\))\s*:(.*)/,
+	preProcessorDirective: /^\s*#.*\n/gm,
+	functionDeclare: /(\w*\s+)*\w*\s*\(.*\)\s*/,
+	typeDeclare: /(struct|class)/
 };

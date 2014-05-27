@@ -1,15 +1,7 @@
-/* 
-	think of this type as of scope "type". 
-
-		namespace
-		type
-		function
-*/ 
-
 var assert = require( 'assert' )
-  , events = require( 'events' )
   , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Scoper = require( './scoper' ).Scoper;
+  , Scoper = require( './scoper' ).Scoper
+  , regexMap = require( '../regexmap' ).regexMap; 
 
 function Declarer(emitter) {
 
@@ -34,21 +26,20 @@ function Declarer(emitter) {
 			}
 			else if (isFunctionDeclaration(code)) { 
 				emitter.emit( 'declare function', code );
-			}	
-
+			} 
+				
 			function isFunctionDeclaration(code) {
-				return code.search( /(\w*\s+)*\w*\s*\(.*\)\s*/ ) == 0;
+				return code.search( regexMap.functionDeclare ) == 0;
 			}
 
 			function isType() {
-				return code.search( /(struct|class)/ ) != -1; 
+				return code.search( regexMap.typeDeclare ) != -1; 
 			}
 		} );
 
 		parser.process( code );
 	}
 }
-
 Declarer.prototype = new Scoper();
 
 exports.Declarer = Declarer;

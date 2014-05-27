@@ -15,7 +15,8 @@ function runTest() {
   cp.fork( './analyzers/definer' ); 
   cp.fork( './analyzers/declarer' );
   cp.fork( './analyzers/template' );
-  cp.fork( './factory' );
-  cp.fork( './builder' );
-  cp.fork( './squint' );
+  cp.fork( './analyzers/preprocessor' );
+  // cp.fork( './factory' );
+  // cp.fork( './builder' );
+  // cp.fork( './squint' );
 }

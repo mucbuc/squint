@@ -1,5 +1,4 @@
 var assert = require( 'assert' )
-  , events = require( 'events' )
   , Builder = require( './builder' ).Builder
   , Forward = require( './factories/forward' ).Forward
   , Header = require( './factories/header' ).Header
@@ -50,14 +49,8 @@ var Squint = {
     return code;
   },
 
-  compile: function( code, done ) {
-    var emitter = new events.EventEmitter()
-      , parser = new Compiler( emitter );
-
-    emitter.once( 'compile', function( model ) {
-      done( model );
-    } );
-  
+  compile: function( code, emitter ) {
+    var parser = new Compiler( emitter );
     parser.process( code, emitter );
   }, 
 
