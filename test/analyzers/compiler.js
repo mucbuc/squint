@@ -14,7 +14,7 @@ testCompiler();
 function testCompiler() {
 
 	test( compilerSingelDeclaration );
-	test( namespaceTreeCompiler );
+  test( namespaceTreeCompiler );
   test( namespaceDeclaration );
 	test( compilerDeclarationsAndDefinitions );
 	test( compilerNestedTypes ); 
@@ -23,6 +23,13 @@ function testCompiler() {
 	test( compilerMemberFunctionDeclare );
   test( declareTypeAfterPreproesorDirective ); 
   test( declareTypeAfterPreproesorDirectives ); 
+  test( defineTypeAfterDeclareType );
+
+  function defineTypeAfterDeclareType( emitter, parser ) {
+    emitter.expect( 'declare type', { name: 'struct jimmy', code: '' } );
+    emitter.expect( 'define type', { name: 'struct hey', code: 'joe' } ); 
+    parser.process( 'struct jimmy; struct hey { joe }' );
+  }
 
   function declareTypeAfterPreproesorDirectives( emitter, parser ) {
    	emitter.expect( 'preprocessor' );
