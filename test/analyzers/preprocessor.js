@@ -9,9 +9,15 @@ assert( typeof Preprocessor !== 'undefined' );
 
 test( preprocessorSingleLine );
 test( preprocessorMultiLine );
-test( preproecssorMultiple ); 
+test( preprocessorMultiple );
+test( preprocessorAfterComment );
 
-function preproecssorMultiple(emitter, parser) {
+function preprocessorAfterComment(emitter, parser) {
+	emitter.expect( 'preprocess', '#define BLA\n' );
+	parser.process( '/*yo*/ #define BLA\n')
+}
+
+function preprocessorMultiple(emitter, parser) {
 	emitter.expect( 'preprocess', '#define A\n#define B\n' );
 	parser.process( '#define A\n#define B\n' );
 }
