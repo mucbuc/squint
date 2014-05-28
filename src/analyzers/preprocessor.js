@@ -3,10 +3,10 @@ var assert = require( 'assert' )
 
 function Preprocessor( emitter ) {
 	this.process = function( code ) {
-		var result = '';
 		while (true) {
 			var i = code.search( regexMap.preProcessorDirective );
 			if (i != -1) {
+				var result = '';
 				code = code.substr( i, code.length );
 				do {
 					var chunk = code.search( '\n' ) + 1; 
@@ -14,11 +14,20 @@ function Preprocessor( emitter ) {
 					code = code.substr( chunk, code.length );
 				}	
 				while (result[result.length - 2] === '\\' );
+				emitter.emit( 'preprocess', result.trim() );
 			}
-			else 
-				break;
+			else {
+				var i = code.search( regexMap.commentSingle );
+				if (i != -1) {
+					var result = code.match( regexMap.commentSingle );
+					code = code.replace( regexMap.commentSingle, '' );
+					emitter.emit( 'comment', result.toString().trim() ); 
+				}
+				else 
+					break;
+			}
 		}
-		emitter.emit( 'preprocess', result.trim() );
+		
 	}; 
 }
 

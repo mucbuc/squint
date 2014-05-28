@@ -11,6 +11,12 @@ test( preprocessorSingleLine );
 test( preprocessorMultiLine );
 test( preprocessorMultiple );
 test( preprocessorAfterComment );
+test( preprocessorComment );
+
+function preprocessorComment(emitter, parser) {
+	emitter.expect( 'comment', '// hello\n' );
+	parser.process( '// hello\n' );
+}
 
 function preprocessorAfterComment(emitter, parser) {
 	emitter.expect( 'preprocess', '#define BLA\n' );
@@ -18,7 +24,8 @@ function preprocessorAfterComment(emitter, parser) {
 }
 
 function preprocessorMultiple(emitter, parser) {
-	emitter.expect( 'preprocess', '#define A\n#define B\n' );
+	emitter.expect( 'preprocess', '#define A\n' );
+	emitter.expect( 'preprocess', '#define B\n' );
 	parser.process( '#define A\n#define B\n' );
 }
 
