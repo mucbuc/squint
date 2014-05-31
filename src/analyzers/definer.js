@@ -8,16 +8,12 @@
 
 
 var assert = require( 'assert' )
-  , Scoper = require( './scoper' ).Scoper
   , regexMap = require( '../regexmap' ).regexMap; 
 
-assert( typeof Scoper === 'function' );
 assert( typeof regexMap !== 'undefined' );
 
 function Definer(emitter) {
 	
-	Scoper.call( this, emitter );
-
 	emitter.on( 'open scope', function( code ) {
 		code = code.replace( /.*?;/, '' ).trim()
 		
@@ -57,7 +53,5 @@ function Definer(emitter) {
 		}
 	} );
 }
-
-Definer.prototype = new Scoper();
 
 exports.Definer = Definer;

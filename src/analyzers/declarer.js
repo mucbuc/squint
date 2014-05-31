@@ -1,11 +1,8 @@
 var assert = require( 'assert' )
   , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Scoper = require( './scoper' ).Scoper
   , regexMap = require( '../regexmap' ).regexMap; 
 
 function Declarer(emitter) {
-
-	Scoper.call( this, emitter );
 
 	emitter.on( 'open scope', function( code ) {
 		declare(code); 
@@ -40,6 +37,5 @@ function Declarer(emitter) {
 		parser.process( code );
 	}
 }
-Declarer.prototype = new Scoper();
 
 exports.Declarer = Declarer;

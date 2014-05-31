@@ -15,6 +15,15 @@ var Base = {
         console.log( f.name + ' passed' );
       } );
 
+      if (typeof parser.process === 'undefined') {
+        var Scoper = require( '../src/analyzers/scoper' ).Scoper
+          , scoper;
+
+        scoper = new Scoper(emitter);
+        parser.process = scoper.process;
+        parser.step = scoper.step;
+      }
+
 	    f( emitter, parser );
 	  }
 };
