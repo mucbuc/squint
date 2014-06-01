@@ -11,9 +11,9 @@ testDeclarer();
 function testDeclarer() {
 
   test( declareType );
-  test( declareFunction );
-  test( declareNot );
-  test( ignoreSubScopes );
+  // test( declareFunction );
+  // test( declareNot );
+  // test( ignoreSubScopes );
 
   function ignoreSubScopes(emitter, parser) {
     emitter.expectNot( 'declare type' );
@@ -34,11 +34,12 @@ function testDeclarer() {
 
   function declareType( emitter, parser ) {
     emitter.expectNot( 'define type' );
-    
+
     emitter.expect( 'declare type', 'struct bla' );
     parser.process( 'struct bla;' );
   }
-} 
+}
 
 function test(f) {
-  Base.test( f, Declarer ); }
+  Base.test( f, Declarer );
+}

@@ -1,28 +1,21 @@
 var assert = require( 'assert' )
   , events = require( 'events' )
   , Test = require( 'mucbuc-jsthree' ).Test
-  , finalLog = Test.finalLog
-  , Parser = require( 'mucbuc-jsthree' ).Parser;
+  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
+  , finalLog = Test.finalLog;
 
 var Base = {
-  test: function( f, Parser_Type ) {
+  test: function( f, AnalyzerType ) {
+      assert(typeof AnalyzerType === 'function' );
       var emitter = new Test.Emitter()
-        , parser = new ((typeof Parser_Type === 'undefined') ? Parser : Parser_Type)(emitter);
-      
+        , parser = new Tokenizer(emitter)
+        , analyzer = new AnalyzerType(emitter);
+
       emitter.setMaxListeners( 0 );
 
       emitter.once( 'end', function() {
         console.log( f.name + ' passed' );
       } );
-
-      if (typeof parser.process === 'undefined') {
-        var Scoper = require( '../src/analyzers/scoper' ).Scoper
-          , scoper;
-
-        scoper = new Scoper(emitter);
-        parser.process = scoper.process;
-        parser.step = scoper.step;
-      }
 
 	    f( emitter, parser );
 	  }

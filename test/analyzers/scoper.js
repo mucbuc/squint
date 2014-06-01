@@ -29,9 +29,6 @@ function testScoper() {
 
 	function aggregateScopes( emitter, parser ) {
 
-		emitter.expectNot( 'open' );
-		emitter.expectNot( 'close' );
-
 		emitter.expect( 'open scope', 'namespace outside' );
 		emitter.expect( 'close scope', 'namespace inside1{}namespace inside2{}' );
 		parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
@@ -39,18 +36,12 @@ function testScoper() {
 
 	function nestedScopes(emitter, parser) {
 
-		emitter.expectNot( 'open' );
-		emitter.expectNot( 'close' );
-
 		emitter.expect( 'open scope', 'namespace hello' );
 		emitter.expect( 'close scope', 'namespace world{namespace{}}' );
 		parser.process( 'namespace hello{ namespace world{ namespace {} } }', emitter );
 	}
 
 	function basicScope(emitter, parser) {
-
-		emitter.expectNot( 'open' );
-		emitter.expectNot( 'close' );
 
 		emitter.expect( 'open scope', 'namespace bla' );
 		emitter.expect( 'close scope', '' );

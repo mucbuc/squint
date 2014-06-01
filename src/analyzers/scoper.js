@@ -7,19 +7,14 @@ function Scoper( emitter, openToken, closeToken ) {
 
 	var instance = this
     , depth = 0
-	  , content = ''
-	  , sub;
+	  , content = '';
 
 	if (typeof emitter === 'undefined')
 		return;
 
-	sub = Object.create( emitter.constructor.prototype );
+	Tokenizer.call( this, emitter, initMap( openToken, closeToken ) );
 
-	Tokenizer.call( this, sub );
-
-  initMap( openToken, closeToken );
-
-	sub.on( 'open', function(code) {
+	emitter.on( 'open', function(code) {
 		if (!depth)
 			emitter.emit( 'open scope', code.trim() );
 		else
@@ -27,7 +22,7 @@ function Scoper( emitter, openToken, closeToken ) {
 		++depth;
 	} );
 
-	sub.on( 'close', function(code) {
+	emitter.on( 'close', function(code) {
 		assert( depth );
 
 		if (!--depth) {
@@ -39,19 +34,25 @@ function Scoper( emitter, openToken, closeToken ) {
 		}
 	} );
 
-	sub.on( 'end', function(code) {
+  // hackybacky this belongs on a higher level, what if content should be ignored?
+  emitter.on( 'statement', function(code) {
+    content += code.trim() + ';';
+  } );
+
+	emitter.on( 'end', function(code) {
 		emitter.emit( 'end', code.trim() );
 	} );
 
 	function initMap() {
-
+    var result = {};
 		if (typeof openToken === 'undefined')
 			openToken = '{';
-    instance.match( openToken, 'open' );
+    result['open'] = openToken;
 
 		if (typeof closeToken === 'undefined')
 			closeToken = mapClosed();
-    instance.match( closeToken, 'close' );
+    result['close'] = closeToken;
+    return result;
 
 		function mapClosed() {
 			switch(openToken) {
