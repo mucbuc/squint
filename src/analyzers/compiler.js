@@ -4,8 +4,8 @@ var assert = require( 'assert' )
   , Definer = require( './definer' ).Definer
   , Preprocessor = require( './preprocessor' ).Preprocessor;
 
-assert( typeof Scoper === 'function' ); 
-assert( typeof Declarer === 'function' ); 
+assert( typeof Scoper === 'function' );
+assert( typeof Declarer === 'function' );
 assert( typeof Definer === 'function' );
 assert( typeof Preprocessor === 'function' );
 
@@ -17,7 +17,8 @@ function Compiler( emitter ) {
 	  , preprocessor = new Preprocessor( emitter );
 
 	this.process = function( code ) {
-		emitter.on( 'preprocess', function( prepCode ) {
+
+    emitter.on( 'preprocess', function( prepCode ) {
 			code = code.replace( prepCode, '' ).trim();
 			scoper.process( code );
 		} );
@@ -25,4 +26,4 @@ function Compiler( emitter ) {
 	};
 }
 
-exports.Compiler = Compiler; 
+exports.Compiler = Compiler;

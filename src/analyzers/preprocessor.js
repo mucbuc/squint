@@ -3,10 +3,6 @@ var assert = require( 'assert' )
 
 function Preprocessor( emitter ) {
 
-  emitter.on( 'comment', function( code ) {
-    emitter.emit( 'consume', '' );
-  } );
-
 /*
 	this.process = function( code ) {
 		while (true) {

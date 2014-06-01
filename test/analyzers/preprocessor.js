@@ -16,7 +16,7 @@ test( preprocessorComment );
 
 function preprocessorComment(emitter, parser) {
 	emitter.expect( 'comment' );
-	emitter.expect( 'end', 'hello\n' );
+	//emitter.expect( 'end', 'hello\n' );
   parser.process( '// hello\n' );
 }
 

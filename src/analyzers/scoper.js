@@ -30,11 +30,18 @@ function Scoper( emitter, openToken, closeToken ) {
 			content = '';
 		}
 		else {
-			content += code.trim() + mapClosedString();
+      content += code.trim() + mapClosedString();
 		}
 	} );
 
-  // hackybacky this belongs on a higher level, what if content should be ignored?
+  // emitter.on( 'comment', function() {
+  //   emitter.remove( 'open' ..
+  //   emitter.remove( 'close' ... )
+  // });
+
+  /* hackybacky this belongs on a higher level, what if content should be ignored?
+    Or what if new token gets added? same with two cases above
+  */
   emitter.on( 'statement', function(code) {
     content += code.trim() + ';';
   } );
