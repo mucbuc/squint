@@ -11,7 +11,7 @@ checkTemplate();
 function checkTemplate() {
 
 	test( singleParameter );
-	//test( multipleParameters );
+	test( multipleParameters );
 	// test( macroParameters );
 	// test( templateNestedParameters );
 
