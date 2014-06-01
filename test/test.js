@@ -11,7 +11,7 @@ function runTest() {
 
   process.setMaxListeners( 0 );
 
-  cp.fork( './analyzers/analyzers' );
+  cp.fork( './analyzers', [], { cwd: 'analyzers/' } );
   // cp.fork( './factory' );
   // cp.fork( './builder' );
   // cp.fork( './squint' );

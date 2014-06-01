@@ -32,18 +32,6 @@ function Template( emitter ) {
       emitter.emit( 'template parameters', content + code.trim() );
     });
 
-    // emitter.on( 'statement', function( code ) {
-    //   content += code.trim() + ';';
-    // } );
-    //
-    // emitter.on( 'open', function( code ) {
-    //   content += code.trim() + '{';
-    // } );
-    //
-    // emitter.on( 'close', function( code ) {
-    //   content += code.trim() + '}';
-    // } );
-
     tokenizer.process( code );
   }
 }

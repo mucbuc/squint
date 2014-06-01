@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 
 var assert = require( 'chai' ).assert
-  , Base = require( '../base' ).Base
   , events = require( 'events' )
+  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
+  , Base = require( '../base' ).Base
   , Preprocessor = require( '../../src/analyzers/preprocessor' ).Preprocessor;
 
 assert( typeof Preprocessor !== 'undefined' );
 
-test( preprocessorSingleLine );
-test( preprocessorMultiLine );
-test( preprocessorMultiple );
-test( preprocessorAfterComment );
+// test( preprocessorSingleLine );
+// test( preprocessorMultiLine );
+// test( preprocessorMultiple );
+// test( preprocessorAfterComment );
 test( preprocessorComment );
 
 function preprocessorComment(emitter, parser) {
-	emitter.expect( 'comment', '// hello\n' );
-	parser.process( '// hello\n' );
+	emitter.expect( 'comment' );
+	emitter.expect( 'end', 'hello\n' );
+  parser.process( '// hello\n' );
 }
 
 function preprocessorAfterComment(emitter, parser) {
@@ -40,5 +42,5 @@ function preprocessorSingleLine(emitter, parser) {
 }
 
 function test(f) {
-	Base.test( f, Preprocessor );
+	Base.test( f, Preprocessor, Tokenizer, { 'comment': '\\/\\/' } );
 }

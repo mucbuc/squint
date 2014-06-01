@@ -2,8 +2,8 @@
 
 var cp = require( 'child_process' );
 
-cp.fork( 'scoper', [], { cwd: 'analyzers/' } );
-cp.fork( 'definer', [], { cwd: 'analyzers/' } );
-cp.fork( 'declarer', [], { cwd: 'analyzers/' } );
-cp.fork( 'template', [], { cwd: 'analyzers/' } );
-cp.fork( 'preprocessor', [], { cwd: 'analyzers/' } );
+cp.fork( 'scoper' );
+cp.fork( 'definer' );
+cp.fork( 'declarer' );
+cp.fork( 'template' );
+cp.fork( 'preprocessor' );
