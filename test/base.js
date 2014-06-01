@@ -5,11 +5,11 @@ var assert = require( 'assert' )
   , finalLog = Test.finalLog;
 
 var Base = {
-  test: function( f, AnalyzerType ) {
+  test: function( f, AnalyzerType, initTokenizer, initAnalyzer ) {
       assert(typeof AnalyzerType === 'function' );
       var emitter = new Test.Emitter()
-        , parser = new Tokenizer(emitter)
-        , analyzer = new AnalyzerType(emitter);
+        , parser = new Tokenizer(emitter, initTokenizer )
+        , analyzer = new AnalyzerType(emitter, initAnalyzer );
 
       emitter.setMaxListeners( 0 );
 

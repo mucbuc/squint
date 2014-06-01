@@ -14,22 +14,17 @@ function testScoper() {
 	test( basicScope );
 	test( nestedScopes );
 	test( aggregateScopes );
-	test( alternativeScopeTag );
+	Base.test( alternativeScopeTag, Scoper, { 'open': '<', 'close': '>' }, '<' );
 
-	function alternativeScopeTag(e) {
-
-		var emitter = new Test.Emitter
-      , parser = new Scoper( emitter, '<' );
+	function alternativeScopeTag(emitter, parser) {
 
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'typename' );
-		parser.process( 'template< typename >', emitter );
+		parser.process( 'template< typename >' );
 
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'template<typename>' );
-    parser.process( 'template< template< typename > >', emitter );
-
-    e.emit( 'end' );
+    parser.process( 'template< template< typename > >' );
 	}
 
 	function aggregateScopes( emitter, parser ) {
