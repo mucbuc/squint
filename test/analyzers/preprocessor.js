@@ -3,7 +3,7 @@
 var assert = require( 'chai' ).assert
   , Base = require( '../base' ).Base
   , events = require( 'events' )
-  , Preprocessor = require( '../../src/analyzers/preprocessor' ).Preprocessor; 
+  , Preprocessor = require( '../../src/analyzers/preprocessor' ).Preprocessor;
 
 assert( typeof Preprocessor !== 'undefined' );
 
@@ -20,7 +20,7 @@ function preprocessorComment(emitter, parser) {
 
 function preprocessorAfterComment(emitter, parser) {
 	emitter.expect( 'preprocess', '#define BLA\n' );
-	parser.process( '/*yo*/ #define BLA\n')
+	parser.process( '/*yo*/ #define BLA\n');
 }
 
 function preprocessorMultiple(emitter, parser) {
@@ -36,10 +36,9 @@ function preprocessorMultiLine(emitter, parser) {
 
 function preprocessorSingleLine(emitter, parser) {
 	emitter.expect( 'preprocess', '#define hello hello\n' );
-	parser.process( '#define hello hello\nasdfaasdf\nbla' ); 
+	parser.process( '#define hello hello\nasdfaasdf\nbla' );
 }
 
 function test(f) {
 	Base.test( f, Preprocessor );
 }
-

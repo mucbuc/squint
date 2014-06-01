@@ -5,10 +5,15 @@ var assert = require( 'assert' )
   , finalLog = Test.finalLog;
 
 var Base = {
-  test: function( f, AnalyzerType, initTokenizer, initAnalyzer ) {
+  test: function( f, AnalyzerType, ParserType, initTokenizer, initAnalyzer ) {
       assert(typeof AnalyzerType === 'function' );
+
+      if (typeof ParserType === 'undefined') {
+        ParserType = Tokenizer;
+      }
+
       var emitter = new Test.Emitter()
-        , parser = new Tokenizer(emitter, initTokenizer )
+        , parser = new ParserType(emitter, initTokenizer )
         , analyzer = new AnalyzerType(emitter, initAnalyzer );
 
       emitter.setMaxListeners( 0 );

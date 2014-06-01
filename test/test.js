@@ -10,12 +10,8 @@ runTest();
 function runTest() {
 
   process.setMaxListeners( 0 );
-  
-  cp.fork( './analyzers/scoper' );
-  cp.fork( './analyzers/definer' ); 
-  cp.fork( './analyzers/declarer' );
-  cp.fork( './analyzers/template' );
-  cp.fork( './analyzers/preprocessor' );
+
+  cp.fork( './analyzers/analyzers' );
   // cp.fork( './factory' );
   // cp.fork( './builder' );
   // cp.fork( './squint' );

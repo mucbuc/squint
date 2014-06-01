@@ -1,4 +1,4 @@
-/* 
+/*
 	think of this type as of scope "type".
 
 		namespace
@@ -47,7 +47,7 @@ function Definer(emitter) {
 				else
 					emitter.emit( 'define ' + type, {
 						name: name,
-						code: code
+						code: code.trim()
 					} );
 			} );
 		}

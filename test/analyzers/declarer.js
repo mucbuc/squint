@@ -2,6 +2,7 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
+  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , Declarer = require( '../../src/analyzers/declarer' ).Declarer;
 
 assert( typeof Declarer !== 'undefined' );
@@ -11,9 +12,9 @@ testDeclarer();
 function testDeclarer() {
 
   test( declareType );
-  // test( declareFunction );
-  // test( declareNot );
-  // test( ignoreSubScopes );
+  test( declareFunction );
+  test( declareNot );
+  test( ignoreSubScopes );
 
   function ignoreSubScopes(emitter, parser) {
     emitter.expectNot( 'declare type' );
@@ -41,5 +42,5 @@ function testDeclarer() {
 }
 
 function test(f) {
-  Base.test( f, Declarer );
+  Base.test( f, Declarer, Scoper );
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
+  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
   , Scoper = require( '../../src/analyzers/scoper').Scoper
   , Base = require( '../base' ).Base
   , Test = require( 'mucbuc-jsthree' ).Test;
@@ -14,7 +15,7 @@ function testScoper() {
 	test( basicScope );
 	test( nestedScopes );
 	test( aggregateScopes );
-	Base.test( alternativeScopeTag, Scoper, { 'open': '<', 'close': '>' }, '<' );
+	Base.test( alternativeScopeTag, Scoper, Tokenizer, { 'open': '<', 'close': '>' }, '<' );
 
 	function alternativeScopeTag(emitter, parser) {
 
