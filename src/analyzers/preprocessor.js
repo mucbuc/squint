@@ -3,9 +3,8 @@ var assert = require( 'assert' )
 
 function Preprocessor( emitter ) {
 
-/*
-	this.process = function( code ) {
-		while (true) {
+  emitter.on( 'preprocessor', function( token, code ) {
+    while (true) {
 			var i = code.search( regexMap.preProcessorDirective );
 			if (i != -1) {
 				var result = '';
@@ -16,22 +15,12 @@ function Preprocessor( emitter ) {
 					code = code.substr( chunk, code.length );
 				}
 				while (result[result.length - 2] === '\\' );
-				emitter.emit( 'preprocess', result.trim() );
+				emitter.emit( 'consume', result.trim() );
 			}
-			else {
-				var i = code.search( regexMap.commentSingle );
-				if (i != -1) {
-					var result = code.match( regexMap.commentSingle );
-					code = code.replace( regexMap.commentSingle, '' );
-					emitter.emit( 'comment', result.toString().trim() );
-				}
-				else
-					break;
-			}
+			else
+				break;
 		}
-
-	};
-*/
+	} );
 }
 
 exports.Preprocessor = Preprocessor;

@@ -8,39 +8,33 @@ var assert = require( 'chai' ).assert
 
 assert( typeof Preprocessor !== 'undefined' );
 
-// test( preprocessorSingleLine );
-// test( preprocessorMultiLine );
-// test( preprocessorMultiple );
-// test( preprocessorAfterComment );
-test( preprocessorComment );
-
-function preprocessorComment(emitter, parser) {
-	emitter.expect( 'comment' );
-	//emitter.expect( 'end', 'hello\n' );
-  parser.process( '// hello\n' );
-}
+test( preprocessorSingleLine );
+test( preprocessorMultiLine );
+test( preprocessorMultiple );
+test( preprocessorAfterComment );
 
 function preprocessorAfterComment(emitter, parser) {
-	emitter.expect( 'preprocess', '#define BLA\n' );
+	emitter.expect( 'preprocess' ); // consume =>, '#define BLA\n' );
 	parser.process( '/*yo*/ #define BLA\n');
 }
 
 function preprocessorMultiple(emitter, parser) {
-	emitter.expect( 'preprocess', '#define A\n' );
-	emitter.expect( 'preprocess', '#define B\n' );
+	emitter.expect( 'preprocess' ); // consume =>, '#define A\n' );
+	emitter.expect( 'preprocess' ); // consume =>, '#define B\n' );
 	parser.process( '#define A\n#define B\n' );
 }
 
 function preprocessorMultiLine(emitter, parser) {
-	emitter.expect( 'preprocess', '#define hello hello\\\nhello\n' );
+	emitter.expect( 'preprocess' ); // consume =>, '#define hello hello\\\nhello\n' );
 	parser.process( '#define hello hello\\\nhello\nbla' );
 }
 
 function preprocessorSingleLine(emitter, parser) {
-	emitter.expect( 'preprocess', '#define hello hello\n' );
-	parser.process( '#define hello hello\nasdfaasdf\nbla' );
+	emitter.expect( 'preprocess' );
+	//emitter.expect( 'consume', '#define hello hello\n' );
+  parser.process( '#define hello hello\nasdfaasdf\nbla' );
 }
 
 function test(f) {
-	Base.test( f, Preprocessor, Tokenizer, { 'comment': '\\/\\/' } );
+	Base.test( f, Preprocessor, Tokenizer, { 'preprocess': '#' } );
 }
