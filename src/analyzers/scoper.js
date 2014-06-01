@@ -1,30 +1,33 @@
 var assert = require( 'assert' )
-  , Parser = require( 'mucbuc-jsthree' ).Parser;
+  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer;
 
-assert( typeof Parser === 'function' );
+assert( typeof Tokenizer === 'function' );
 
 function Scoper( emitter, openToken, closeToken ) {
-	
-	var depth = 0
+
+	var instance = this
+    , depth = 0
 	  , content = ''
 	  , sub;
 
 	if (typeof emitter === 'undefined')
-		return; 
-	
+		return;
+
 	sub = Object.create( emitter.constructor.prototype );
-	
-	Parser.call( this, sub, initMap( openToken, closeToken ) );
-	
+
+	Tokenizer.call( this, sub );
+
+  initMap( openToken, closeToken );
+
 	sub.on( 'open', function(code) {
 		if (!depth)
 			emitter.emit( 'open scope', code.trim() );
 		else
-			content += code.trim() + openToken; 
+			content += code.trim() + openToken;
 		++depth;
-	} ); 
+	} );
 
-	sub.on( 'close', function(code) { 
+	sub.on( 'close', function(code) {
 		assert( depth );
 
 		if (!--depth) {
@@ -39,37 +42,33 @@ function Scoper( emitter, openToken, closeToken ) {
 	sub.on( 'end', function(code) {
 		emitter.emit( 'end', code.trim() );
 	} );
-	
+
 	function initMap() {
 
-		var result = {};
+		if (typeof openToken === 'undefined')
+			openToken = '{';
+    instance.match( openToken, 'open' );
 
-		if (typeof openToken === 'undefined') 
-			openToken = '{'; 
-
-		if (typeof closeToken === 'undefined') 
+		if (typeof closeToken === 'undefined')
 			closeToken = mapClosed();
-
-		result[openToken] = 'open'; 
-		result[closeToken] = 'close'; 
-		return result;
+    instance.match( closeToken, 'close' );
 
 		function mapClosed() {
 			switch(openToken) {
-				case '(': 
-					return ')';
-				case '[':
-					return ']';
+        case '\\(':
+					return '\\)';
+				case '\\[':
+					return '\\]';
 				case '<':
 					return '>';
 				case '{':
 				default:
 					return '}';
 			}
-		} 
+		}
 	}
 }
 
-Scoper.prototype = new Parser(); 
+Scoper.prototype = new Tokenizer();
 
 exports.Scoper = Scoper;

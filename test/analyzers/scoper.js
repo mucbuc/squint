@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var assert = require( 'assert' )
   , Scoper = require( '../../src/analyzers/scoper').Scoper
   , Base = require( '../base' ).Base;
@@ -19,13 +21,13 @@ function testScoper() {
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'typename' );
 		parser.process( 'template< typename >', emitter );
-	
+
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'template<typename>' );
 		parser.process( 'template< template< typename > >', emitter );
-	}	
+	}
 
-	function aggregateScopes( emitter, parser ) { 
+	function aggregateScopes( emitter, parser ) {
 
 		emitter.expectNot( 'open' );
 		emitter.expectNot( 'close' );
@@ -46,7 +48,7 @@ function testScoper() {
 	}
 
 	function basicScope(emitter, parser) {
-		
+
 		emitter.expectNot( 'open' );
 		emitter.expectNot( 'close' );
 
@@ -63,7 +65,7 @@ function testScoper() {
 		parser.process( 'namespace bla { hello }', emitter );
 	}
 
-	function test(f) { 
+	function test(f) {
 		Base.test( f, Scoper );
 	}
 }
