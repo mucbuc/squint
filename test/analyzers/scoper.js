@@ -2,7 +2,8 @@
 
 var assert = require( 'assert' )
   , Scoper = require( '../../src/analyzers/scoper').Scoper
-  , Base = require( '../base' ).Base;
+  , Base = require( '../base' ).Base
+  , Test = require( 'mucbuc-jsthree' ).Test;
 
 assert( typeof Scoper !== 'undefined' );
 
@@ -15,8 +16,10 @@ function testScoper() {
 	test( aggregateScopes );
 	test( alternativeScopeTag );
 
-	function alternativeScopeTag( emitter ) {
-		var parser = new Scoper( emitter, '<' );
+	function alternativeScopeTag(e) {
+
+		var emitter = new Test.Emitter
+      , parser = new Scoper( emitter, '<' );
 
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'typename' );
@@ -24,21 +27,25 @@ function testScoper() {
 
 		emitter.expect( 'open scope', 'template' );
 		emitter.expect( 'close scope', 'template<typename>' );
-		parser.process( 'template< template< typename > >', emitter );
+    parser.process( 'template< template< typename > >', emitter );
+
+    e.emit( 'end' );
 	}
 
 	function aggregateScopes( emitter, parser ) {
 
 		emitter.expect( 'open scope', 'namespace outside' );
 		emitter.expect( 'close scope', 'namespace inside1{}namespace inside2{}' );
-		parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
+		emitter.expect( 'end' );
+    parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
 	}
 
 	function nestedScopes(emitter, parser) {
 
 		emitter.expect( 'open scope', 'namespace hello' );
 		emitter.expect( 'close scope', 'namespace world{namespace{}}' );
-		parser.process( 'namespace hello{ namespace world{ namespace {} } }', emitter );
+		emitter.expect( 'end' );
+    parser.process( 'namespace hello{ namespace world{ namespace {} } }', emitter );
 	}
 
 	function basicScope(emitter, parser) {

@@ -30,7 +30,7 @@ function Scoper( emitter, openToken, closeToken ) {
 			content = '';
 		}
 		else {
-			content += code.trim() + closeToken;
+			content += code.trim() + mapClosedString();
 		}
 	} );
 
@@ -39,9 +39,19 @@ function Scoper( emitter, openToken, closeToken ) {
     content += code.trim() + ';';
   } );
 
-	emitter.on( 'end', function(code) {
-		emitter.emit( 'end', code.trim() );
-	} );
+  function mapClosedString() {
+    switch(openToken) {
+      case '(':
+        return ')';
+      case '[':
+        return ']';
+      case '<':
+        return '>';
+      case '{':
+      default:
+        return '}';
+    }
+  }
 
 	function initMap() {
     var result = {};

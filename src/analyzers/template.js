@@ -21,12 +21,28 @@ function Template( emitter ) {
       , tokenizer = new Tokenizer( sub, {
           'open scope': '<',
           'close scope': '>'
-        }
-      );
+        } )
+      , content = '';
 
     sub.on( 'close scope', function(code) {
-      emitter.emit( 'template parameters', code );
+      emitter.emit( 'template parameters', content + code.trim() );
     } );
+
+    sub.on( 'end', function(code) {
+      emitter.emit( 'template parameters', content + code.trim() );
+    });
+
+    // emitter.on( 'statement', function( code ) {
+    //   content += code.trim() + ';';
+    // } );
+    //
+    // emitter.on( 'open', function( code ) {
+    //   content += code.trim() + '{';
+    // } );
+    //
+    // emitter.on( 'close', function( code ) {
+    //   content += code.trim() + '}';
+    // } );
 
     tokenizer.process( code );
   }
