@@ -55,8 +55,9 @@ function Scoper( emitter, openToken, closeToken ) {
       case '<':
         return '>';
       case '{':
-      default:
         return '}';
+      default:
+        return '\n';
     }
   }
 

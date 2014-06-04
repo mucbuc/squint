@@ -9,13 +9,13 @@ function Declarer(emitter) {
 	} );
 
 	emitter.on( 'end', function( code ) {
-		declare(code);
+    declare(code);
 	} );
 
 	function declare(code) {
 
-		var sub = Object.create( emitter.constructor.prototype )
-		  , tokenizer = new Tokenizer( sub, { 'statement': ';' } );
+    var sub = Object.create( emitter.constructor.prototype )
+      , tokenizer = new Tokenizer( sub, { 'statement': ';' } );
 
 		sub.on( 'statement', function(code) {
 			if (isType(code)) {

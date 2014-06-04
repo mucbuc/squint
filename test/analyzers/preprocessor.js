@@ -31,7 +31,7 @@ function preprocessorMultiLine(emitter, parser) {
 
 function preprocessorSingleLine(emitter, parser) {
 	emitter.expect( 'preprocess' );
-	//emitter.expect( 'consume', '#define hello hello\n' );
+  //emitter.expect( 'consume', '#define hello hello\n' );
   parser.process( '#define hello hello\nasdfaasdf\nbla' );
 }
 
