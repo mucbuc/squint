@@ -13,7 +13,6 @@ function Preprocessor( emitter ) {
 		}
 		while (result[result.length - 2] === '\\' );
 		emitter.emit( 'consume', result.trim() );
-
 	} );
 }
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var assert = require( 'chai' ).assert
-  , events = require( 'events' )
   , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
   , Base = require( '../base' ).Base
   , Commenter = require( '../../src/analyzers/commenter' ).Commenter;
