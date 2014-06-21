@@ -8,6 +8,12 @@ var assert = require( 'assert' )
 assert( typeof Literalizer === 'function' );
 
 test( stringLiteral );
+test( ignorable );
+
+function ignorable( emitter, parser ) {
+	emitter.expect( 'ignore' );
+	parser.process( '\\"' );
+}
 
 function stringLiteral(emitter, parser) {
   emitter.expectNot( 'declare' ); 
@@ -17,6 +23,7 @@ function stringLiteral(emitter, parser) {
 
 function test(f) {
 	Base.test( f, Literalizer, Tokenizer, {
-		'literal': '\"' 
+		'literal': '\"',
+		'ignore': '\\\"',
 	} );
 }
