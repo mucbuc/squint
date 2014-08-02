@@ -13,8 +13,8 @@ var Base = {
       }
 
       var emitter = new Test.Emitter()
-        , parser = new ParserType(emitter, initTokenizer )
-        , analyzer = new AnalyzerType(emitter, initAnalyzer );
+        , parser = new ParserType(emitter, initTokenizer)
+        , analyzer = new AnalyzerType(emitter, initAnalyzer);
 
       emitter.setMaxListeners( 0 );
 

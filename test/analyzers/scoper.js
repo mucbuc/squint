@@ -8,58 +8,53 @@ var assert = require( 'assert' )
 
 assert( typeof Scoper !== 'undefined' );
 
-testScoper();
+test( basicScope );
+test( nestedScopes );
+test( aggregateScopes );
+Base.test( alternativeScopeTag, Scoper, Tokenizer, { 'open': '<', 'close': '>' }, '<' );
 
-function testScoper() {
+function alternativeScopeTag(emitter, parser) {
 
-	test( basicScope );
-	test( nestedScopes );
-	test( aggregateScopes );
-	Base.test( alternativeScopeTag, Scoper, Tokenizer, { 'open': '<', 'close': '>' }, '<' );
+	emitter.expect( 'open scope', 'template' );
+	emitter.expect( 'close scope', 'typename' );
+	parser.process( 'template< typename >' );
 
-	function alternativeScopeTag(emitter, parser) {
+	emitter.expect( 'open scope', 'template' );
+	emitter.expect( 'close scope', 'template<typename>' );
+parser.process( 'template< template< typename > >' );
+}
 
-		emitter.expect( 'open scope', 'template' );
-		emitter.expect( 'close scope', 'typename' );
-		parser.process( 'template< typename >' );
+function aggregateScopes( emitter, parser ) {
 
-		emitter.expect( 'open scope', 'template' );
-		emitter.expect( 'close scope', 'template<typename>' );
-    parser.process( 'template< template< typename > >' );
-	}
+	emitter.expect( 'open scope', 'namespace outside' );
+	emitter.expect( 'close scope', 'namespace inside1{}namespace inside2{}' );
+	emitter.expect( 'end' );
+parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
+}
 
-	function aggregateScopes( emitter, parser ) {
+function nestedScopes(emitter, parser) {
 
-		emitter.expect( 'open scope', 'namespace outside' );
-		emitter.expect( 'close scope', 'namespace inside1{}namespace inside2{}' );
-		emitter.expect( 'end' );
-    parser.process( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', emitter );
-	}
+	emitter.expect( 'open scope', 'namespace hello' );
+	emitter.expect( 'close scope', 'namespace world{namespace{}}' );
+	emitter.expect( 'end' );
+parser.process( 'namespace hello{ namespace world{ namespace {} } }', emitter );
+}
 
-	function nestedScopes(emitter, parser) {
+function basicScope(emitter, parser) {
 
-		emitter.expect( 'open scope', 'namespace hello' );
-		emitter.expect( 'close scope', 'namespace world{namespace{}}' );
-		emitter.expect( 'end' );
-    parser.process( 'namespace hello{ namespace world{ namespace {} } }', emitter );
-	}
+	emitter.expect( 'open scope', 'namespace bla' );
+	emitter.expect( 'close scope', '' );
+	parser.process( 'namespace bla {}', emitter );
 
-	function basicScope(emitter, parser) {
+	emitter.expect( 'open scope', 'namespace bla' );
+	emitter.expect( 'close scope', 'hello;' );
+	parser.process( 'namespace bla { hello; }', emitter );
 
-		emitter.expect( 'open scope', 'namespace bla' );
-		emitter.expect( 'close scope', '' );
-		parser.process( 'namespace bla {}', emitter );
+	emitter.expect( 'open scope', 'namespace bla' );
+	emitter.expect( 'close scope', 'hello' );
+	parser.process( 'namespace bla { hello }', emitter );
+}
 
-		emitter.expect( 'open scope', 'namespace bla' );
-		emitter.expect( 'close scope', 'hello;' );
-		parser.process( 'namespace bla { hello; }', emitter );
-
-		emitter.expect( 'open scope', 'namespace bla' );
-		emitter.expect( 'close scope', 'hello' );
-		parser.process( 'namespace bla { hello }', emitter );
-	}
-
-	function test(f) {
-		Base.test( f, Scoper );
-	}
+function test(f) {
+	Base.test( f, Scoper );
 }

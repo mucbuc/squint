@@ -7,38 +7,33 @@ var assert = require( 'assert' )
 
 assert( typeof Declarer !== 'undefined' );
 
-testDeclarer();
+test( declareType );
+test( declareFunction );
+test( declareNot );
+test( ignoreSubScopes );
 
-function testDeclarer() {
+function ignoreSubScopes(emitter, parser) {
+  emitter.expectNot( 'declare type' );
+  parser.process( 'namespace { struct hello; }' );
+}
 
-  test( declareType );
-  test( declareFunction );
-  test( declareNot );
-  test( ignoreSubScopes );
+function declareNot(emitter, parser) {
+  emitter.expectNot( 'declare function' );
+  parser.process( 'bla bla;' );
+  parser.process( 'bla += bla();' );
+}
 
-  function ignoreSubScopes(emitter, parser) {
-    emitter.expectNot( 'declare type' );
-    parser.process( 'namespace { struct hello; }' );
-  }
+function declareFunction( emitter, parser ) {
+  emitter.expectNot( 'define function' );
+  emitter.expect( 'declare function', 'void foo()' );
+  parser.process( 'void foo();' );
+}
 
-  function declareNot(emitter, parser) {
-    emitter.expectNot( 'declare function' );
-    parser.process( 'bla bla;' );
-    parser.process( 'bla += bla();' );
-  }
+function declareType( emitter, parser ) {
+  emitter.expectNot( 'define type' );
 
-  function declareFunction( emitter, parser ) {
-    emitter.expectNot( 'define function' );
-    emitter.expect( 'declare function', 'void foo()' );
-    parser.process( 'void foo();' );
-  }
-
-  function declareType( emitter, parser ) {
-    emitter.expectNot( 'define type' );
-
-    emitter.expect( 'declare type', 'struct bla' );
-    parser.process( 'struct bla;' );
-  }
+  emitter.expect( 'declare type', 'struct bla' );
+  parser.process( 'struct bla;' );
 }
 
 function test(f) {
