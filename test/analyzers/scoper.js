@@ -10,7 +10,7 @@ assert( typeof Scoper !== 'undefined' );
 test( basicScope );
 test( nestedScopes );
 test( aggregateScopes );
-test( alternativeScopeTag ); // , Scoper, Tokenizer, { 'open': '<', 'close': '>' }, '<' );
+test( alternativeScopeTag ); 
 
 function alternativeScopeTag(emitter, parser) {
   var rules = { 'open': '<', 'close': '>' };
@@ -19,9 +19,9 @@ function alternativeScopeTag(emitter, parser) {
   emitter.expect( 'close scope', 'typename' );
   parser.process( 'template< typename >', rules );
 
-  // emitter.expect( 'open scope', 'template' );
-  // emitter.expect( 'close scope', 'template<typename>' );
-  // parser.process( 'template< template< typename > >', rules );
+  emitter.expect( 'open scope', 'template' );
+  emitter.expect( 'close scope', 'template<typename>' );
+  parser.process( 'template< template< typename > >', rules );
 }
 
 function aggregateScopes( emitter, parser ) {

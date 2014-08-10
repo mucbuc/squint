@@ -17,21 +17,21 @@ function Scoper( emitter, openToken, closeToken ) {
 			rules = initMap( openToken, closeToken ); 
 		}
 
-		fluke.splitAll( code, function( type, token, source ) { 
-			  	emitter.emit( type, token, source );
+		fluke.splitAll( code, function( type, lhs, rhs, token ) { 
+			  	emitter.emit( type, lhs, rhs, token );
 			  } 
 		  , rules ); 
 	}; 
 
-	emitter.on( 'open', function(code) {
+	emitter.on( 'open', function(code, src, token) {
 		if (!depth)
 			emitter.emit( 'open scope', code.trim() );
 		else
-			content += code.trim() + openToken;
+			content += code.trim() + token;
 		++depth;
 	} );
 
-	emitter.on( 'close', function(code) {
+	emitter.on( 'close', function(code, src, token) {
 		assert( depth );
 
 		if (!--depth) {
@@ -39,7 +39,7 @@ function Scoper( emitter, openToken, closeToken ) {
 			content = '';
 		}
 		else {
-      content += code.trim() + mapClosedString();
+      content += code.trim() + token;
 		}
 	} );
 
@@ -54,21 +54,6 @@ function Scoper( emitter, openToken, closeToken ) {
   emitter.on( 'statement', function(code) {
     content += code.trim() + ';';
   } );
-
-  function mapClosedString() {
-    switch(openToken) {
-      case '(':
-        return ')';
-      case '[':
-        return ']';
-      case '<':
-        return '>';
-      case '{':
-        return '}';
-      default:
-        return '\n';
-    }
-  }
 
 	function initMap() {
     var result = {};
