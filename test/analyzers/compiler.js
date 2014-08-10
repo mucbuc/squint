@@ -65,7 +65,7 @@ function compilerNestedTypes(emitter, parser) {
 	emitter.once( 'define type', function( context ) {
 		emitter.expect( 'define type', { name: 'struct inside', code: 'struct inside{}' } ); 
 		parser.process( context.code ); 
-	}	); 	
+	} ); 	
 
   parser.process( 'struct outside { struct inside {}; };');
 }
