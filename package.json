@@ -9,6 +9,6 @@
   "dependencies": {
     "mucbuc-jsthree": "*",
     "chai": "*",
-    "tokenizer": "*"
+    "flukejs": "*"
   }
 }

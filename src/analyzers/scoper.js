@@ -1,7 +1,7 @@
 var assert = require( 'assert' )
-  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer;
+  , fluke = require( 'flukejs' );
 
-assert( typeof Tokenizer === 'function' );
+assert( typeof fluke !== 'undefined' );
 
 function Scoper( emitter, openToken, closeToken ) {
 
@@ -12,7 +12,16 @@ function Scoper( emitter, openToken, closeToken ) {
 	if (typeof emitter === 'undefined')
 		return;
 
-	Tokenizer.call( this, emitter, initMap( openToken, closeToken ) );
+	this.process = function( code, rules ) {
+		if (typeof rules === 'undefined') {
+			rules = initMap( openToken, closeToken ); 
+		}
+
+		fluke.splitAll( code, function( type, token, source ) { 
+			  	emitter.emit( type, token, source );
+			  } 
+		  , rules ); 
+	}; 
 
 	emitter.on( 'open', function(code) {
 		if (!depth)
@@ -87,7 +96,5 @@ function Scoper( emitter, openToken, closeToken ) {
 		}
 	}
 }
-
-Scoper.prototype = new Tokenizer();
 
 exports.Scoper = Scoper;
