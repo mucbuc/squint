@@ -16,6 +16,9 @@ function testFunction() {
 	test( defineFunction );
 
 	function defineFunction(emitter, parser) {
+		
+		var definer = new Definer(emitter);
+
 		emitter.expectNot( 'define namespace' );
 		emitter.expectNot( 'define type' );
 
@@ -40,11 +43,17 @@ function testType() {
 	test( defineSubType );
 
 	function defineSubType( emitter, parser ) {
+		
+		var definer = new Definer(emitter);
+
 		emitter.expect( 'define type', { name: 'struct cya', code: 'yes', meta: 'blu' } );
 		parser.process( 'struct cya : blu { yes }' );
 	}
 
 	function defineType(emitter, parser) {
+
+		var definer = new Definer(emitter);
+
 		emitter.expectNot( 'define namespace' );
 		emitter.expectNot( 'define function' );
 
@@ -65,6 +74,8 @@ function testNamespace() {
 
 	function defineNamespace(emitter, parser) {
 
+		var definer = new Definer(emitter);
+
 		emitter.expectNot( 'define type' );
 		emitter.expectNot( 'define function' );
 
@@ -80,5 +91,5 @@ function testNamespace() {
 }
 
 function test(f) {
-	Base.test( f, Definer, Scoper );
+	Base.test( f, Scoper );
 }

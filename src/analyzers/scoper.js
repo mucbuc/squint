@@ -5,43 +5,43 @@ assert( typeof fluke !== 'undefined' );
 
 function Scoper( emitter, openToken, closeToken ) {
 
-	var instance = this
+  var instance = this
     , depth = 0
-	  , content = '';
+    , content = '';
 
-	if (typeof emitter === 'undefined')
-		return;
+  if (typeof emitter === 'undefined')
+    return;
 
-	this.process = function( code, rules ) {
-		if (typeof rules === 'undefined') {
-			rules = initMap( openToken, closeToken ); 
-		}
+  this.process = function( code, rules ) {
+    if (typeof rules === 'undefined') {
+      rules = initMap( openToken, closeToken ); 
+    }
 
-		fluke.splitAll( code, function( type, lhs, rhs, token ) { 
-			  	emitter.emit( type, lhs, rhs, token );
-			  } 
-		  , rules ); 
-	}; 
+    fluke.splitAll( code, function( type, lhs, rhs, token ) { 
+          emitter.emit( type, lhs, rhs, token );
+        } 
+      , rules ); 
+  }; 
 
-	emitter.on( 'open', function(code, src, token) {
-		if (!depth)
-			emitter.emit( 'open scope', code.trim() );
-		else
-			content += code.trim() + token;
-		++depth;
-	} );
-
-	emitter.on( 'close', function(code, src, token) {
-		assert( depth );
-
-		if (!--depth) {
-			emitter.emit( 'close scope', content + code.trim() );
-			content = '';
-		}
-		else {
+  emitter.on( 'open', function(code, src, token) {
+    if (!depth)
+      emitter.emit( 'open scope', code.trim() );
+    else
       content += code.trim() + token;
-		}
-	} );
+    ++depth;
+  } );
+
+  emitter.on( 'close', function(code, src, token) {
+    assert( depth );
+
+    if (!--depth) {
+      emitter.emit( 'close scope', content + code.trim() );
+      content = '';
+    }
+    else {
+      content += code.trim() + token;
+    }
+  } );
 
   // emitter.on( 'comment', function() {
   //   emitter.remove( 'open' ..
@@ -55,31 +55,31 @@ function Scoper( emitter, openToken, closeToken ) {
     content += code.trim() + ';';
   } );
 
-	function initMap() {
+  function initMap() {
     var result = {};
-		if (typeof openToken === 'undefined')
-			openToken = '{';
+    if (typeof openToken === 'undefined')
+      openToken = '{';
     result['open'] = openToken;
 
-		if (typeof closeToken === 'undefined')
-			closeToken = mapClosed();
+    if (typeof closeToken === 'undefined')
+      closeToken = mapClosed();
     result['close'] = closeToken;
     return result;
 
-		function mapClosed() {
-			switch(openToken) {
+    function mapClosed() {
+      switch(openToken) {
         case '\\(':
-					return '\\)';
-				case '\\[':
-					return '\\]';
-				case '<':
-					return '>';
-				case '{':
-				default:
-					return '}';
-			}
-		}
-	}
+          return '\\)';
+        case '\\[':
+          return '\\]';
+        case '<':
+          return '>';
+        case '{':
+        default:
+          return '}';
+      }
+    }
+  }
 }
 
 exports.Scoper = Scoper;
