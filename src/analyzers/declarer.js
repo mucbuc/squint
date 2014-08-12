@@ -1,6 +1,6 @@
 var assert = require( 'assert' )
-  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
-  , regexMap = require( '../regexmap' ).regexMap;
+  , regexMap = require( '../regexmap' ).regexMap
+  , fluke = require( 'flukejs' );
 
 function Declarer(emitter) {
 
@@ -8,33 +8,31 @@ function Declarer(emitter) {
     declare(code);
   } );
 
-  emitter.on( 'end', function( code ) {
+  emitter.on( 'end', function( bullshit, code ) {
     declare(code);
   } );
 
   function declare(code) {
+    fluke.splitAll( code, function(type, lhs, rhs, token) {
+        if (type == 'statement') {
+          if (isType(lhs)) {
+            emitter.emit( 'declare type', lhs );
+          }
+          else if (isFunctionDeclaration(lhs)) {
+            emitter.emit( 'declare function', lhs );
+          }
 
-    var sub = Object.create( emitter.constructor.prototype )
-      , tokenizer = new Tokenizer( sub, { 'statement': ';' } );
+          function isFunctionDeclaration(code) {
+            return code.search( regexMap.functionDeclare ) == 0;
+          }
 
-    sub.on( 'statement', function(code) {
-      if (isType(code)) {
-        emitter.emit( 'declare type', code );
-      }
-      else if (isFunctionDeclaration(code)) {
-        emitter.emit( 'declare function', code );
-      }
-
-      function isFunctionDeclaration(code) {
-        return code.search( regexMap.functionDeclare ) == 0;
-      }
-
-      function isType() {
-        return code.search( regexMap.typeDeclare ) != -1;
-      }
-    } );
-
-    tokenizer.process( code );
+          function isType(code) {
+            return code.search( regexMap.typeDeclare ) != -1;
+          }
+        }
+      }, 
+      { 'statement': ';' } 
+    );
   }
 }
 
