@@ -2,75 +2,90 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Template = require( '../../src/analyzers/template' ).Template;
+  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
+  , Template = require( '../../src/analyzers/template' ).Template
+  , rules = { 'open': '{', 'statement': ';' };
 
 process.setMaxListeners( 0 );
 
 test( singleParameter );
-// test( multipleParameters );
-// test( macroParameters );
-// test( templateNestedParameters );
+test( multipleParameters );
+test( macroParameters );
+test( templateNestedParameters );
 
 function templateNestedParameters(emitter, parser) {
 
+	console.log( "** templateNestedParameters disabled ** ");
+	return;
+
+	var templater = new Template( emitter );
+
 	emitter.expect( 'template parameters', 'template<typename>, template<typename>' );
-	parser.process( 'template< template< typename >, template< typename > >;', emitter );
+	parser.process( 'template< template< typename >, template< typename > >;', rules );
 }
 
 function macroParameters(emitter, parser) {
 
+	console.log( "** macroParameters disabled ** ");
+	return;
+
+	var templater = new Template( emitter );
+
 	emitter.expect( 'template parameters', 'MACRO(), MACRO' );
-	parser.process( 'template< MACRO(), MACRO >;', emitter );
+	parser.process( 'template< MACRO(), MACRO >;', rules );
 
 	emitter.expect( 'template parameters', 'MACRO(ARG), MACRO()' );
-	parser.process( 'template< MACRO(ARG), MACRO() >;', emitter );
+	parser.process( 'template< MACRO(ARG), MACRO() >;', rules );
 
 	emitter.expect( 'template parameters', 'MACRO(), MACRO' );
-	parser.process( 'template< MACRO(), MACRO >', emitter );
+	parser.process( 'template< MACRO(), MACRO >', rules );
 }
 
 function multipleParameters(emitter, parser) {
+	var templater = new Template( emitter );
+	
+	emitter.expect( 'template parameters', 'class A, class B' );
+	parser.process( 'template< class A, class B>;', rules );
 
 	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B>;', emitter );
+	parser.process( 'template< class A, class B>{', rules );
 
 	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B>{', emitter );
+	parser.process( 'template< class A, class B> text;', rules );
 
 	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B> text;', emitter );
+	parser.process( 'template< class A, class B> text{', rules );
 
 	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B> text{', emitter );
+	parser.process( 'template< class A, class B> void text( A a );', rules );
 
 	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B> void text( A a );', emitter );
-
-	emitter.expect( 'template parameters', 'class A, class B' );
-	parser.process( 'template< class A, class B> void text( A a ) {', emitter );
+	parser.process( 'template< class A, class B> void text( A a ) {', rules );
 }
 
 function singleParameter(emitter, parser) {
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A>{', emitter );
+	var templater = new Template( emitter );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A>;', emitter );
+	parser.process( 'template<class A>{', rules );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> text text {', emitter );
+	parser.process( 'template<class A>;', rules );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> text text;', emitter );
+	parser.process( 'template<class A> text text {', rules );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> void text( A a ) {', emitter );
+	parser.process( 'template<class A> text text;', rules );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> void text( A a );', emitter );
+	parser.process( 'template<class A> void text( A a ) {', rules );
+
+	emitter.expect( 'template parameters', 'class A' );
+	parser.process( 'template<class A> void text( A a );', rules );
 }
 
 function test(f) {
-	Base.test( f, Template );
+	Base.test( f, Scoper );
 }
 

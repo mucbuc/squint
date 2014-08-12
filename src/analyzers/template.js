@@ -4,7 +4,7 @@
 */
 
 var assert = require( 'assert' )
-  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
+  , fluke = require( 'flukejs' )
   , Scoper = require( './scoper' ).Scoper
   , events = require( 'events' );
 
@@ -17,11 +17,11 @@ function Template( emitter ) {
 
   function parse( code ) {
     var sub = Object.create( emitter.constructor.prototype )
-      , scoper = new Scoper( sub, '<' )
-      , tokenizer = new Tokenizer( sub, {
+      , scoper = new Scoper( sub )
+      , rules = {
           'open scope': '<',
           'close scope': '>'
-        } )
+        }
       , content = '';
 
     sub.on( 'close scope', function(code) {
@@ -32,7 +32,10 @@ function Template( emitter ) {
       emitter.emit( 'template parameters', content + code.trim() );
     });
 
-    tokenizer.process( code );
+    fluke.splitAll( code, function( type, lhs, rhs, token ) {
+          sub.emit( type, lhs, rhs, token );
+        }
+      , rules );
   }
 }
 
