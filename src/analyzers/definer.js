@@ -24,13 +24,9 @@ function Definer(emitter, rules) {
     else if (isFunction(code))
       initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
 
-    console.log( '*splitNext:', source );
-    process.nextTick( function() { 
-        fluke.splitNext( source, function(type, lhs, rhs, token) {
-            console.log( arguments );
-            emitter.emit( type, lhs, rhs, token );
-          }, rules );
-      } );
+    fluke.splitNext( source, function(type, lhs, rhs, token) {
+        emitter.emit( type, lhs, rhs, token );
+      }, rules );
 
     function isFunction( code ) {
       return code[code.length - 1] == ')';
