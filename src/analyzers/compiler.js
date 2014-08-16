@@ -11,16 +11,17 @@ assert( typeof Preprocessor === 'function' );
 
 function Compiler( emitter ) {
 
-	var scoper = new Scoper( emitter, {
-        'preprocess': '#',
-        'comment line': '\\/\\/',
-        'comment block': '\\/\\*',
-        'statement': ';',
-        'open': '{',
-        'close': '}',
-      } )
+  var rules = {
+      'preprocess': '#',
+      'comment line': '\\/\\/',
+      'comment block': '\\/\\*',
+      'statement': ';',
+      'open': '{',
+      'close': '}',
+    }
+    , scoper = new Scoper( emitter, rules )
 	  , declarer = new Declarer(emitter)
-	  , definer = new Definer(emitter)
+	  , definer = new Definer(emitter, rules)
 	  , preprocessor = new Preprocessor( emitter );
 
 	this.process = function( code ) {

@@ -6,15 +6,15 @@
     function
 */
 
-
 var assert = require( 'assert' )
-  , regexMap = require( '../regexmap' ).regexMap;
+  , regexMap = require( '../regexmap' ).regexMap
+  , fluke = require( 'flukejs' );
 
 assert( typeof regexMap !== 'undefined' );
 
-function Definer(emitter) {
+function Definer(emitter, rules) {
 
-  emitter.on( 'open scope', function( code ) {
+  emitter.on( 'open scope', function( code, source, token ) {
     code = code.replace( /.*?;/, '' ).trim()
 
     if (isNamespace(code))
@@ -23,6 +23,14 @@ function Definer(emitter) {
       initDefine( 'type', code, code.match( regexMap.typeDefinitionSplitter, '' ) );
     else if (isFunction(code))
       initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
+
+    console.log( '*splitNext:', source );
+    process.nextTick( function() { 
+        fluke.splitNext( source, function(type, lhs, rhs, token) {
+            console.log( arguments );
+            emitter.emit( type, lhs, rhs, token );
+          }, rules );
+      } );
 
     function isFunction( code ) {
       return code[code.length - 1] == ')';

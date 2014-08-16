@@ -8,9 +8,9 @@ var assert = require( 'assert' )
 assert( typeof Scoper !== 'undefined' );
 
 test( basicScope );
-test( nestedScopes );
-test( aggregateScopes );
-test( alternativeScopeTag ); 
+// test( nestedScopes );
+// test( aggregateScopes );
+// test( alternativeScopeTag ); 
 
 function alternativeScopeTag(emitter, parser) {
   var rules = { 'open': '<', 'close': '>' };
@@ -41,6 +41,11 @@ function nestedScopes(emitter, parser) {
 }
 
 function basicScope(emitter, parser) {
+
+  // emitter.on( 'open', console.log ); 
+  // emitter.on( 'close', console.log );
+  // emitter.on( 'open scope', console.log ); 
+  // emitter.on( 'close scope', console.log );
 
   emitter.expect( 'open scope', 'namespace bla' );
   emitter.expect( 'close scope', '' );
