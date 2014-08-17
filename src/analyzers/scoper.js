@@ -1,39 +1,27 @@
 var assert = require( 'assert' );
 
-function Scoper( emitter, cb ) {
+function Scoper( emitter ) {
 
   var instance = this
-    , depth = 0
-    , content = '';
+    , depth = 0;
 
   if (typeof emitter === 'undefined')
     return;
 
-  emitter.on( 'open', function(code, src, token) {
+  emitter.on( 'open', function(response) {
     if (!depth)
-      emitter.emit( 'open scope', code.trim(), src, token );
-    else
-      content += code.trim() + token;
+    {
+      emitter.emit( 'open scope', response.lhs );
+      response.resetStash(); 
+    }
     ++depth;
-    cb( src );
   } );
 
-  emitter.on( 'close', function(code, src, token) {
+  emitter.on( 'close', function(response) {
     assert( depth );
-
-    if (!--depth) {
-      emitter.emit( 'close scope', content + code.trim(), src, token );
-      content = '';
-    }
-    else {
-      content += code.trim() + token;
-    }
-    cb( src ); 
-  } );
-
-  emitter.on( 'statement', function(code, src) {
-    content += code.trim() + ';';
-    cb(src);
+    
+    if (!--depth) 
+      emitter.emit( 'close scope', response.stash + response.lhs );
   } );
 }
 
