@@ -3,50 +3,43 @@
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
-  , Declarer = require( '../../src/analyzers/declarer' ).Declarer;
+  , Declarer = require( '../../src/analyzers/declarer' ).Declarer
+  , defaultRules = {
+        'open': '{',
+        'close': '}'
+      };
 
 assert( typeof Declarer !== 'undefined' );
 
-test( declareType );
-test( declareFunction );
-test( declareNot );
-test( ignoreSubScopes );
+Base.test_2( declareType, defaultRules, Scoper );
+// Base.test_2( declareFunction, defaultRules, Scoper );
+// Base.test_2( declareNot, defaultRules, Scoper );
+// Base.test_2( ignoreSubScopes, defaultRules, Scoper );
 
-function ignoreSubScopes(emitter, parser) {
+function ignoreSubScopes(emitter, process) {
   var declarer = new Declarer( emitter ); 
   emitter.expectNot( 'declare type' );
-  parser.process( 'namespace { struct hello; }', defaultMap() );
+  process( 'namespace { struct hello; }' );
 }
 
-function declareNot(emitter, parser) {
+function declareNot(emitter, process) {
   var declarer = new Declarer( emitter );
   emitter.expectNot( 'declare function' );
-  parser.process( 'bla bla;' );
-  parser.process( 'bla += bla();', defaultMap() );
+  process( 'bla bla;' );
+  process( 'bla += bla();' );
 }
 
-function declareFunction( emitter, parser ) {
+function declareFunction( emitter, process ) {
   var declarer = new Declarer( emitter );
   emitter.expectNot( 'define function' );
   emitter.expect( 'declare function', 'void foo()' );
-  parser.process( 'void foo();', defaultMap() );
+  process( 'void foo();' );
 }
 
-function declareType( emitter, parser ) {
+function declareType( emitter, process ) {
   var declarer = new Declarer( emitter );
   emitter.expectNot( 'define type' );
-  emitter.expect( 'declare type', 'struct bla' );
-  parser.process( 'struct bla;', defaultMap() );
+  // emitter.expect( 'declare type', 'struct bla' );
+  process( 'struct bla;' );
 }
 
-function defaultMap() {
-  return {
-    //'statement': ';',
-    'open': '{',
-    'close': '}',
-  };
-}
-
-function test(f) {
-  Base.test( f, Scoper );
-}

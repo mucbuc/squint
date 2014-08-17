@@ -5,9 +5,6 @@ function Scoper( emitter ) {
   var instance = this
     , depth = 0;
 
-  if (typeof emitter === 'undefined')
-    return;
-
   emitter.on( 'open', function(response) {
     if (!depth)
     {

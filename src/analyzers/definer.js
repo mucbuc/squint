@@ -1,21 +1,14 @@
-/*
-  think of this type as of scope "type".
-
-    namespace
-    type
-    function
-*/
 
 var assert = require( 'assert' )
-  , regexMap = require( '../regexmap' ).regexMap
-  , fluke = require( 'flukejs' );
+  , regexMap = require( '../regexmap' ).regexMap;
 
 assert( typeof regexMap !== 'undefined' );
 
-function Definer(emitter, next) {
+function Definer(emitter) {
 
-  emitter.on( 'open scope', function( code, source, token ) {
-    code = code.replace( /.*?;/, '' ).trim()
+  emitter.on( 'open scope', function( source ) {
+     
+    var code = source.replace( /.*?;/, '' );
 
     if (isNamespace(code))
       initDefine( 'namespace', code );
@@ -24,10 +17,9 @@ function Definer(emitter, next) {
     else if (isFunction(code))
       initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
 
-    next( source ); 
-
     function isFunction( code ) {
-      return code[code.length - 1] == ')';
+      var t = code.trim();
+      return t[t.length - 1] == ')';
     }
 
     function isType( code ) {
@@ -42,14 +34,14 @@ function Definer(emitter, next) {
       emitter.once( 'close scope', function( code ) {
         if (matches)
           emitter.emit( 'define ' + type, {
-            name: matches[1].trim(),
+            name: matches[1],
             code: code,
-            meta: matches[2].trim(),
+            meta: matches[2],
           } );
         else
           emitter.emit( 'define ' + type, {
             name: name,
-            code: code.trim()
+            code: code
           } );
       } );
     }

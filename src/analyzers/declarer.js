@@ -1,25 +1,26 @@
 var assert = require( 'assert' )
-  , regexMap = require( '../regexmap' ).regexMap;
+  , regexMap = require( '../regexmap' ).regexMap
+  , fluke = require( 'flukejs' );
 
-function Declarer(emitter, next) {
 
-  emitter.on( 'open scope', function( code, rhs ) {
-    declare(code);
-    next( rhs );
+function Declarer(emitter) {
+
+  emitter.on( 'open scope', function( response ) {
+    declare( response.lhs );
   } );
 
-  emitter.on( 'end', function( code ) {
-    declare(code);
+  emitter.on( 'end', function( response ) {
+    declare( response.lhs );
   } );
 
   function declare(code) {
-    fluke.splitAll( code, function(type, lhs, rhs, token) {
+    fluke.splitAll( code, function(type, response) {
         if (type == 'statement') {
-          if (isType(lhs)) {
-            emitter.emit( 'declare type', lhs );
+          if (isType(response.lhs)) {
+            emitter.emit( 'declare type', response.lhs );
           }
-          else if (isFunctionDeclaration(lhs)) {
-            emitter.emit( 'declare function', lhs );
+          else if (isFunctionDeclaration(response.lhs)) {
+            emitter.emit( 'declare function', response.lhs );
           }
 
           function isFunctionDeclaration(code) {

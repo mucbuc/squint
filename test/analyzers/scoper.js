@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
-  , fluke = require( 'flukejs' )
-  , Test = require( 'mucbuc-jsthree' ).Test
   , Scoper = require( '../../src/analyzers/scoper').Scoper
   , Base = require( '../base' ).Base
-  , Test = require( 'mucbuc-jsthree' ).Test;
+  , defaultRules = { 'open': '{', 'close': '}' };
 
 assert( typeof Scoper !== 'undefined' );
 
-test( basicScope, { 'open': '{', 'close': '}' } );
-test( nestedScopes, { 'open': '{', 'close': '}' } );
-test( aggregateScopes, { 'open': '{', 'close': '}' } );
-test( alternativeScopeTag, { 'open': '<', 'close': '>' } ); 
+Base.test_2( basicScope, defaultRules, Scoper );
+Base.test_2( nestedScopes, defaultRules, Scoper );
+Base.test_2( aggregateScopes, defaultRules, Scoper );
+Base.test_2( alternativeScopeTag, { 'open': '<', 'close': '>' }, Scoper ); 
 
 function alternativeScopeTag(emitter, next) {
   emitter.expect( 'open scope', 'template' );
@@ -52,21 +50,4 @@ function basicScope(emitter, next) {
   emitter.expect( 'open scope', 'namespace bla' );
   emitter.expect( 'close scope', 'hello' );
   next( 'namespace bla { hello }' );
-}
-
-function test(f, rules ) {
-  var emitter = new Test.Emitter
-    , scoper = new Scoper( emitter );
-  
-  f( emitter, splitAll );
-  process.on( 'exit', function() {
-    console.log( f.name + ' passed' );
-  });
-
-  function splitAll( code ) {
-    fluke.splitAll( code, function( type, request ) {
-        emitter.emit(type, request);
-      }
-      , rules ); 
-  }
 }
