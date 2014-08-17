@@ -11,8 +11,8 @@ assert( typeof Scoper !== 'undefined' );
 
 test( basicScope, { 'open': '{', 'close': '}' } );
 test( nestedScopes, { 'open': '{', 'close': '}' } );
-//test( aggregateScopes, { 'open': '{', 'close': '}' } );
-// test( alternativeScopeTag, { 'open': '<', 'close': '>' } ); 
+test( aggregateScopes, { 'open': '{', 'close': '}' } );
+test( alternativeScopeTag, { 'open': '<', 'close': '>' } ); 
 
 function alternativeScopeTag(emitter, next) {
   emitter.expect( 'open scope', 'template' );
@@ -20,14 +20,14 @@ function alternativeScopeTag(emitter, next) {
   next( 'template< typename >' );
 
   emitter.expect( 'open scope', 'template' );
-  emitter.expect( 'close scope', 'template<typename>' );
+  emitter.expect( 'close scope', 'template< typename >' );
   next( 'template< template< typename > >' );
 }
 
 function aggregateScopes( emitter, next ) {
 
   emitter.expect( 'open scope', 'namespace outside' );
-  emitter.expect( 'close scope', 'namespace inside1{}namespace inside2{}' );
+  emitter.expect( 'close scope', 'namespace inside1 {} namespace inside2 {}' );
   emitter.expect( 'end' );
   next( 'namespace outside{ namespace inside1 {} namespace inside2 {} }' );
 }

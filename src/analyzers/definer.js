@@ -12,7 +12,7 @@ var assert = require( 'assert' )
 
 assert( typeof regexMap !== 'undefined' );
 
-function Definer(emitter, rules) {
+function Definer(emitter, next) {
 
   emitter.on( 'open scope', function( code, source, token ) {
     code = code.replace( /.*?;/, '' ).trim()
@@ -24,9 +24,7 @@ function Definer(emitter, rules) {
     else if (isFunction(code))
       initDefine( 'function', code, code.match( regexMap.constructorSplitter, '' ) );
 
-    fluke.splitNext( source, function(type, lhs, rhs, token) {
-        emitter.emit( type, lhs, rhs, token );
-      }, rules );
+    next( source ); 
 
     function isFunction( code ) {
       return code[code.length - 1] == ')';

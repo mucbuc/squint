@@ -1,14 +1,14 @@
 var assert = require( 'assert' )
-  , regexMap = require( '../regexmap' ).regexMap
-  , fluke = require( 'flukejs' );
+  , regexMap = require( '../regexmap' ).regexMap;
 
-function Declarer(emitter) {
+function Declarer(emitter, next) {
 
-  emitter.on( 'open scope', function( code ) {
+  emitter.on( 'open scope', function( code, rhs ) {
     declare(code);
+    next( rhs );
   } );
 
-  emitter.on( 'end', function( bullshit, code ) {
+  emitter.on( 'end', function( code ) {
     declare(code);
   } );
 
