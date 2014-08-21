@@ -12,12 +12,15 @@ var assert = require( 'assert' )
 assert( typeof Declarer !== 'undefined' );
 
 Base.test_2( declareType, defaultRules, Scoper );
-// Base.test_2( declareFunction, defaultRules, Scoper );
-// Base.test_2( declareNot, defaultRules, Scoper );
-// Base.test_2( ignoreSubScopes, defaultRules, Scoper );
+Base.test_2( declareFunction, defaultRules, Scoper );
+Base.test_2( declareNot, defaultRules, Scoper );
+//  Base.test_2( ignoreSubScopes, defaultRules, Scoper );
 
 function ignoreSubScopes(emitter, process) {
   var declarer = new Declarer( emitter ); 
+
+  emitter.on( 'open', console.log ); 
+
   emitter.expectNot( 'declare type' );
   process( 'namespace { struct hello; }' );
 }
@@ -39,7 +42,7 @@ function declareFunction( emitter, process ) {
 function declareType( emitter, process ) {
   var declarer = new Declarer( emitter );
   emitter.expectNot( 'define type' );
-  // emitter.expect( 'declare type', 'struct bla' );
+  emitter.expect( 'declare type', 'struct bla' );
   process( 'struct bla;' );
 }
 
