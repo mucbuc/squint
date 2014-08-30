@@ -21,7 +21,7 @@ function Compiler( emitter ) {
     }
     , scoper = new Scoper( emitter, rules )
 	  , declarer = new Declarer(emitter)
-	  , definer = new Definer(emitter, rules)
+	  , definer = new Definer(emitter)
 	  , preprocessor = new Preprocessor( emitter );
 
 	this.process = function( code ) {

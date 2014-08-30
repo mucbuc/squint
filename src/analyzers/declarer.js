@@ -2,11 +2,10 @@ var assert = require( 'assert' )
   , regexMap = require( '../regexmap' ).regexMap
   , fluke = require( 'flukejs' );
 
-
 function Declarer(emitter) {
 
   emitter.on( 'open scope', function( response ) {
-    declare( response.lhs );
+    declare( response );
   } );
 
   emitter.on( 'end', function( response ) {

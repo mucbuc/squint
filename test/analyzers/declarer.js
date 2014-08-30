@@ -14,12 +14,10 @@ assert( typeof Declarer !== 'undefined' );
 Base.test_2( declareType, defaultRules, Scoper );
 Base.test_2( declareFunction, defaultRules, Scoper );
 Base.test_2( declareNot, defaultRules, Scoper );
-//  Base.test_2( ignoreSubScopes, defaultRules, Scoper );
+Base.test_2( ignoreSubScopes, defaultRules, Scoper );
 
 function ignoreSubScopes(emitter, process) {
   var declarer = new Declarer( emitter ); 
-
-  emitter.on( 'open', console.log ); 
 
   emitter.expectNot( 'declare type' );
   process( 'namespace { struct hello; }' );
