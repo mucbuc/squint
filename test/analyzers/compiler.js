@@ -21,24 +21,27 @@ assert( typeof Scoper === 'function' );
 
 process.setMaxListeners( 0 );
 
-Base.test_2( compilerSingelDeclaration, rules, Scoper );
-Base.test_2( namespaceTreeCompiler, rules, Scoper );
-Base.test_2( namespaceDeclaration, rules, Scoper );
-Base.test_2( compilerNestedNamespaces, rules, Scoper );
-Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
-Base.test_2( compilerNestedTypes, rules, Scoper );
-Base.test_2( compilerFunctionDeclare, rules, Scoper );
-Base.test_2( compilerFunctonDefine, rules, Scoper );
-Base.test_2( compilerMemberFunctionDeclare, rules, Scoper );
-Base.test_2( declareTypeAfterPreproesorDirective, rules, Scoper );
-Base.test_2( declareTypeAfterPreproesorDirectives, rules, Scoper );
+// Base.test_2( compilerSingelDeclaration, rules, Scoper );
+// Base.test_2( namespaceTreeCompiler, rules, Scoper );
+// Base.test_2( namespaceDeclaration, rules, Scoper );
+// Base.test_2( compilerNestedNamespaces, rules, Scoper );
+// Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
+// Base.test_2( compilerNestedTypes, rules, Scoper );
+// Base.test_2( compilerFunctionDeclare, rules, Scoper );
+// Base.test_2( compilerFunctonDefine, rules, Scoper );
+// Base.test_2( compilerMemberFunctionDeclare, rules, Scoper );
+// Base.test_2( declareTypeAfterPreproesorDirective, rules, Scoper );
+// Base.test_2( declareTypeAfterPreproesorDirectives, rules, Scoper );
 
 /* need to rethink shit*/ 
-//Base.test_2( defineTypeAfterDeclareType, rules, Scoper );
+Base.test_2( defineTypeAfterDeclareType, rules, Scoper );
 
 function defineTypeAfterDeclareType( emitter, process ) {
 	var compiler = new Compiler( emitter );
+	
 	emitter.expect( 'statement' );
+	emitter.expect( 'open' ); 
+
 	emitter.expect( 'end' ); 
 
 	//emitter.expect( 'close scope' );
