@@ -22,15 +22,14 @@ function Template( emitter ) {
       , rules = {
           'open scope': '<',
           'close scope': '>'
-        }
-      , content = '';
+        };
 
     sub.on( 'close scope', function(code) {
-      emitter.emit( 'template parameters', content + code.trim() );
+      emitter.emit( 'template parameters', code );
     } );
 
     sub.on( 'end', function(code) {
-      emitter.emit( 'template parameters', content + code.trim() );
+      emitter.emit( 'template parameters', code );
     });
 
     fluke.splitAll( code, function( type, response) {
