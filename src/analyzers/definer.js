@@ -27,7 +27,7 @@ function Definer(emitter) {
     }
 
     function isNamespace( code ) {
-      return code.indexOf( 'namespace' ) == 0;
+      return code.indexOf( 'namespace' ) != -1;
     }
 
     function initDefine( type, name, matches ) {

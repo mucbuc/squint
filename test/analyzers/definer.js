@@ -14,7 +14,28 @@ assert( typeof Definer !== 'undefined' );
 Base.test_2( defineFunction, rules, Scoper ); 
 Base.test_2( defineType, rules, Scoper ); 
 Base.test_2( defineSubType, rules, Scoper ); 
-Base.test_2( defineNamespace, rules, Scoper ); 
+Base.test_2( defineNamespace, rules, Scoper );
+Base.test_2( defineNamespaceWithWhite, rules, Scoper );
+
+function defineNamespaceWithWhite(emitter, process) {
+
+  var definer = new Definer(emitter);
+
+  emitter.expectNot( 'define type' );
+  emitter.expectNot( 'define function' );
+
+  emitter.expect( 'define namespace', { name: ' namespace hello ', code: ' this is it ' } );
+  process( ' namespace hello { this is it }' );
+
+  emitter.expect( 'define namespace', { name: '  namespace world ', code: ' wtf? ' } );
+  process( '  namespace world { wtf? }' );
+
+  emitter.expect( 'define namespace', { name: '    namespace world', code: '' } );
+  process( '    namespace world{}' );
+
+  emitter.expect( 'define namespace', { name: 'namespace   world ', code: '' } );
+  process( 'namespace   world {}' );
+}
 
 function defineFunction(emitter, process) {
   
