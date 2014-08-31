@@ -15,12 +15,9 @@ Base.test_2( templateNestedParameters, rules, Scoper );
 
 function templateNestedParameters(emitter, process) {
 
-	console.log( "** templateNestedParameters disabled ** ");
-	return;
-
 	var templater = new Template( emitter );
 
-	emitter.expect( 'template parameters', 'template<typename>, template<typename>' );
+	emitter.expect( 'template parameters', ' template< typename >, template< typename > ' );
 	process( 'template< template< typename >, template< typename > >;' );
 }
 

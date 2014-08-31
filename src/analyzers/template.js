@@ -17,25 +17,23 @@ function Template( emitter ) {
 
   function parse( response ) {
     var sub = Object.create( emitter.constructor.prototype )
-      , code = response.lhs
-      , scoper = new Scoper( sub )
-      , rules = {
-          'open scope': '<',
-          'close scope': '>'
-        };
+      , scoper = new Scoper( sub );
 
     sub.on( 'close scope', function(code) {
       emitter.emit( 'template parameters', code );
     } );
 
-    sub.on( 'end', function(code) {
-      emitter.emit( 'template parameters', code );
+    sub.on( 'end', function( response ) {
+      emitter.emit( 'template parameters', response.lhs );
     });
 
-    fluke.splitAll( code, function( type, response) {
-          sub.emit( type, response.lhs );
+    fluke.splitAll( response.lhs, function( type, response) {
+          sub.emit( type, response );
         }
-      , rules );
+      , {
+          'open': '<',
+          'close': '>'
+      } );
   }
 }
 
