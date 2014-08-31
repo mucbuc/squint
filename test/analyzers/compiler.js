@@ -31,15 +31,22 @@ Base.test_2( compilerFunctionDeclare, rules, Scoper );
 Base.test_2( compilerFunctonDefine, rules, Scoper );
 Base.test_2( compilerMemberFunctionDeclare, rules, Scoper );
 Base.test_2( declareTypeAfterPreproesorDirective, rules, Scoper );
-//Base.test_2( declareTypeAfterPreproesorDirectives, rules, Scoper );
-//Base.test_2( defineTypeAfterDeclareType, rules, Scoper );
+Base.test_2( declareTypeAfterPreproesorDirectives, rules, Scoper );
 
+/* need to rethink shit*/ 
+//Base.test_2( defineTypeAfterDeclareType, rules, Scoper );
 
 function defineTypeAfterDeclareType( emitter, process ) {
 	var compiler = new Compiler( emitter );
 	emitter.expect( 'statement' );
-	emitter.expect( 'declare type', { name: 'struct jimmy', code: '' } );
-	//emitter.expect( 'define type', { name: 'struct hey', code: 'joe' } ); 
+	emitter.expect( 'end' ); 
+
+	//emitter.expect( 'close scope' );
+
+	emitter.on( 'define type', console.log ); 
+	// emitter.expect( 'declare type' ); // , { name: 'struct jimmy', code: '' } );
+	
+	//emitter.expect( 'define type', { name: ' struct hey ', code: ' joe ' } ); 
 	process( 'struct jimmy; struct hey { joe }' );
 }
 
@@ -53,7 +60,7 @@ function declareTypeAfterPreproesorDirectives( emitter, process ) {
 function declareTypeAfterPreproesorDirective( emitter, process ) {
 	var compiler = new Compiler( emitter );
 	emitter.expect( 'preprocess' );
-	//emitter.expect( 'declare type', 'struct bla' );
+	emitter.expect( 'declare type', 'struct bla' );
 	process( '#define hello asd\nstruct bla;' );
 }
 
@@ -99,7 +106,7 @@ function compilerNestedTypes(emitter, process) {
 
 function compilerDeclarationsAndDefinitions(emitter, process) {
 	var compiler = new Compiler( emitter );
-	emitter.expect( 'statement' );
+	//emitter.expect( 'statement' );
 	emitter.expect( 'declare type', 'struct hello' ); 
   	process( 'struct hello;' );
 
@@ -157,7 +164,6 @@ function namespaceTreeCompiler(emitter, process) {
 
 function compilerSingelDeclaration(emitter, process) {
 	var compiler = new Compiler( emitter ); 
-	emitter.expect( 'statement' ); 
 	emitter.expect( 'declare type', 'struct hello' );
 	process( 'struct hello;' );  
 }

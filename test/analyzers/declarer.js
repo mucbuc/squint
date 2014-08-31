@@ -18,7 +18,6 @@ Base.test_2( ignoreSubScopes, defaultRules, Scoper );
 
 function ignoreSubScopes(emitter, process) {
   var declarer = new Declarer( emitter ); 
-
   emitter.expectNot( 'declare type' );
   process( 'namespace { struct hello; }' );
 }
