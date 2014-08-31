@@ -25,7 +25,11 @@ Base.test_2( compilerSingelDeclaration, rules, Scoper );
 Base.test_2( namespaceTreeCompiler, rules, Scoper );
 Base.test_2( namespaceDeclaration, rules, Scoper );
 Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
-// test( compilerNestedTypes ); 
+Base.test_2( compilerNestedTypes, rules, Scoper );
+
+//test( compilerNestedNamespaces ); 
+
+//  
 // test( compilerFunctionDeclare ); 
 // test( compilerFunctonDefine );
 // test( compilerMemberFunctionDeclare );
@@ -71,15 +75,20 @@ function compilerFunctionDeclare(emitter, parser) {
 	parser.process( 'void foo();' );
 }
 
-function compilerNestedTypes(emitter, parser) {
-    
-	emitter.expect( 'define type', { name: 'struct outside', code: 'struct inside{};' } );
+function compilerNestedTypes(emitter, process) {
+    var compiler = new Compiler( emitter );
+	
+	emitter.expect( 'define type', { name: 'struct outside ', code: ' struct inside {}; ' } );
+
 	emitter.once( 'define type', function( context ) {
-		emitter.expect( 'define type', { name: 'struct inside', code: 'struct inside{}' } ); 
-		parser.process( context.code ); 
+		emitter.once( 'define type', function( context ) {
+			emitter.expect( 'define type', { name: ' struct inside ', code: '' } );
+			process( context.code );
+		} ); 
+		process( context.code );
 	} ); 	
 
-  parser.process( 'struct outside { struct inside {}; };');
+  process( 'struct outside { struct inside {}; };');
 }
 
 function compilerNestedNamespaces(emitter, parser) {
