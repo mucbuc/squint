@@ -3,23 +3,27 @@
 var assert = require( 'chai' ).assert
   , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
   , Base = require( '../base' ).Base
-  , Commenter = require( '../../src/analyzers/commenter' ).Commenter;
+  , Commenter = require( '../../src/analyzers/commenter' ).Commenter
+  , rules = {
+      'comment line': '\\/\\/',
+      'comment block': '\\/\\*',
+    };
 
 assert( typeof Commenter !== 'undefined' );
 
-test( commenterSingleLine );
-test( commentBlock );
+Base.test_2( commenterSingleLine, rules, Tokenizer );
+Base.test_2( commentBlock, rules, Tokenizer );
 
-function commentBlock(emitter, parser) {
+function commentBlock(emitter, process) {
   emitter.expect( 'comment block' );
   //emitter.expect( 'consume', 'hello*/' ); // not sure why this fails
-  parser.process( '/*hello*/' );
+  process( '/*hello*/' );
 }
 
-function commenterSingleLine(emitter, parser) {
+function commenterSingleLine(emitter, process) {
   emitter.expect( 'comment line' );
   //emitter.expect( 'consume', 'hello\n' ); // not sure why this fails
-  parser.process( '// hello\n' );
+  process( '// hello\n' );
 }
 
 function test(f) {
