@@ -21,7 +21,7 @@ assert( typeof Scoper === 'function' );
 process.setMaxListeners( 0 );
 
 Base.test_2( compilerSingelDeclaration, rules, Scoper );
-// test( namespaceTreeCompiler );
+Base.test_2( namespaceTreeCompiler, rules, Scoper );
 // test( namespaceDeclaration );
 // test( compilerDeclarationsAndDefinitions );
 // test( compilerNestedTypes ); 
@@ -116,19 +116,24 @@ function namespaceDeclaration(emitter, parser) {
 	parser.process( 'namespace outside{ struct hello; }' );
 } 
 
-function namespaceTreeCompiler(emitter, parser) {
-  
-  emitter.expect( 'define namespace', { name: 'namespace outside', code: 'namespace inside{}' } );
+function namespaceTreeCompiler(emitter, process) {
+  var compiler = new Compiler( emitter );
+
+  emitter.expect( 'define namespace', { name: 'namespace outside', code: ' namespace inside {} ' } );
   emitter.expect( 'end' ); 
 
-emitter.once( 'define namespace', function( context ) {
-	emitter.expect( 'define namespace', { name: 'namespace inside', code: '' } ); 
-	emitter.expect( 'end' ); 
-	
-	parser.process( context.code )
-} );
+  emitter.once( 'define namespace', function( context ) {
+	var inner = context.code; 
+  	
+	emitter.once( 'end', function() {
+		emitter.expect( 'define namespace', { name: 'namespace inside ', code: '' } ); 
+		emitter.expect( 'end' ); 
+		console.log( inner );
+		process( inner.trim() );
+	} ); 
+  } );
 
-  parser.process( 'namespace outside{ namespace inside {} }' );
+  processSource( 'namespace outside{ namespace inside {} }' );
 } 
 
 function compilerSingelDeclaration(emitter, process) {
