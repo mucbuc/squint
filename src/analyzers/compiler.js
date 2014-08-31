@@ -15,6 +15,7 @@ function Compiler( emitter ) {
       'preprocess': '#',
       'comment line': '\\/\\/',
       'comment block': '\\/\\*',
+      'open literal': '([^//]"|^")',
       'statement': ';',
       'open': '{',
       'close': '}',

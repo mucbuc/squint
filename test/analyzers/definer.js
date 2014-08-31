@@ -62,7 +62,6 @@ function defineType(emitter, process) {
   process( 'typedef hello string; struct cya { yes}' );
 }
 
-
 function defineNamespace(emitter, process) {
 
   var definer = new Definer(emitter);

@@ -25,10 +25,3 @@ function commenterSingleLine(emitter, process) {
   //emitter.expect( 'consume', 'hello\n' ); // not sure why this fails
   process( '// hello\n' );
 }
-
-function test(f) {
-  Base.test( f, Commenter, Tokenizer, {
-    'comment line': '\\/\\/',
-    'comment block': '\\/\\*',
-  } );
-}

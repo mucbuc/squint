@@ -3,27 +3,26 @@
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
   , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
-  , Literalizer = require( '../../src/analyzers/literalizer.js').Literalizer; 
+  , Literalizer = require( '../../src/analyzers/literalizer.js').Literalizer
+  , rules = { 'open literal': '([^//]"|^")' }; 
 
 assert( typeof Literalizer === 'function' );
 
-test( stringLiteral );
-test( ignorable );
+Base.test_2( stringLiteral, rules, Tokenizer );
+Base.test_2( stringLiteralWithQutationMarks, rules, Tokenizer );
 
-function ignorable( emitter, parser ) {
-	emitter.expect( 'ignore' );
-	parser.process( '\\"' );
-}
+function stringLiteralWithQutationMarks(emitter, process) {
+  var literalizer = new Literalizer( emitter ); 
 
-function stringLiteral(emitter, parser) {
   emitter.expectNot( 'declare' ); 
-  emitter.expect( 'literal' );
-  parser.process( '"struct hello;"' );
+  emitter.expect( 'open literal' );
+  process( '"struct he/"llo;"' );
 }
 
-function test(f) {
-	Base.test( f, Literalizer, Tokenizer, {
-		'literal': '\"',
-		'ignore': '\\\"',
-	} );
+function stringLiteral(emitter, process) {
+  var literalizer = new Literalizer( emitter ); 
+
+  emitter.expectNot( 'declare' ); 
+  emitter.expect( 'open literal' );
+  process( '"struct hello;"' );
 }

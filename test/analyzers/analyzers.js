@@ -8,3 +8,4 @@ cp.fork( 'declarer' );
 cp.fork( 'template' );
 cp.fork( 'preprocessor' );
 cp.fork( 'commenter' );
+cp.fork( 'literalizer' );
