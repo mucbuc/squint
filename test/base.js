@@ -23,7 +23,7 @@ var Base = {
 
   test_2: function(f, rules, Tokenizer ) {
       var emitter = new Test.Emitter
-        , scoper = new Tokenizer( emitter );
+        , tokenizer = new Tokenizer( emitter );
       
       f( emitter, splitAll );
       process.on( 'exit', function() {

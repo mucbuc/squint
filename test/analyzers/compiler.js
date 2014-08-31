@@ -3,23 +3,34 @@
 var assert = require( 'chai' ).assert
   , events = require( 'events' )
   , Compiler = require( '../../src/analyzers/compiler' ).Compiler
-  , Base = require( '../base' ).Base;
+  , Base = require( '../base' ).Base
+  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
+  , rules = {
+      'preprocess': '#',
+      'comment line': '\\/\\/',
+      'comment block': '\\/\\*',
+      'open literal': '([^//]"|^")',
+      'statement': ';',
+      'open': '{',
+      'close': '}',
+    };
 
 assert( typeof Compiler === 'function' );
+assert( typeof Scoper === 'function' );
 
 process.setMaxListeners( 0 );
 
-test( compilerSingelDeclaration );
-test( namespaceTreeCompiler );
-test( namespaceDeclaration );
-test( compilerDeclarationsAndDefinitions );
-test( compilerNestedTypes ); 
-test( compilerFunctionDeclare ); 
-test( compilerFunctonDefine );
-test( compilerMemberFunctionDeclare );
-test( declareTypeAfterPreproesorDirective ); 
-test( declareTypeAfterPreproesorDirectives ); 
-test( defineTypeAfterDeclareType );
+Base.test_2( compilerSingelDeclaration, rules, Scoper );
+// test( namespaceTreeCompiler );
+// test( namespaceDeclaration );
+// test( compilerDeclarationsAndDefinitions );
+// test( compilerNestedTypes ); 
+// test( compilerFunctionDeclare ); 
+// test( compilerFunctonDefine );
+// test( compilerMemberFunctionDeclare );
+// test( declareTypeAfterPreproesorDirective ); 
+// test( declareTypeAfterPreproesorDirectives ); 
+// test( defineTypeAfterDeclareType );
 
 function defineTypeAfterDeclareType( emitter, parser ) {
   emitter.expect( 'declare type', { name: 'struct jimmy', code: '' } );
@@ -110,19 +121,20 @@ function namespaceTreeCompiler(emitter, parser) {
   emitter.expect( 'define namespace', { name: 'namespace outside', code: 'namespace inside{}' } );
   emitter.expect( 'end' ); 
 
-	emitter.once( 'define namespace', function( context ) {
-		emitter.expect( 'define namespace', { name: 'namespace inside', code: '' } ); 
-		emitter.expect( 'end' ); 
-		
-		parser.process( context.code )
-	} );
+emitter.once( 'define namespace', function( context ) {
+	emitter.expect( 'define namespace', { name: 'namespace inside', code: '' } ); 
+	emitter.expect( 'end' ); 
+	
+	parser.process( context.code )
+} );
 
   parser.process( 'namespace outside{ namespace inside {} }' );
 } 
 
-function compilerSingelDeclaration(emitter, parser) {
-	emitter.expect( 'declare type', 'struct hello' );
-	parser.process( 'struct hello;', emitter );  
+function compilerSingelDeclaration(emitter, process) {
+	var declarer = new Compiler( emitter ); 
+	//emitter.expect( 'declare type', 'struct hello' );
+	process( 'struct hello;' );  
 }
 
 function test(f) {
