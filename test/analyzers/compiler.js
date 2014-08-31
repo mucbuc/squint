@@ -12,7 +12,7 @@ var assert = require( 'chai' ).assert
       'open literal': '([^//]"|^")',
       'statement': ';',
       'open': '{',
-      'close': '}',
+      'close': '}'
     };
 
 assert( typeof Compiler === 'function' );
@@ -132,8 +132,8 @@ emitter.once( 'define namespace', function( context ) {
 } 
 
 function compilerSingelDeclaration(emitter, process) {
-	var declarer = new Compiler( emitter ); 
-	//emitter.expect( 'declare type', 'struct hello' );
+	var compiler = new Compiler( emitter ); 
+	emitter.expect( 'declare type', 'struct hello' );
 	process( 'struct hello;' );  
 }
 

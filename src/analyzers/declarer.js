@@ -9,7 +9,7 @@ function Declarer(emitter) {
   } );
 
   emitter.on( 'end', function( response ) {
-    declare( response.lhs );
+    declare( response.stash );
   } );
 
   function declare(code) {

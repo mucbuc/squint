@@ -30,10 +30,6 @@ function Compiler( emitter ) {
 	  , preprocessor = new Preprocessor( emitter )
     , literalizer = new Literalizer( emitter )
     , commenter = new Commenter( emitter );
-
-	this.process = function( code ) {
-		scoper.process( code );
-	};
 }
 
 exports.Compiler = Compiler;
