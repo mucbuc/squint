@@ -3,6 +3,7 @@
 var assert = require( 'chai' ).assert
   , events = require( 'events' )
   , Compiler = require( '../../src/analyzers/compiler' ).Compiler
+  , Declarer = require( '../../src/analyzers/declarer' ).Declarer
   , Base = require( '../base' ).Base
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , rules = {
@@ -23,7 +24,7 @@ process.setMaxListeners( 0 );
 Base.test_2( compilerSingelDeclaration, rules, Scoper );
 Base.test_2( namespaceTreeCompiler, rules, Scoper );
 Base.test_2( namespaceDeclaration, rules, Scoper );
-// test( compilerDeclarationsAndDefinitions );
+//Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
 // test( compilerNestedTypes ); 
 // test( compilerFunctionDeclare ); 
 // test( compilerFunctonDefine );
@@ -93,13 +94,13 @@ function compilerNestedNamespaces(emitter, parser) {
 	parser.process( 'namespace outside { namespace inside {} }', emitter );  
 }
 
-function compilerDeclarationsAndDefinitions(emitter, parser) {
+function compilerDeclarationsAndDefinitions(emitter, process) {
 	
 	emitter.expect( 'declare type', 'struct hello' ); 
-  parser.process( 'struct hello;' );
+  	process( 'struct hello;' );
 
 	emitter.expect( 'define type', { name: 'struct hello', code: '' } ); 
-	parser.process( 'struct hello{};' );
+	process( 'struct hello{};' );
 }
 
 function namespaceDeclaration(emitter, process) {
@@ -111,8 +112,6 @@ function namespaceDeclaration(emitter, process) {
 	emitter.once( 'define namespace', function( context ) {
 		emitter.once( 'end', function() {
 			emitter.expect( 'declare type', 'struct hello' );
-			//emitter.expect( 'end' ); 
-			console.log( context.code ); 
 			process( context.code );
 		} ); 
 	} ); 
@@ -140,6 +139,7 @@ function namespaceTreeCompiler(emitter, process) {
 
 function compilerSingelDeclaration(emitter, process) {
 	var compiler = new Compiler( emitter ); 
+	emitter.expect( 'statement' ); 
 	emitter.expect( 'declare type', 'struct hello' );
 	process( 'struct hello;' );  
 }

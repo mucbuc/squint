@@ -17,8 +17,11 @@ function Scoper( emitter ) {
   emitter.on( 'close', function(response) {
     assert( depth );
     
-    if (!--depth) 
+    if (!--depth)
+    { 
       emitter.emit( 'close scope', response.stash + response.lhs );
+      response.resetStash();
+    }
   } );
 }
 
