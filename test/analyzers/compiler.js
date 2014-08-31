@@ -22,7 +22,7 @@ process.setMaxListeners( 0 );
 
 Base.test_2( compilerSingelDeclaration, rules, Scoper );
 Base.test_2( namespaceTreeCompiler, rules, Scoper );
-// test( namespaceDeclaration );
+Base.test_2( namespaceDeclaration, rules, Scoper );
 // test( compilerDeclarationsAndDefinitions );
 // test( compilerNestedTypes ); 
 // test( compilerFunctionDeclare ); 
@@ -102,18 +102,22 @@ function compilerDeclarationsAndDefinitions(emitter, parser) {
 	parser.process( 'struct hello{};' );
 }
 
-function namespaceDeclaration(emitter, parser) {
-	
-	emitter.expect( 'define namespace', { name: 'namespace outside', code: 'struct hello;' } );
+function namespaceDeclaration(emitter, process) {
+	var compiler = new Compiler( emitter );
+
+	emitter.expect( 'define namespace', { name: 'namespace outside', code: ' struct hello; ' } );
 	emitter.expect( 'end' ); 
 
 	emitter.once( 'define namespace', function( context ) {
-		emitter.expect( 'declare type', 'struct hello' );
-		emitter.expect( 'end' ); 
-		parser.process( context.code );
+		emitter.once( 'end', function() {
+			emitter.expect( 'declare type', 'struct hello' );
+			//emitter.expect( 'end' ); 
+			console.log( context.code ); 
+			process( context.code );
+		} ); 
 	} ); 
 
-	parser.process( 'namespace outside{ struct hello; }' );
+	process( 'namespace outside{ struct hello; }' );
 } 
 
 function namespaceTreeCompiler(emitter, process) {
@@ -123,17 +127,15 @@ function namespaceTreeCompiler(emitter, process) {
   emitter.expect( 'end' ); 
 
   emitter.once( 'define namespace', function( context ) {
-	var inner = context.code; 
-  	
 	emitter.once( 'end', function() {
-		emitter.expect( 'define namespace', { name: 'namespace inside ', code: '' } ); 
-		emitter.expect( 'end' ); 
-		console.log( inner );
-		process( inner.trim() );
+		emitter.expect( 'define namespace', { name: ' namespace inside ', code: '' } ); 
+		emitter.expect( 'end' );
+
+		process( context.code );
 	} ); 
   } );
 
-  processSource( 'namespace outside{ namespace inside {} }' );
+  process( 'namespace outside{ namespace inside {} }' );
 } 
 
 function compilerSingelDeclaration(emitter, process) {

@@ -6,10 +6,15 @@ function Declarer(emitter) {
 
   emitter.on( 'open scope', function( response ) {
     declare( response );
+
+    emitter.once( 'close scope', function( ) {
+
+    } );
   } );
 
   emitter.on( 'end', function( response ) {
-    declare( response.stash );
+    console.log( response ); 
+    declare( response.lhs );
   } );
 
   function declare(code) {

@@ -41,6 +41,7 @@ function declareType( emitter, process ) {
   var declarer = new Declarer( emitter );
   emitter.expectNot( 'define type' );
   emitter.expect( 'declare type', 'struct bla' );
+  emitter.expect( 'end' );
   process( 'struct bla;' );
 }
 
