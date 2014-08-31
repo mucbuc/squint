@@ -26,9 +26,6 @@ function templateNestedParameters(emitter, process) {
 
 function macroParameters(emitter, process) {
 
-	console.log( "** macroParameters disabled ** ");
-	return;
-
 	var templater = new Template( emitter );
 
 	emitter.expect( 'template parameters', 'MACRO(), MACRO' );
