@@ -27,8 +27,7 @@ Base.test_2( namespaceDeclaration, rules, Scoper );
 Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
 Base.test_2( compilerNestedTypes, rules, Scoper );
 Base.test_2( compilerFunctionDeclare, rules, Scoper );
- 
-// test( compilerFunctonDefine );
+Base.test_2( compilerFunctonDefine, rules, Scoper );
 // test( compilerMemberFunctionDeclare );
 // test( declareTypeAfterPreproesorDirective ); 
 // test( declareTypeAfterPreproesorDirectives ); 
@@ -65,9 +64,10 @@ function compilerMemberFunctionDeclare(emitter, parser) {
   parser.process( 'struct text{void member();};', emitter );
 }
 
-function compilerFunctonDefine(emitter, parser) {
+function compilerFunctonDefine(emitter, process) {
+	var compiler = new Compiler( emitter );
 	emitter.expect( 'define function', { name: 'void foo()', code: 'hello' } ); 
-	parser.process( 'void foo() { hello }' );
+	process( 'void foo() { hello }' );
 }
 
 function compilerFunctionDeclare(emitter, process) {
