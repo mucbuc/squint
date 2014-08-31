@@ -28,9 +28,9 @@ Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
 Base.test_2( compilerNestedTypes, rules, Scoper );
 Base.test_2( compilerFunctionDeclare, rules, Scoper );
 Base.test_2( compilerFunctonDefine, rules, Scoper );
-// test( compilerMemberFunctionDeclare );
-// test( declareTypeAfterPreproesorDirective ); 
-// test( declareTypeAfterPreproesorDirectives ); 
+Base.test_2( compilerMemberFunctionDeclare, rules, Scoper );
+Base.test_2( declareTypeAfterPreproesorDirective, rules, Scoper );
+Base.test_2( declareTypeAfterPreproesorDirectives, rules, Scoper );
 // test( defineTypeAfterDeclareType );
 
 //test( compilerNestedNamespaces ); 
@@ -42,26 +42,26 @@ function defineTypeAfterDeclareType( emitter, parser ) {
   parser.process( 'struct jimmy; struct hey { joe }' );
 }
 
-function declareTypeAfterPreproesorDirectives( emitter, parser ) {
+function declareTypeAfterPreproesorDirectives( emitter, process ) {
  	emitter.expect( 'preprocessor' );
  	emitter.expect( 'declare type', 'struct bla' );
-  parser.process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;', emitter );
+	process( '#define hello asd\n#define hello\\nasdfasd\nstruct bla;' );
 }
 
-function declareTypeAfterPreproesorDirective( emitter, parser ) {
-  emitter.expect( 'preprocessor' );
-  emitter.expect( 'declare type', 'struct bla' );
-	parser.process( '#define hello asd\nstruct bla;', emitter );
+function declareTypeAfterPreproesorDirective( emitter, process ) {
+	emitter.expect( 'preprocessor' );
+	emitter.expect( 'declare type', 'struct bla' );
+	process( '#define hello asd\nstruct bla;' );
 }
 
-function compilerMemberFunctionDeclare(emitter, parser) {
-  emitter.expect( 'define type' ); 
+function compilerMemberFunctionDeclare(emitter, process) {
+  	emitter.expect( 'define type' ); 
 	emitter.once( 'define type', function( context ) {
 		emitter.expect( 'declare function', 'void member()' ); 
-		parser.process( context.code ); 
+		process( context.code ); 
 	} ); 
 
-  parser.process( 'struct text{void member();};', emitter );
+	process( 'struct text{void member();};' );
 }
 
 function compilerFunctonDefine(emitter, process) {
