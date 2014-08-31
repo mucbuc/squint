@@ -95,12 +95,13 @@ function compilerNestedNamespaces(emitter, parser) {
 }
 
 function compilerDeclarationsAndDefinitions(emitter, process) {
-	
+	var compiler = new Compiler( emitter );
+	emitter.expect( 'statement' );
 	emitter.expect( 'declare type', 'struct hello' ); 
   	process( 'struct hello;' );
 
-	// emitter.expect( 'define type', { name: 'struct hello', code: '' } ); 
-	// process( 'struct hello{};' );
+	emitter.expect( 'define type', { name: 'struct hello', code: '' } ); 
+	process( 'struct hello{};' );
 }
 
 function namespaceDeclaration(emitter, process) {
