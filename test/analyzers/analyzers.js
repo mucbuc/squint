@@ -9,3 +9,4 @@ cp.fork( 'template' );
 cp.fork( 'preprocessor' );
 cp.fork( 'commenter' );
 cp.fork( 'literalizer' );
+cp.fork( 'compiler' );

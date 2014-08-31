@@ -6,7 +6,8 @@ var assert = require( 'assert' )
   , Declarer = require( '../../src/analyzers/declarer' ).Declarer
   , defaultRules = {
         'open': '{',
-        'close': '}'
+        'close': '}',
+        'statement': ';'
       };
 
 assert( typeof Declarer !== 'undefined' );
