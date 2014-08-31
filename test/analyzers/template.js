@@ -8,10 +8,10 @@ var assert = require( 'assert' )
 
 process.setMaxListeners( 0 );
 
-test( singleParameter );
-test( multipleParameters );
-test( macroParameters );
-test( templateNestedParameters );
+Base.test_2( singleParameter, rules, Scoper );
+//	Base.test_2( multipleParameters );
+// test( macroParameters );
+// test( templateNestedParameters );
 
 function templateNestedParameters(emitter, parser) {
 
@@ -63,26 +63,26 @@ function multipleParameters(emitter, parser) {
 	parser.process( 'template< class A, class B> void text( A a ) {', rules );
 }
 
-function singleParameter(emitter, parser) {
+function singleParameter(emitter, process) {
 	var templater = new Template( emitter );
 
 	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A>{', rules );
+	process( 'template<class A>{' );
 
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A>;', rules );
+	// emitter.expect( 'template parameters', 'class A' );
+	// process( 'template<class A>;' );
 
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> text text {', rules );
+	// emitter.expect( 'template parameters', 'class A' );
+	// process( 'template<class A> text text {' );
 
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> text text;', rules );
+	// emitter.expect( 'template parameters', 'class A' );
+	// process( 'template<class A> text text;' );
 
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> void text( A a ) {', rules );
+	// emitter.expect( 'template parameters', 'class A' );
+	// process( 'template<class A> void text( A a ) {' );
 
-	emitter.expect( 'template parameters', 'class A' );
-	parser.process( 'template<class A> void text( A a );', rules );
+	// emitter.expect( 'template parameters', 'class A' );
+	// process( 'template<class A> void text( A a );' );
 }
 
 function test(f) {

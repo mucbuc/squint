@@ -15,8 +15,9 @@ function Template( emitter ) {
   emitter.on( 'open', parse );
   emitter.on( 'statement', parse );
 
-  function parse( code ) {
+  function parse( response ) {
     var sub = Object.create( emitter.constructor.prototype )
+      , code = response.lhs
       , scoper = new Scoper( sub )
       , rules = {
           'open scope': '<',
@@ -32,8 +33,8 @@ function Template( emitter ) {
       emitter.emit( 'template parameters', content + code.trim() );
     });
 
-    fluke.splitAll( code, function( type, lhs, rhs, token ) {
-          sub.emit( type, lhs, rhs, token );
+    fluke.splitAll( code, function( type, response) {
+          sub.emit( type, response.lhs );
         }
       , rules );
   }
