@@ -9,7 +9,7 @@ function Declarer(emitter) {
   } );
 
   emitter.on( 'statement', function( response ) { 
-    declare( response.lhs ); 
+    declare( response.lhs );
   } ); 
 
   emitter.on( 'end', function( response ) {
@@ -35,8 +35,6 @@ function Declarer(emitter) {
         }
       }, 
       { 
-        'open': '{',
-        'close': '}',
         'statement': ';'
       } 
     );

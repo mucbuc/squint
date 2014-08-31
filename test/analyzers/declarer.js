@@ -5,9 +5,8 @@ var assert = require( 'assert' )
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , Declarer = require( '../../src/analyzers/declarer' ).Declarer
   , defaultRules = {
-        'open': '{',
-        'close': '}',
-        'statement': ';'
+        'statement': ';',
+        'open': '{'
       };
 
 assert( typeof Declarer !== 'undefined' );
@@ -15,7 +14,7 @@ assert( typeof Declarer !== 'undefined' );
 Base.test_2( declareType, defaultRules, Scoper );
 Base.test_2( declareFunction, defaultRules, Scoper );
 Base.test_2( declareNot, defaultRules, Scoper );
-Base.test_2( ignoreSubScopes, defaultRules, Scoper );
+//Base.test_2( ignoreSubScopes, defaultRules, Scoper );
 
 function ignoreSubScopes(emitter, process) {
   var declarer = new Declarer( emitter ); 
