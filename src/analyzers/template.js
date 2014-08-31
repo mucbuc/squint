@@ -14,7 +14,6 @@ function Template( emitter ) {
 
   emitter.on( 'open', parse );
   emitter.on( 'statement', parse );
-  emitter.on( 'end', parse );
 
   function parse( response ) {
     var sub = Object.create( emitter.constructor.prototype )
