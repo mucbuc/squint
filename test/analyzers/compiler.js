@@ -26,16 +26,16 @@ Base.test_2( namespaceTreeCompiler, rules, Scoper );
 Base.test_2( namespaceDeclaration, rules, Scoper );
 Base.test_2( compilerDeclarationsAndDefinitions, rules, Scoper );
 Base.test_2( compilerNestedTypes, rules, Scoper );
-
-//test( compilerNestedNamespaces ); 
-
-//  
-// test( compilerFunctionDeclare ); 
+Base.test_2( compilerFunctionDeclare, rules, Scoper );
+ 
 // test( compilerFunctonDefine );
 // test( compilerMemberFunctionDeclare );
 // test( declareTypeAfterPreproesorDirective ); 
 // test( declareTypeAfterPreproesorDirectives ); 
 // test( defineTypeAfterDeclareType );
+
+//test( compilerNestedNamespaces ); 
+
 
 function defineTypeAfterDeclareType( emitter, parser ) {
   emitter.expect( 'declare type', { name: 'struct jimmy', code: '' } );
@@ -70,9 +70,11 @@ function compilerFunctonDefine(emitter, parser) {
 	parser.process( 'void foo() { hello }' );
 }
 
-function compilerFunctionDeclare(emitter, parser) {
+function compilerFunctionDeclare(emitter, process) {
+	
+	var compiler = new Compiler( emitter );
 	emitter.expect( 'declare function', 'void foo()' );
-	parser.process( 'void foo();' );
+	process( 'void foo();' );
 }
 
 function compilerNestedTypes(emitter, process) {
