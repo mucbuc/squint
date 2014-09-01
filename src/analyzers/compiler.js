@@ -10,21 +10,11 @@ assert( typeof Scoper === 'function' );
 assert( typeof Declarer === 'function' );
 assert( typeof Definer === 'function' );
 assert( typeof Preprocessor === 'function' );
-assert( typeof Commenter === 'function' );
 assert( typeof Literalizer === 'function' );
+assert( typeof Commenter === 'function' );
 
 function Compiler( emitter ) {
-
-  var rules = {
-      'preprocess': '#',
-      'comment line': '\\/\\/',
-      'comment block': '\\/\\*',
-      'open literal': '([^//]"|^")',
-      'statement': ';',
-      'open': '{',
-      'close': '}',
-    }
-    , scoper = new Scoper( emitter, rules )
+  var scoper = new Scoper( emitter )
 	  , declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
 	  , preprocessor = new Preprocessor( emitter )
