@@ -1,27 +1,44 @@
-var assert = require( 'assert' );
+var assert = require( 'assert' )
+  , fluke = require( 'flukejs' );
 
-function Scoper( emitter ) {
+function Scoper( emitter, rules ) {
 
   var instance = this
     , depth = 0;
 
-  emitter.on( 'open', function(response) {
-    if (!depth)
-    {
-      emitter.emit( 'open scope', response.lhs );
-      response.resetStash(); 
-    }
-    ++depth;
-  } );
+  if (typeof rules === 'undefined') {
+    rules = {
+        'open': '{',
+        'close': '}'
+      };
+  }
 
-  emitter.on( 'close', function(response) {
-    assert( depth );
-    
-    if (!--depth)
-    { 
-      emitter.emit( 'close scope', response.stash + response.lhs );
-      response.resetStash();
-    }
+  emitter.on( 'open', function(response) {
+    var depth = 1;
+    emitter.emit( 'open scope', response.lhs );
+    response.resetStash(); 
+    do {
+      var content = '';
+      fluke.splitNext(response.rhs, function(type, inner) {  
+        if (type == 'open') {
+          ++depth; 
+        }
+        else if (type == 'close' || type == 'end') {
+          if (!--depth) {
+            content += inner.lhs;
+            emitter.emit( 'close scope', content );
+            response.consume( content.length );
+            response.resetStash();
+          }
+        }
+        else if (type == 'end') {
+          if (!--depth) {
+            emitter.emit( 'end', inner );
+          }
+        }
+      }, rules );
+    } 
+    while(depth); 
   } );
 }
 

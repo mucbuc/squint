@@ -17,7 +17,7 @@ function Template( emitter ) {
 
   function parse( response ) {
     var sub = Object.create( emitter.constructor.prototype )
-      , scoper = new Scoper( sub );
+      , scoper = new Scoper( sub, { 'open': '<', 'close': '>' } );
 
     sub.on( 'close scope', function(code) {
       emitter.emit( 'template parameters', code );
