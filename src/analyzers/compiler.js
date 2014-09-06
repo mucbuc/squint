@@ -1,26 +1,25 @@
 var assert = require( 'assert' )
+  , Scoper = require( './scoper' ).Scoper
   , Declarer = require( './declarer' ).Declarer
   , Definer = require( './definer' ).Definer
-  , Preprocessor = require( './preprocessor' ).Preprocessor;
+  , Preprocessor = require( './preprocessor' ).Preprocessor
+  , Commenter = require( './commenter' ).Commenter
+  , Literalizer = require( './literalizer' ).Literalizer; 
 
-assert( typeof Declarer === 'function' ); 
+assert( typeof Scoper === 'function' );
+assert( typeof Declarer === 'function' );
 assert( typeof Definer === 'function' );
 assert( typeof Preprocessor === 'function' );
+assert( typeof Literalizer === 'function' );
+assert( typeof Commenter === 'function' );
 
 function Compiler( emitter ) {
-
-	var declarer = new Declarer(emitter)
+  var scoper = new Scoper( emitter )
+	  , declarer = new Declarer(emitter)
 	  , definer = new Definer(emitter)
-	  , preprocessor = new Preprocessor( emitter );
-
-	this.process = function( code ) {
-		emitter.on( 'preprocess', function( prepCode ) {
-			code = code.replace( prepCode, '' ).trim();
-			definer.process( code );
-			declarer.process( code ); 
-		} );
-		preprocessor.process( code );
-	};
+	  , preprocessor = new Preprocessor( emitter )
+    , literalizer = new Literalizer( emitter )
+    , commenter = new Commenter( emitter );
 }
 
-exports.Compiler = Compiler; 
+exports.Compiler = Compiler;

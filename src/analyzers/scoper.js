@@ -1,75 +1,53 @@
 var assert = require( 'assert' )
-  , Parser = require( 'mucbuc-jsthree' ).Parser;
+  , fluke = require( 'flukejs' );
 
-assert( typeof Parser === 'function' );
+function Scoper( emitter, rules ) {
 
-function Scoper( emitter, openToken, closeToken ) {
-	
-	var depth = 0
-	  , content = ''
-	  , sub;
+  var instance = this
+    , depth = 0;
 
-	if (typeof emitter === 'undefined')
-		return; 
-	
-	sub = Object.create( emitter.constructor.prototype );
-	
-	Parser.call( this, sub, initMap( openToken, closeToken ) );
-	
-	sub.on( 'open', function(code) {
-		if (!depth)
-			emitter.emit( 'open scope', code.trim() );
-		else
-			content += code.trim() + openToken; 
-		++depth;
-	} ); 
+  if (typeof rules === 'undefined') {
+    rules = {
+        'open': '{',
+        'close': '}'
+      };
+  }
 
-	sub.on( 'close', function(code) { 
-		assert( depth );
+  emitter.on( 'open', function(response) {
+    var depth = 1
+      , source = response.rhs
+      , content = '';
+    emitter.emit( 'open scope', response.lhs );
+    response.resetStash(); 
+    do {
+      
+      fluke.splitNext(source, function(type, inner) {
+        source = inner.rhs;
+        content += inner.lhs;
 
-		if (!--depth) {
-			emitter.emit( 'close scope', content + code.trim() );
-			content = '';
-		}
-		else {
-			content += code.trim() + closeToken;
-		}
-	} );
-
-	sub.on( 'end', function(code) {
-		emitter.emit( 'end', code.trim() );
-	} );
-	
-	function initMap() {
-
-		var result = {};
-
-		if (typeof openToken === 'undefined') 
-			openToken = '{'; 
-
-		if (typeof closeToken === 'undefined') 
-			closeToken = mapClosed();
-
-		result[openToken] = 'open'; 
-		result[closeToken] = 'close'; 
-		return result;
-
-		function mapClosed() {
-			switch(openToken) {
-				case '(': 
-					return ')';
-				case '[':
-					return ']';
-				case '<':
-					return '>';
-				case '{':
-				default:
-					return '}';
-			}
-		} 
-	}
+        if (type == 'open') {
+          ++depth;
+          content += inner.token;
+        }
+        else if (type == 'close' || type == 'end') {
+          if (!--depth) {
+            emitter.emit( 'close scope', content );
+            response.consume( content.length );
+            response.resetStash();
+          }
+          else {
+             content += inner.token;
+          }
+        }
+        else if (type == 'end') {
+          if (!--depth) {
+            emitter.emit( 'end', inner );
+          }
+        }
+      }, rules );
+    } 
+    while(depth); 
+  } );
 }
-
-Scoper.prototype = new Parser(); 
 
 exports.Scoper = Scoper;

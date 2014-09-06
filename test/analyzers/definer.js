@@ -2,82 +2,101 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Definer = require( '../../src/analyzers/definer' ).Definer;
+  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
+  , Definer = require( '../../src/analyzers/definer' ).Definer
+  , rules = {
+      'open': '{',
+      'close': '}',
+    };
 
 assert( typeof Definer !== 'undefined' );
 
-testNamespace();
-testType(); 
-testFunction();
+Base.test_2( defineFunction, rules, Scoper ); 
+Base.test_2( defineType, rules, Scoper ); 
+Base.test_2( defineSubType, rules, Scoper ); 
+Base.test_2( defineNamespace, rules, Scoper );
+Base.test_2( defineNamespaceWithWhite, rules, Scoper );
 
-function testFunction() {
+function defineNamespaceWithWhite(emitter, process) {
 
-	test( defineFunction );
+  var definer = new Definer(emitter);
 
-	function defineFunction(emitter, parser) {
-		emitter.expectNot( 'define namespace' );
-		emitter.expectNot( 'define type' );
+  emitter.expectNot( 'define type' );
+  emitter.expectNot( 'define function' );
 
-		emitter.expect( 'define function', { name: 'void foo()', code: 'do something' } );
-		parser.process( 'void foo() { do something }' );
-		
-		emitter.expect( 'define function', { name: 'void fool()', code: 'do nothing' } );
-		parser.process( 'void fool() { do nothing }' );
- 
-		emitter.expect( 'define function', { 
-			name: 'hello::hello()', 
-			code: 'bla bla', 
-			meta: 'base()' 
-		} );
-		parser.process( 'hello::hello() : base() {bla bla}' );
-	}
+  emitter.expect( 'define namespace', { name: ' namespace hello ', code: ' this is it ' } );
+  process( ' namespace hello { this is it }' );
+
+  emitter.expect( 'define namespace', { name: '  namespace world ', code: ' wtf? ' } );
+  process( '  namespace world { wtf? }' );
+
+  emitter.expect( 'define namespace', { name: '    namespace world', code: '' } );
+  process( '    namespace world{}' );
+
+  emitter.expect( 'define namespace', { name: 'namespace   world ', code: '' } );
+  process( 'namespace   world {}' );
 }
 
-function testType() {
+function defineFunction(emitter, process) {
+  
+  var definer = new Definer(emitter);
 
-	test( defineType );
-	test( defineSubType );
+  emitter.expectNot( 'define namespace' );
+  emitter.expectNot( 'define type' );
 
-	function defineSubType( emitter, parser ) {
-		emitter.expect( 'define type', { name: 'struct cya', code: 'yes', meta: 'blu' } );
-		parser.process( 'struct cya : blu { yes }' );
-	}
-	
-	function defineType(emitter, parser) {
-		emitter.expectNot( 'define namespace' );
-		emitter.expectNot( 'define function' );
+  emitter.expect( 'define function', { name: 'void foo() ', code: ' do something ' } );
+  process( 'void foo() { do something }' );
 
-		emitter.expect( 'define type', { name: 'struct hello', code: 'unsigned world;' } );
-		parser.process( 'struct hello { unsigned world; }' );
-	
-		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
-		parser.process( 'struct cya { yes}' );
+  emitter.expect( 'define function', { name: 'void fool() ', code: ' do nothing ' } );
+  process( 'void fool() { do nothing }' );
 
-		emitter.expect( 'define type', { name: 'struct cya', code: 'yes' } );
-		parser.process( 'typedef hello string; struct cya { yes}' );
-	}
+  emitter.expect( 'define function', {
+    name: 'hello::hello()',
+    code: 'bla bla',
+    meta: ' base() '
+  } );
+  process( 'hello::hello() : base() {bla bla}' );
 }
 
-function testNamespace() {
+function defineSubType( emitter, process ) {
+  
+  var definer = new Definer(emitter);
 
-	test( defineNamespace );
-
-	function defineNamespace(emitter, parser) {
-		
-		emitter.expectNot( 'define type' );
-		emitter.expectNot( 'define function' );
-
-		emitter.expect( 'define namespace', { name: 'namespace hello', code: 'this is it' } );
-		parser.process( 'namespace hello { this is it }' );
-	
-		emitter.expect( 'define namespace', { name: 'namespace world', code: 'wtf?' } );
-		parser.process( 'namespace world { wtf? }' );
-
-		emitter.expect( 'define namespace', { name: 'namespace world', code: '' } );
-		parser.process( 'namespace world{}' );
-	}
+  emitter.expect( 'define type', { name: 'struct cya ', code: ' yes ', meta: ' blu ' } );
+  process( 'struct cya : blu { yes }' );
 }
 
-function test(f) {
-	Base.test( f, Definer );
+function defineType(emitter, process) {
+
+  var definer = new Definer(emitter);
+
+  emitter.expectNot( 'define namespace' );
+  emitter.expectNot( 'define function' );
+
+  emitter.expect( 'define type', { name: 'struct hello ', code: ' unsigned world; ' } );
+  process( 'struct hello { unsigned world; }' );
+
+  emitter.expect( 'define type', { name: 'struct cya ', code: ' yes' } );
+  process( 'struct cya { yes}' );
+
+  emitter.expect( 'define type', { name: ' struct cya ', code: ' yes' } );
+  process( 'typedef hello string; struct cya { yes}' );
 }
+
+function defineNamespace(emitter, process) {
+
+  var definer = new Definer(emitter);
+
+  emitter.expectNot( 'define type' );
+  emitter.expectNot( 'define function' );
+
+  emitter.expect( 'define namespace', { name: 'namespace hello ', code: ' this is it ' } );
+  process( 'namespace hello { this is it }' );
+
+  emitter.expect( 'define namespace', { name: 'namespace world ', code: ' wtf? ' } );
+  process( 'namespace world { wtf? }' );
+
+  emitter.expect( 'define namespace', { name: 'namespace world', code: '' } );
+  process( 'namespace world{}' );
+}
+

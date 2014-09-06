@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "mucbuc-jsthree": "*",
-    "chai": "*"
+    "chai": "*",
+    "flukejs": "*"
   }
 }

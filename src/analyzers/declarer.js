@@ -1,45 +1,44 @@
 var assert = require( 'assert' )
-  , Parser = require( 'mucbuc-jsthree' ).Parser
-  , Scoper = require( './scoper' ).Scoper
-  , regexMap = require( '../regexmap' ).regexMap; 
+  , regexMap = require( '../regexmap' ).regexMap
+  , fluke = require( 'flukejs' );
 
 function Declarer(emitter) {
 
-	Scoper.call( this, emitter );
+  emitter.on( 'open scope', function( response ) {
+    declare( response );
+  } );
 
-	emitter.on( 'open scope', function( code ) {
-		declare(code); 
-	} );
-	
-	emitter.on( 'end', function( code ) {
-		declare(code);
-	} );
+  emitter.on( 'statement', function( response ) { 
+    declare( response.lhs );
+  } ); 
 
-	function declare(code) {
-		
-		var sub = Object.create( emitter.constructor.prototype )  
-		  , parser = new Parser( sub );
+  emitter.on( 'end', function( response ) {
+    declare( response.stash + response.lhs );
+  } );
 
-		sub.on( 'statement', function(code) {
-			if (isType(code)) {
-				emitter.emit( 'declare type', code );
-			}
-			else if (isFunctionDeclaration(code)) { 
-				emitter.emit( 'declare function', code );
-			} 
-				
-			function isFunctionDeclaration(code) {
-				return code.search( regexMap.functionDeclare ) == 0;
-			}
+  function declare(code) {
+    fluke.splitAll( code, function(type, response) {
+        
+        if (isType(response.lhs)) {
+          emitter.emit( 'declare type', response.lhs );
+        }
+        else if (isFunctionDeclaration(response.lhs)) {
+          emitter.emit( 'declare function', response.lhs );
+        }
 
-			function isType() {
-				return code.search( regexMap.typeDeclare ) != -1; 
-			}
-		} );
+        function isFunctionDeclaration(code) {
+          return code.search( regexMap.functionDeclare ) == 0;
+        }
 
-		parser.process( code );
-	}
+        function isType(code) {
+          return code.search( regexMap.typeDeclare ) != -1;
+        }
+      }, 
+      { 
+        'statement': ';'
+      } 
+    );
+  }
 }
-Declarer.prototype = new Scoper();
 
 exports.Declarer = Declarer;
