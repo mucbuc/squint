@@ -14,21 +14,29 @@ function Scoper( emitter, rules ) {
   }
 
   emitter.on( 'open', function(response) {
-    var depth = 1;
+    var depth = 1
+      , source = response.rhs
+      , content = '';
     emitter.emit( 'open scope', response.lhs );
     response.resetStash(); 
     do {
-      var content = '';
-      fluke.splitNext(response.rhs, function(type, inner) {  
+      
+      fluke.splitNext(source, function(type, inner) {
+        source = inner.rhs;
+        content += inner.lhs;
+
         if (type == 'open') {
-          ++depth; 
+          ++depth;
+          content += inner.token;
         }
         else if (type == 'close' || type == 'end') {
           if (!--depth) {
-            content += inner.lhs;
             emitter.emit( 'close scope', content );
             response.consume( content.length );
             response.resetStash();
+          }
+          else {
+             content += inner.token;
           }
         }
         else if (type == 'end') {
