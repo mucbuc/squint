@@ -20,11 +20,9 @@ function Scoper( emitter, rules ) {
     emitter.emit( 'open scope', response.lhs );
     response.resetStash(); 
     do {
-      
       fluke.splitNext(source, function(type, inner) {
         source = inner.rhs;
         content += inner.lhs;
-
         if (type == 'open') {
           ++depth;
           content += inner.token;
@@ -36,7 +34,7 @@ function Scoper( emitter, rules ) {
             response.resetStash();
           }
           else {
-             content += inner.token;
+            content += inner.token;
           }
         }
         else if (type == 'end') {
