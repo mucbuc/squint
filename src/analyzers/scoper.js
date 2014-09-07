@@ -42,7 +42,10 @@ function Scoper( emitter, rules ) {
             emitter.emit( 'end', inner );
           }
         }
-      }, rules );
+      }, { 
+        'open': rules.open, 
+        'close': rules.close 
+      } );
     } 
     while(depth); 
   } );
