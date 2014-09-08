@@ -11,9 +11,7 @@ assert( typeof Scoper !== 'undefined' );
 
 suite( 'scoper', function() {
   
-  var emitter
-    , tokenizer;
-
+  var emitter;
   setup(function() {
     emitter = new Expector;
   });
@@ -26,44 +24,44 @@ suite( 'scoper', function() {
   test( 'basicScope', function() {
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', '' );
-    next( 'namespace bla {}', defaultRules );
+    split( 'namespace bla {}', defaultRules );
     
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', 'hello;' );
-    next( 'namespace bla { hello; }', defaultRules );
+    split( 'namespace bla { hello; }', defaultRules );
 
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', 'hello' );
-    next( 'namespace bla { hello }', defaultRules );
+    split( 'namespace bla { hello }', defaultRules );
   });
 
   test( 'nestedScopes', function() {
     emitter.expect( 'open scope', 'namespace hello' );
     emitter.expect( 'close scope', 'namespace world{ namespace {} }' );
     emitter.expect( 'end' );
-    next( 'namespace hello{ namespace world{ namespace {} } }', defaultRules );
+    split( 'namespace hello{ namespace world{ namespace {} } }', defaultRules );
   });
 
   test( 'aggregateScopes', function() {
     emitter.expect( 'open scope', 'namespace outside' );
     emitter.expect( 'close scope', 'namespace inside1 {} namespace inside2 {}' );
     emitter.expect( 'end' );
-    next( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', defaultRules );
+    split( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', defaultRules );
   });
 
-  test ( 'alternativeScopeTag', function() {
+  test( 'alternativeScopeTag', function() {
     var rules = { 'open': '<', 'close': '>' };
 
     emitter.expect( 'open scope', 'template' );
     emitter.expect( 'close scope', 'typename' );
-    next( 'template< typename >', rules );
+    split( 'template< typename >', rules );
 
     emitter.expect( 'open scope', 'template' );
     emitter.expect( 'close scope', 'template< typename >' );
-    next( 'template< template< typename > >', rules );  
+    split( 'template< template< typename > >', rules );  
   });   
 
-  function next( code, rules ) {
+  function split( code, rules ) {
     var tokenizer = new Scoper( emitter, rules );
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
