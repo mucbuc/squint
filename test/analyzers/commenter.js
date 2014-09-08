@@ -25,17 +25,17 @@ suite( 'commenter', function() {
     delete emitter;
   }); 
 
-  // test( 'commenterSingleLine', function(){
-  //   emitter.expect( 'comment line' );
-  //   //emitter.expect( 'consume', 'hello\n' ); // not sure why this fails
-  //   split( '// hello\n' );
-  // });
+  test( 'commenterSingleLine', function(){
+    emitter.expect( 'comment line' );
+    //emitter.expect( 'consume', 'hello\n' ); // not sure why this fails
+    split( '// hello\n' );
+  });
 
-  // test( 'commentBlock', function() {
-  //   emitter.expect( 'comment block' );
-  //   //emitter.expect( 'consume', 'hello*/' ); // not sure why this fails
-  //   split( '/*hello*/' );
-  // }); 
+  test( 'commentBlock', function() {
+    emitter.expect( 'comment block' );
+    //emitter.expect( 'consume', 'hello*/' ); // not sure why this fails
+    split( '/*hello*/' );
+  }); 
 
   function split( code ) {
     var commenter = new Commenter( emitter ); 

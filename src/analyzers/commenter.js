@@ -2,14 +2,14 @@ var assert = require( 'assert' )
   , regexMap = require( '../regexmap' ).regexMap;
 
 function Commenter( emitter ) {
-  emitter.on( 'comment line', function( token, code ) {
-    var comment = code.match( /.*\n/ );
-    emitter.emit( 'consume', comment[0] );
+  emitter.on( 'comment line', function( response ) {
+    var comment = response.rhs.match( /.*\n/ );
+  	response.consume( comment[0].lenght );
   } );
 
-  emitter.on( 'comment block', function( token, code ) {
-    var comment = code.match( /.*\*\// );
-    emitter.emit( 'consume', comment[0] );
+  emitter.on( 'comment block', function( response ) {
+    var comment = response.rhs.match( /.*\*\// );
+    response.consume( comment[0].lenght );
   } );
 }
 
