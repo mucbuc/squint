@@ -12,6 +12,7 @@ suite( 'template', function(){
   var emitter;
   setup(function() {
     emitter = new Expector;
+    emitter.setMaxListeners( 0 );
   });
 
   teardown(function() {
