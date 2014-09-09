@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 var assert = require( 'chai' ).assert
-  , Compiler = require( '../../src/analyzers/compiler' ).Compiler
+  , Analyzer = require( '../../src/analyzers/analyzer' )
   , Expector = require( 'expector' ).Expector;
 
-assert( typeof Compiler === 'function' );
+assert( typeof Analyzer === 'function' );
 
-suite( 'compiler', function(){
+console.log( Analyzer );
+
+suite( 'analyzer', function(){
 
 	var emitter;
 
@@ -20,12 +22,12 @@ suite( 'compiler', function(){
 		delete emitter;
 	}); 
 	
-	test( 'compilerSingelDeclaration', function() {
+	test( 'SingleDeclaration', function() {
 		emitter.expect( 'declare type', 'struct hello' );
 		split( 'struct hello;' );  
 	});
 
-	test( 'namespaceTreeCompiler', function() {
+	test( 'namespaceTree', function() {
 	  emitter.expect( 'define namespace', { name: 'namespace outside', code: ' namespace inside {} ' } );
 	  emitter.expect( 'end' ); 
 
@@ -55,7 +57,7 @@ suite( 'compiler', function(){
 		split( 'namespace outside{ struct hello; }' );
 	});
 
-	test( 'compilerNestedNamespaces', function() {
+	test( 'NestedNamespaces', function() {
 		emitter.expect( 'define namespace', { name: 'namespace outside ', code: ' namespace inside {} ' } );
 		emitter.once( 'define namespace', function( context ) {
 			emitter.once( 'end', function() {
@@ -67,7 +69,7 @@ suite( 'compiler', function(){
 		split( 'namespace outside { namespace inside {} }' );  
 	});
 
-	test( 'compilerDeclarationsAndDefinitions', function() {
+	test( 'DeclarationsAndDefinitions', function() {
 		//emitter.expect( 'statement' );
 		emitter.expect( 'declare type', 'struct hello' ); 
 	  	split( 'struct hello;' );
@@ -76,7 +78,7 @@ suite( 'compiler', function(){
 		split( 'struct hello{};' );
 	});
 
-	test( 'compilerNestedTypes', function() {
+	test( 'NestedTypes', function() {
 		
 		emitter.expect( 'define type', { name: 'struct outside ', code: ' struct inside {}; ' } );
 
@@ -91,17 +93,17 @@ suite( 'compiler', function(){
 	  split( 'struct outside { struct inside {}; };');
 	});
 
-	test( 'compilerFunctionDeclare', function() {
+	test( 'FunctionDeclare', function() {
 		emitter.expect( 'declare function', 'void foo()' );
 		split( 'void foo();' );
 	});
 
-	test( 'compilerFunctonDefine', function() {
+	test( 'FunctonDefine', function() {
 		emitter.expect( 'define function', { name: 'void foo() ', code: ' hello ' } ); 
 		split( 'void foo() { hello }' );
 	});
 
-	test( 'compilerMemberFunctionDeclare', function() {
+	test( 'MemberFunctionDeclare', function() {
   	emitter.expect( 'define type' ); 
 		emitter.once( 'define type', function( context ) {
 			emitter.expect( 'declare function', 'void member()' ); 
@@ -130,8 +132,8 @@ suite( 'compiler', function(){
 	});
 
 	function split( code ) {
-	    var compiler = new Compiler( emitter );
-	    compiler.split( code ); 
+	    var analyzer = new Analyzer( emitter );
+	    analyzer.split( code ); 
 	}
 
 });

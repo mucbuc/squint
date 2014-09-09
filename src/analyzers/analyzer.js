@@ -1,11 +1,11 @@
-var assert = require( 'assert' )
+var assert = require( 'chai' ).assert
+  , fluke = require( 'flukejs' )
   , Scoper = require( './scoper' ).Scoper
   , Declarer = require( './declarer' ).Declarer
   , Definer = require( './definer' ).Definer
   , Preprocessor = require( './preprocessor' ).Preprocessor
   , Commenter = require( './commenter' ).Commenter
-  , Literalizer = require( './literalizer' ).Literalizer
-  , fluke = require( 'flukejs' );
+  , Literalizer = require( './literalizer' ).Literalizer;
 
 assert( typeof Scoper === 'function' );
 assert( typeof Declarer === 'function' );
@@ -14,7 +14,7 @@ assert( typeof Preprocessor === 'function' );
 assert( typeof Literalizer === 'function' );
 assert( typeof Commenter === 'function' );
 
-function Compiler( emitter ) {
+var Analyzer = function( emitter ) {
   
   var rules = {
       'preprocess': '#',
@@ -38,6 +38,6 @@ function Compiler( emitter ) {
     }
     , rules );
   };
-}
+}; 
 
-exports.Compiler = Compiler;
+module.exports = Analyzer;
