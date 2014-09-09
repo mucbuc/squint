@@ -1,38 +1,24 @@
 #!/usr/bin/env node
 
 var assert = require( 'chai' ).assert
-  , events = require( 'events' )
   , Compiler = require( '../../src/analyzers/compiler' ).Compiler
-  , Declarer = require( '../../src/analyzers/declarer' ).Declarer
-  , Base = require( '../base' ).Base
-  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
-	, Expector = require( 'expector' ).Expector
-  , fluke = require( 'flukejs' )
-	, rules = {
-      'preprocess': '#',
-      'comment line': '\\/\\/',
-      'comment block': '\\/\\*',
-      'open literal': '([^//]"|^")',
-      'statement': ';',
-      'open': '{',
-      'close': '}'
-    };
+  , Expector = require( 'expector' ).Expector;
 
 assert( typeof Compiler === 'function' );
-assert( typeof Scoper === 'function' );
 
 suite( 'compiler', function(){
 
-  var emitter;
-  setup(function() {
-    emitter = new Expector;
-    emitter.setMaxListeners( 0 );
-  });
+	var emitter;
+
+	setup(function() {
+	    emitter = new Expector;
+	    emitter.setMaxListeners( 0 );
+	});
 	
 	teardown(function() {
-    emitter.check(); 
-    delete emitter;
-  }); 
+		emitter.check(); 
+		delete emitter;
+	}); 
 	
 	test( 'compilerSingelDeclaration', function() {
 		emitter.expect( 'declare type', 'struct hello' );
@@ -144,11 +130,8 @@ suite( 'compiler', function(){
 	});
 
 	function split( code ) {
-    var tokenizer = new Compiler( emitter );
-    fluke.splitAll( code, function( type, request ) {
-        emitter.emit(type, request);
-      }
-      , rules ); 
-  }
+	    var compiler = new Compiler( emitter );
+	    compiler.split( code ); 
+	}
 
 });
