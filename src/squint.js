@@ -4,7 +4,7 @@ var assert = require( 'assert' )
   , Header = require( './factories/header' ).Header
   , Implement = require( './factories/implement' ).Implement
   , TemplateHeader = require( './factories/template_header' ).TemplateHeader
-  , Compiler = require( './analyzers/compiler' ).Compiler
+  , Analyzer = require( './analyzers/analyzer' )
   , regexMap = require( './regexmap' ).regexMap;
 
 assert( typeof Forward !== 'undefined' );
@@ -52,6 +52,11 @@ var Squint = {
   compile: function( code, emitter ) {
     var parser = new Compiler( emitter );
     parser.process( code, emitter );
+  }, 
+
+  analyze: function( code, emitter ) {
+    var parser = new Analyzer( emitter );
+    parser.split( code );
   }, 
 
   forward: function( model, done ) { 

@@ -16,8 +16,11 @@ if (process.argv.length == 3) {
 		//cleaned = squint.stripTypedefs( cleaned );
 		emitter.on( 'define type', print );
 		emitter.on( 'declare type', print );
-
-		squint.compile( cleaned, emitter );
+		emitter.on( 'declare function', print );
+		emitter.on( 'define function', print );
+		emitter.on( 'comment', print ); 
+		emitter.on( 'preprocess', print );
+		squint.analyze( cleaned, emitter );
 	
 		function print( context ) {
 			console.log( context ); 
