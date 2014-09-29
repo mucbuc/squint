@@ -2,8 +2,8 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
-  , Template = require( '../../src/analyzers/template' ).Template
+  , Scoper = require( '../../src/analyzers/scoper' )
+  , Template = require( '../../src/analyzers/template' )
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 

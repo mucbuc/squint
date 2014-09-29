@@ -51,4 +51,4 @@ function Scoper( emitter, rules ) {
   } );
 }
 
-exports.Scoper = Scoper;
+module.exports = Scoper;

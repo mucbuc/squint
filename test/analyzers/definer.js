@@ -2,12 +2,12 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
-  , Definer = require( '../../src/analyzers/definer' ).Definer
+  , Scoper = require( '../../src/analyzers/scoper' )
+  , Definer = require( '../../src/analyzers/definer' )
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 
-assert( typeof Definer !== 'undefined' );
+assert( typeof Definer === 'function' );
 
 suite( 'definer', function() {
 

@@ -40,4 +40,4 @@ function Declarer(emitter) {
   }
 }
 
-exports.Declarer = Declarer;
+module.exports = Declarer;

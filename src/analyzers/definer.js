@@ -48,4 +48,4 @@ function Definer(emitter) {
   } );
 }
 
-exports.Definer = Definer;
+module.exports = Definer;

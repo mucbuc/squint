@@ -16,4 +16,4 @@ function Preprocessor( emitter ) {
 	} );
 }
 
-exports.Preprocessor = Preprocessor;
+module.exports = Preprocessor;

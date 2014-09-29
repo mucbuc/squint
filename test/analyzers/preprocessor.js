@@ -2,10 +2,9 @@
 
 var assert = require( 'chai' ).assert
   , events = require( 'events' )
-  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
   , Base = require( '../base' ).Base
-  , Scoper = require( '../../src/analyzers/scoper' ).Scoper
-  , Preprocessor = require( '../../src/analyzers/preprocessor' ).Preprocessor
+  , Scoper = require( '../../src/analyzers/scoper' )
+  , Preprocessor = require( '../../src/analyzers/preprocessor' )
 	, Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' );
 

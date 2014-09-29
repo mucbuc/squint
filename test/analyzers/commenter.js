@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 var assert = require( 'chai' ).assert
-  , Tokenizer = require( 'mucbuc-jsthree' ).Tokenizer
   , Base = require( '../base' ).Base
-  , Commenter = require( '../../src/analyzers/commenter' ).Commenter
+  , Commenter = require( '../../src/analyzers/commenter' )
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' );
 
-assert( typeof Commenter !== 'undefined' );
+assert( typeof Commenter === 'function' );
 
 suite( 'commenter', function() {
 

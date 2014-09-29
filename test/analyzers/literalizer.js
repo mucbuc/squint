@@ -2,7 +2,7 @@
 
 var assert = require( 'assert' )
   , Base = require( '../base' ).Base
-  , Literalizer = require( '../../src/analyzers/literalizer.js').Literalizer
+  , Literalizer = require( '../../src/analyzers/literalizer.js')
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 

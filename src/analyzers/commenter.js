@@ -13,4 +13,4 @@ function Commenter( emitter ) {
   } );
 }
 
-exports.Commenter = Commenter;
+module.exports = Commenter;

@@ -5,7 +5,7 @@
 
 var assert = require( 'assert' )
   , fluke = require( 'flukejs' )
-  , Scoper = require( './scoper' ).Scoper
+  , Scoper = require( './scoper' )
   , events = require( 'events' );
 
 assert( typeof Scoper !== 'undefined' );
@@ -37,4 +37,4 @@ function Template( emitter ) {
   }
 }
 
-exports.Template = Template;
+module.exports = Template;

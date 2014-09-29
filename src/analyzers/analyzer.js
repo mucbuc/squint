@@ -1,11 +1,11 @@
 var assert = require( 'chai' ).assert
   , fluke = require( 'flukejs' )
-  , Scoper = require( './scoper' ).Scoper
-  , Declarer = require( './declarer' ).Declarer
-  , Definer = require( './definer' ).Definer
-  , Preprocessor = require( './preprocessor' ).Preprocessor
-  , Commenter = require( './commenter' ).Commenter
-  , Literalizer = require( './literalizer' ).Literalizer;
+  , Scoper = require( './scoper' )
+  , Declarer = require( './declarer' )
+  , Definer = require( './definer' )
+  , Preprocessor = require( './preprocessor' )
+  , Commenter = require( './commenter' )
+  , Literalizer = require( './literalizer' );
 
 assert( typeof Scoper === 'function' );
 assert( typeof Declarer === 'function' );

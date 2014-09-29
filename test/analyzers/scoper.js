@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 var assert = require( 'assert' )
-  , Scoper = require( '../../src/analyzers/scoper').Scoper
+  , Scoper = require( '../../src/analyzers/scoper')
   , Base = require( '../base' ).Base
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 
-assert( typeof Scoper !== 'undefined' );
+assert( typeof Scoper === 'function' );
 
 suite( 'scoper', function() {
   

@@ -3,4 +3,4 @@ function Literalizer( emitter ) {
 
 }
 
-exports.Literalizer = Literalizer;
+module.exports = Literalizer;
