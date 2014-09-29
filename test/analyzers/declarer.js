@@ -4,10 +4,6 @@ var assert = require( 'assert' )
   , Base = require( '../base' ).Base
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , Declarer = require( '../../src/analyzers/declarer' ).Declarer
-  , rules = {
-        'statement': ';',
-        'open': '{'
-      }
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 
@@ -49,8 +45,13 @@ suite( 'declarer', function() {
   });
 
   function split( code ) {
-    var tokenizer = new Scoper( emitter, rules )
+    var rules = {
+        'statement': ';',
+        'open': '{'
+      }
+      , tokenizer = new Scoper( emitter, rules )
       , definer = new Declarer(emitter);
+      
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
       }

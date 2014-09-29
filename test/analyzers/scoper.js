@@ -3,7 +3,6 @@
 var assert = require( 'assert' )
   , Scoper = require( '../../src/analyzers/scoper').Scoper
   , Base = require( '../base' ).Base
-  , defaultRules = { 'open': '{', 'close': '}' }
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 
@@ -24,29 +23,29 @@ suite( 'scoper', function() {
   test( 'basicScope', function() {
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', '' );
-    split( 'namespace bla {}', defaultRules );
+    split( 'namespace bla {}' );
     
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', 'hello;' );
-    split( 'namespace bla { hello; }', defaultRules );
+    split( 'namespace bla { hello; }' );
 
     emitter.expect( 'open scope', 'namespace bla' );
     emitter.expect( 'close scope', 'hello' );
-    split( 'namespace bla { hello }', defaultRules );
+    split( 'namespace bla { hello }' );
   });
 
   test( 'nestedScopes', function() {
     emitter.expect( 'open scope', 'namespace hello' );
     emitter.expect( 'close scope', 'namespace world{ namespace {} }' );
     emitter.expect( 'end' );
-    split( 'namespace hello{ namespace world{ namespace {} } }', defaultRules );
+    split( 'namespace hello{ namespace world{ namespace {} } }' );
   });
 
   test( 'aggregateScopes', function() {
     emitter.expect( 'open scope', 'namespace outside' );
     emitter.expect( 'close scope', 'namespace inside1 {} namespace inside2 {}' );
     emitter.expect( 'end' );
-    split( 'namespace outside{ namespace inside1 {} namespace inside2 {} }', defaultRules );
+    split( 'namespace outside{ namespace inside1 {} namespace inside2 {} }' );
   });
 
   test( 'alternativeScopeTag', function() {
@@ -62,10 +61,18 @@ suite( 'scoper', function() {
   });   
 
   function split( code, rules ) {
-    var tokenizer = new Scoper( emitter, rules );
+  
+    var tokenizer; 
+
+    if (typeof rules === 'undefined') {
+      rules = { 'open': '{', 'close': '}' };
+    }
+
+    tokenizer = new Scoper( emitter, rules );
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
       }
       , rules ); 
   }
+
 });

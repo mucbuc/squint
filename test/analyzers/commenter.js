@@ -5,11 +5,7 @@ var assert = require( 'chai' ).assert
   , Base = require( '../base' ).Base
   , Commenter = require( '../../src/analyzers/commenter' ).Commenter
   , Expector = require( 'expector' ).Expector
-  , fluke = require( 'flukejs' )
-  , rules = {
-      'comment line': '\\/\\/',
-      'comment block': '\\/\\*',
-    };
+  , fluke = require( 'flukejs' );
 
 assert( typeof Commenter !== 'undefined' );
 
@@ -38,7 +34,11 @@ suite( 'commenter', function() {
   }); 
 
   function split( code ) {
-    var commenter = new Commenter( emitter ); 
+    var commenter = new Commenter( emitter )
+      , rules = {
+          'comment line': '\\/\\/',
+          'comment block': '\\/\\*',
+      }; 
 
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);

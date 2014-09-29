@@ -4,7 +4,6 @@ var assert = require( 'assert' )
   , Base = require( '../base' ).Base
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , Template = require( '../../src/analyzers/template' ).Template
-  , rules = { 'open': '{', 'statement': ';' }
   , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' ); 
 
@@ -78,8 +77,10 @@ suite( 'template', function(){
 	});
 
   function split( code ) {
-    var tokenizer = new Scoper( emitter, rules )
+	var rules = { 'open': '{', 'statement': ';' }
+	  , tokenizer = new Scoper( emitter, rules )
       , templater = new Template( emitter );
+    
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
       }

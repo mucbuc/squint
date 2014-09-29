@@ -7,8 +7,7 @@ var assert = require( 'chai' ).assert
   , Scoper = require( '../../src/analyzers/scoper' ).Scoper
   , Preprocessor = require( '../../src/analyzers/preprocessor' ).Preprocessor
 	, Expector = require( 'expector' ).Expector
-  , fluke = require( 'flukejs' )
-  , rules = { 'preprocess': '#' };
+  , fluke = require( 'flukejs' );
 
 assert( typeof Preprocessor !== 'undefined' );
 
@@ -47,7 +46,8 @@ suite( 'preprocessor', function() {
 	});
 
   function split( code ) {
-    var commenter = new Preprocessor( emitter ); 
+    var commenter = new Preprocessor( emitter )
+      , rules = { 'preprocess': '#' };
 
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);

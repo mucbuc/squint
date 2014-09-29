@@ -17,8 +17,9 @@ function Declarer(emitter) {
   } );
 
   function declare(code) {
+    var rules = { 'statement': ';' }; 
+
     fluke.splitAll( code, function(type, response) {
-        
         if (isType(response.lhs)) {
           emitter.emit( 'declare type', response.lhs );
         }
@@ -34,9 +35,7 @@ function Declarer(emitter) {
           return code.search( regexMap.typeDeclare ) != -1;
         }
       }, 
-      { 
-        'statement': ';'
-      } 
+      rules 
     );
   }
 }

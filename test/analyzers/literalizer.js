@@ -4,8 +4,7 @@ var assert = require( 'assert' )
   , Base = require( '../base' ).Base
   , Literalizer = require( '../../src/analyzers/literalizer.js').Literalizer
   , Expector = require( 'expector' ).Expector
-  , fluke = require( 'flukejs' )
-  , rules = { 'open literal': '([^//]"|^")' }; 
+  , fluke = require( 'flukejs' ); 
 
 assert( typeof Literalizer === 'function' );
 
@@ -34,7 +33,8 @@ suite( 'literalizer', function() {
   });
 
   function split( code ) {
-    var literalizer = new Literalizer( emitter ); 
+    var literalizer = new Literalizer( emitter )
+      , rules = { 'open literal': '([^//]"|^")' };
 
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
