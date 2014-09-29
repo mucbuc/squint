@@ -19,66 +19,66 @@ suite( 'template', function(){
     delete emitter;
   }); 
 
-	test( 'singleParameter', function() {
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A>{' );
+  test( 'singleParameter', function() {
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A>{' );
 
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A>;' );
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A>;' );
 
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A> text text {' );
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A> text text {' );
 
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A> text text;' );
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A> text text;' );
 
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A> void text( A a ) {' );
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A> void text( A a ) {' );
 
-		emitter.expect( 'template parameters', 'class A' );
-		split( 'template<class A> void text( A a );' );
-	});
+    emitter.expect( 'template parameters', 'class A' );
+    split( 'template<class A> void text( A a );' );
+  });
 
-	test( 'multipleParameters', function() {
-		
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B>;' );
+  test( 'multipleParameters', function() {
+    
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B>;' );
 
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B>{' );
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B>{' );
 
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B> text;' );
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B> text;' );
 
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B> text{' );
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B> text{' );
 
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B> void text( A a );' );
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B> void text( A a );' );
 
-		emitter.expect( 'template parameters', 'class A, class B' );
-		split( 'template< class A, class B> void text( A a ) {' );
-	});
+    emitter.expect( 'template parameters', 'class A, class B' );
+    split( 'template< class A, class B> void text( A a ) {' );
+  });
 
-	test( 'macroParameters', function() {
-		emitter.expect( 'template parameters', 'MACRO(), MACRO' );
-		split( 'template< MACRO(), MACRO >;' );
+  test( 'macroParameters', function() {
+    emitter.expect( 'template parameters', 'MACRO(), MACRO' );
+    split( 'template< MACRO(), MACRO >;' );
 
-		emitter.expect( 'template parameters', 'MACRO(ARG), MACRO()' );
-		split( 'template< MACRO(ARG), MACRO() >;' );
+    emitter.expect( 'template parameters', 'MACRO(ARG), MACRO()' );
+    split( 'template< MACRO(ARG), MACRO() >;' );
 
-		emitter.expect( 'template parameters', 'MACRO(), MACRO' );
-		split( 'template< MACRO(), MACRO >;' );
-	});
-	
-	test( 'templateNestedParameters', function() {
-		emitter.expect( 'template parameters', ' template< typename >, template< typename > ' );
-		split( 'template< template< typename >, template< typename > >;' );
-	});
+    emitter.expect( 'template parameters', 'MACRO(), MACRO' );
+    split( 'template< MACRO(), MACRO >;' );
+  });
+  
+  test( 'templateNestedParameters', function() {
+    emitter.expect( 'template parameters', ' template< typename >, template< typename > ' );
+    split( 'template< template< typename >, template< typename > >;' );
+  });
 
   function split( code ) {
-	var rules = { 'open': '{', 'statement': ';' }
-	  , tokenizer = new Scoper( emitter, rules )
+  var rules = { 'open': '{', 'statement': ';' }
+    , tokenizer = new Scoper( emitter, rules )
       , templater = new Template( emitter );
     
     fluke.splitAll( code, function( type, request ) {

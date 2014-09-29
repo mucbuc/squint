@@ -5,7 +5,7 @@ var assert = require( 'chai' ).assert
   , Base = require( '../base' ).Base
   , Scoper = require( '../../src/analyzers/scoper' )
   , Preprocessor = require( '../../src/analyzers/preprocessor' )
-	, Expector = require( 'expector' ).Expector
+  , Expector = require( 'expector' ).Expector
   , fluke = require( 'flukejs' );
 
 assert( typeof Preprocessor !== 'undefined' );
@@ -23,26 +23,26 @@ suite( 'preprocessor', function() {
   }); 
 
   test( 'preprocessorSingleLine', function() {
-		emitter.expect( 'preprocess' );
-	  //emitter.expect( 'consume', '#define hello hello\n' );
-	  split( '#define hello hello\nasdfaasdf\nbla' );
-	});
+    emitter.expect( 'preprocess' );
+    //emitter.expect( 'consume', '#define hello hello\n' );
+    split( '#define hello hello\nasdfaasdf\nbla' );
+  });
 
   test( 'preprocessorAfterComment', function() {
-		emitter.expect( 'preprocess' ); // consume =>, '#define BLA\n' );
-		split( '/*yo*/ #define BLA\n');
+    emitter.expect( 'preprocess' ); // consume =>, '#define BLA\n' );
+    split( '/*yo*/ #define BLA\n');
   });
-	
-	test( 'preprocessorMultiple', function() {
-		emitter.expect( 'preprocess' ); // consume =>, '#define A\n' );
-		emitter.expect( 'preprocess' ); // consume =>, '#define B\n' );
-		split( '#define A\n#define B\n' );
-	});
+  
+  test( 'preprocessorMultiple', function() {
+    emitter.expect( 'preprocess' ); // consume =>, '#define A\n' );
+    emitter.expect( 'preprocess' ); // consume =>, '#define B\n' );
+    split( '#define A\n#define B\n' );
+  });
 
-	test( 'preprocessorMultiLine', function() {
-		emitter.expect( 'preprocess' ); // consume =>, '#define hello hello\\\nhello\n' );
-		split( '#define hello hello\\\nhello\nbla' );
-	});
+  test( 'preprocessorMultiLine', function() {
+    emitter.expect( 'preprocess' ); // consume =>, '#define hello hello\\\nhello\n' );
+    split( '#define hello hello\\\nhello\nbla' );
+  });
 
   function split( code ) {
     var commenter = new Preprocessor( emitter )
