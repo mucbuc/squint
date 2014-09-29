@@ -79,7 +79,7 @@ suite( 'template', function(){
   function split( code ) {
   var rules = { 'open': '{', 'statement': ';' }
     , tokenizer = new Scoper( emitter, rules )
-      , templater = new Template( emitter );
+    , templater = new Template( emitter );
     
     fluke.splitAll( code, function( type, request ) {
         emitter.emit(type, request);
