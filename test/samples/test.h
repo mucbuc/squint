@@ -1,2 +1,2 @@
 #define INCLUDE_GUARD
-#endif
+#endif	// INCLUDE_GUARD
