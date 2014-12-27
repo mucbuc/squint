@@ -15,6 +15,7 @@
     "chai": "*",
     "mocha": "*",
     "flukejs": "*", 
-    "expector": "*"
+    "expector": "*", 
+    "app-stack": "*"
   }
 }
