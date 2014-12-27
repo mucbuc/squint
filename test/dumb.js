@@ -21,13 +21,11 @@ suite( "hello", function() {
   }); 
 
   test( "test.h", function() {
-    fs.readFile( './test/samples/test.h', function(err, data) {
-      if (err) throw err;
-      var analyzer = new Analyzer( emitter );
-      emitter
-        .expect( 'preprocess' )
-        .repeat( 1 );
-      analyzer.split( data.toString() );
-    });
+    var data = fs.readFileSync( './test/samples/test.h' )
+      , analyzer = new Analyzer( emitter );
+    emitter
+      .expect( 'preprocess' )
+      .repeat( 1 );
+    analyzer.split( data.toString() );
   });
 }); 
